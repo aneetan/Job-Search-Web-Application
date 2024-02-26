@@ -4,6 +4,10 @@
     --secondary: #008080;
     --light: #F7F8FC;
     --dark: #333333;
+    --background: #060D23;
+    --background-hover: #383D4F;
+    --primary-blue: #00E0FE;
+    --blue-gray: #f4fcff;
 }
  *{
     font-family: "Poppins", sans-serif !important;
@@ -392,6 +396,100 @@
     font-size: 14px;
     padding: 5px !important;
 }
+
+/* ------ FAQs------ */
+  .faq-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 95%;
+    padding: 2rem;
+    border-radius: 1rem;
+    /* background-color: var(--background); */
+  }
+  
+  details {
+    font-size: 1rem;
+    margin: 0 auto;
+    width: 100%;
+    border-radius: 0.5rem;
+    border: 0.5px solid #dcd8d8;
+    position: relative;
+    width: 95%;
+    transition: all 0.3s ease-in-out;
+  }
+
+  details svg{
+    stroke: #4FB9AF;
+  }
+  
+  details:hover {
+    background-color: #4FB9AF;
+  }
+  
+  details:hover svg {
+    stroke: var(--light);
+  }
+  
+  details[open] {
+    background-color: #4FB9AF;
+  }
+  
+  details[open] .faq-title {
+    color: var(--light);
+  }
+  
+  summary {
+    user-select: none;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    list-style: none;
+    padding: 1rem;
+    align-items: center;
+  }
+  
+  summary svg {
+    stroke: #148FA8;
+  }
+  
+  details[open] summary svg {
+    stroke: var(--light);
+    transform: rotate(90deg);
+  }
+  
+  summary:hover .faq-title {
+    color: var(--light);
+  }
+  
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  summary:focus {
+    outline: none;
+  }
+  
+  .faq-title {
+    color: var(--dark);
+    width: 90%;
+    transition: all 250ms ease-in-out;
+  }
+  
+  .faq-content {
+    color: var(--light);
+    padding: 0.2rem 1rem 1rem 1rem;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+  
+  .expand-icon {
+    pointer-events: none;
+    position: absolute;
+    right: 1rem;
+    transition: all 150ms ease-out;
+  }
 
 /*** Footer ***/
 .footer {
