@@ -83,6 +83,11 @@
     border: none;
 }
 
+.btn.btn-primary:hover{
+    transform: scale(1.05);
+    
+}
+
 .btn.btn-secondary{
     background-color: var(--light);
     color: var(--secondary);
@@ -321,10 +326,6 @@
 
 .product-item img {
     transition: .5s;
-}
-
-.product-item:hover img {
-    transform: scale(1.1);
 }
 
 .product-item small a:hover {

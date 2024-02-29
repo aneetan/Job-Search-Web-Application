@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+     <!-- Font awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-bqbXlDvty+wld2VN/h3bWp4F9r4dK5p6YfZXrVQCTldzukq/91xvoELohB06xw0y" crossorigin="anonymous">
+ 
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+    <div class="container">
+    <div class="formbold-main-wrapper">
+        <div class="formbold-form-wrapper">
+          <form action="" method="POST">
+              <div class="formbold-steps">
+                  <ul>
+                      <li class="formbold-step-menu1 active">
+                          <span>1</span>
+                          Personal Details
+                      </li>
+                      <li class="formbold-step-menu2">
+                          <span>2</span>
+                          Additional Details
+                      </li>
+                      <li class="formbold-step-menu3">
+                          <span>3</span>
+                          Documents (if any)
+                      </li>
+                       
+                  </ul>
+              </div>
+
+
+              <!-- ------------------------------ Form 1 ------------------------------------------------------- -->
+      
+              <div class="formbold-form-step-1 active">
+                <div class="formbold-input-flex">
+                  <div>
+                      <label for="firstname" class="formbold-form-label"> Full name </label>
+                      <input
+                      type="text"
+                      name="name"
+                      placeholder="Enter full name"
+                      id="name"
+                      class="formbold-form-input"
+                      />
+                  </div>
+                  <div>
+                      <label for="email" class="formbold-form-label"> Email address </label>
+                      <input
+                      type="email"
+                      name="email"
+                      placeholder="example@gmail.com"
+                      id="email"
+                      class="formbold-form-input"
+                      />
+                  </div>
+                </div>
+        
+                <div class="formbold-input-flex">
+                    <div>
+                        <label for="password" class="formbold-form-label"> Password </label>
+                        <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        placeholder="Enter password"
+                        class="formbold-form-input"
+                        />
+                    </div>
+                    <div>
+                        <label for="confirmPw" class="formbold-form-label"> Confirm Password</label>
+                        <input
+                        type="password"
+                        name="confirmPw"
+                        placeholder="Re-enter your password"
+                        id="confirmPw"
+                        class="formbold-form-input"
+                        />
+                    </div>
+                </div>
+
+                <div class="formbold-input-flex">
+                    <div>
+                        <label for="address" class="formbold-form-label"> Address </label>
+                        <input
+                        type="text"
+                        name="address"
+                        id="address"
+                        placeholder="Kathmandu, Nepal"
+                        class="formbold-form-input"
+                        />
+                    </div>
+                    <div>
+                        <label for="number" class="formbold-form-label"> Phone Number </label>
+                        <input
+                        type="text"
+                        name="number"
+                        id="number"
+                        placeholder="9800000000"
+                        class="formbold-form-input"
+                        />
+                    </div>
+                </div>
+               
+              </div>
+      
+              <!-- ------------------------------ Form 2 ------------------------------------------------------- -->
+              <div class="formbold-form-step-2">
+                <div>
+                    <label for="message" class="formbold-form-label"> Bio </label>
+                    <textarea
+                    rows="3"
+                    name="message"
+                    id="message"
+                    placeholder="Add short summary about your career"
+                    class="formbold-form-input"
+            ></textarea>
+                </div>
+
+                <div class="formbold-input-flex">
+                    <div>
+                        <label for="jobTitle" class="formbold-form-label"> Job Title/ Desired Position </label>
+                        <input
+                        type="text"
+                        name="jobTitle"
+                        placeholder="Eg. Backend Developer"
+                        id="jobTitle"
+                        class="formbold-form-input"
+                        />
+                    </div>
+                    <div>
+                        <label for="experience" class="formbold-form-label"> Work Experience </label>
+                        <input
+                        type="experience"
+                        name="experience"
+                        placeholder="2 years"
+                        id="email"
+                        class="formbold-form-input"
+                        />
+                    </div>    
+                  </div>
+
+                  <div>
+                    <a class="proLinks" href=""> Add Education  </a>
+                    
+                  </div>
+
+                  <div>
+                    <a class="proLinks" href=""> Add Skills </a>
+                  </div>
+
+                  <div>
+                    <a class="proLinks" href=""> Add Experience </a>
+                  </div>
+  
+                   
+              </div>
+
+
+              <!-- ------------------------------ Form 3 ------------------------------------------------------- -->
+      
+              <div class="formbold-form-step-3">
+                <div class="formbold-form-confirm">
+                        <label for="message" class="formbold-form-label"> Add CV (Optional) </label>
+                        <textarea
+                        rows="3"
+                        name="message"
+                        id="message"
+                        placeholder="Add short summary about your career"
+                        class="formbold-form-input"
+                ></textarea>
+
+                <label for="jobTitle" class="formbold-form-label"> Add Certifications (if any) </label>
+                <input
+                type="text"
+                name="jobTitle"
+                placeholder="Eg. Backend Developer"
+                id="jobTitle"
+                class="formbold-form-input"
+                />
+                   
+                </div>
+              </div>
+      
+              <div class="formbold-form-btn-wrapper">
+                <button class="formbold-back-btn">
+                  Back
+                </button>
+      
+                <button class="formbold-btn">
+                    Next Step
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_1675_1807)">
+                    <path d="M10.7814 7.33312L7.20541 3.75712L8.14808 2.81445L13.3334 7.99979L8.14808 13.1851L7.20541 12.2425L10.7814 8.66645H2.66675V7.33312H10.7814Z" fill="white"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_1675_1807">
+                    <rect width="16" height="16" fill="white"/>
+                    </clipPath>
+                    </defs>
+                    </svg>
+                </button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>
+        const stepMenuOne = document.querySelector('.formbold-step-menu1')
+        const stepMenuTwo = document.querySelector('.formbold-step-menu2')
+        const stepMenuThree = document.querySelector('.formbold-step-menu3')
+      
+        const stepOne = document.querySelector('.formbold-form-step-1')
+        const stepTwo = document.querySelector('.formbold-form-step-2')
+        const stepThree = document.querySelector('.formbold-form-step-3')
+      
+        const formSubmitBtn = document.querySelector('.formbold-btn')
+        const formBackBtn = document.querySelector('.formbold-back-btn')
+      
+        formSubmitBtn.addEventListener("click", function(event){
+          event.preventDefault()
+          if(stepMenuOne.className == 'formbold-step-menu1 active') {
+              event.preventDefault()
+      
+              stepMenuOne.classList.remove('active')
+              stepMenuTwo.classList.add('active')
+      
+              stepOne.classList.remove('active')
+              stepTwo.classList.add('active')
+      
+              formBackBtn.classList.add('active')
+              formBackBtn.addEventListener("click", function (event) {
+                event.preventDefault()
+      
+                stepMenuOne.classList.add('active')
+                stepMenuTwo.classList.remove('active')
+      
+                stepOne.classList.add('active')
+                stepTwo.classList.remove('active')
+      
+                formBackBtn.classList.remove('active')
+      
+              })
+      
+            } else if(stepMenuTwo.className == 'formbold-step-menu2 active') {
+              event.preventDefault()
+      
+              stepMenuTwo.classList.remove('active')
+              stepMenuThree.classList.add('active')
+      
+              stepTwo.classList.remove('active')
+              stepThree.classList.add('active')
+      
+              formBackBtn.classList.remove('active')
+              formSubmitBtn.textContent = 'Submit'
+            } else if(stepMenuThree.className == 'formbold-step-menu3 active') {
+              document.querySelector('form').submit()
+            }
+        })
+          
+      
+        
+      </script>
+</body>
+</html>
