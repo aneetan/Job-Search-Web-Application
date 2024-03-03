@@ -16,6 +16,14 @@
 }
 body{
     font-family: "Poppins" , sans-serif;
+    background-image:
+    linear-gradient(to bottom, rgba(20, 143, 168, 0.75), rgba(86, 136, 182, 0.75)),
+    url('../img/register.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 100vh;
+    
 }
 .formbold-main-wrapper {
   display: flex;
@@ -32,8 +40,8 @@ body{
 }
 
 .formbold-steps {
-  padding-bottom: 18px;
-  margin-bottom: 35px;
+  padding-bottom: 2px;
+  margin-bottom: 12px;
   border-bottom: 1px solid #DDE3EC;
 }
 .formbold-steps ul {
@@ -51,6 +59,7 @@ body{
   font-size: 16px;
   line-height: 24px;
   color: #536387;
+  
 }
 .formbold-steps li span {
   display: flex;
@@ -67,9 +76,10 @@ body{
 }
 .formbold-steps li.active {
   color: #07074D;;
+  
 }
 .formbold-steps li.active span {
-  background: #6A64F1;
+  background: var(--primary);
   color: #FFFFFF;
 }
 
@@ -94,7 +104,7 @@ body{
   resize: none;
 }
 .formbold-form-input:focus {
-  border-color: #6a64f1;
+  border-color: var(--secondary);
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
 }
 .formbold-form-label {
@@ -140,7 +150,7 @@ body{
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.12);
 }
 .formbold-confirm-btn.active {
-  background: #6A64F1;
+  background: var(--primary);
   color: #FFFFFF;
 }
 
@@ -184,15 +194,93 @@ body{
   padding: 10px 25px;
   border: none;
   font-weight: 500;
-  background-color: #6A64F1;
+  background-color: var(--primary);
   color: white;
   cursor: pointer;
 }
 .formbold-btn:hover {
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
 }
-
+.links{
+    margin: 10px 0;
+}
+.text{
+  display: none;
+  font-weight: 600;
+  padding: 4px;
+  color: var(--primary);
+}
 .proLinks{
     text-decoration: none;
     padding: 10px 0;
+    color: #07074D;
+    font-weight: 500;
+    font-size: 14px;
+    display: block;
+}
+.addIcon{
+    float: right;
+    font-size: 24px;
+}
+
+.formbold-form-wrapper{
+  border: .2px solid #a7a3a3; 
+  border-radius: 18px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .formbold-main-wrapper {
+      padding: 20px;
+  }
+
+  .formbold-form-wrapper {
+      max-width: 100%;
+  }
+
+  .formbold-input-flex {
+      flex-direction: column;
+  }
+
+  .formbold-input-flex > div {
+      width: 100%;
+  }
+
+  .formbold-steps{
+    display: none;
+  }
+
+  .text{
+    display: block;
+  }
+
+  body{
+    height: 110vh;
+  }
+  
+}
+
+@media screen and (max-width: 480px) {
+  .formbold-form-input {
+      font-size: 14px;
+  }
+
+  .formbold-form-label {
+      font-size: 12px;
+  }
+
+  .formbold-btn {
+      font-size: 14px;
+      padding: 8px 20px;
+  }
+
+  .formbold-step-menu2,
+  .formbold-step-menu3{
+    display: none;
+  }
+
+  .text{
+    display: block;
+  }
 }

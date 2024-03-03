@@ -7,7 +7,6 @@
 
      <!-- Font awesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-bqbXlDvty+wld2VN/h3bWp4F9r4dK5p6YfZXrVQCTldzukq/91xvoELohB06xw0y" crossorigin="anonymous">
- 
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,6 +16,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     
+    <!-- ------ Bootstrap ----------- -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <link rel="stylesheet" href="css/register.css">
 </head>
 <body>
@@ -24,6 +26,7 @@
     <div class="formbold-main-wrapper">
         <div class="formbold-form-wrapper">
           <form action="" method="POST">
+            <div class="text"> Register now </div>
               <div class="formbold-steps">
                   <ul>
                       <li class="formbold-step-menu1 active">
@@ -130,40 +133,42 @@
             ></textarea>
                 </div>
 
-                <div class="formbold-input-flex">
-                    <div>
-                        <label for="jobTitle" class="formbold-form-label"> Job Title/ Desired Position </label>
-                        <input
-                        type="text"
-                        name="jobTitle"
-                        placeholder="Eg. Backend Developer"
-                        id="jobTitle"
-                        class="formbold-form-input"
-                        />
-                    </div>
-                    <div>
-                        <label for="experience" class="formbold-form-label"> Work Experience </label>
-                        <input
-                        type="experience"
-                        name="experience"
-                        placeholder="2 years"
-                        id="email"
-                        class="formbold-form-input"
-                        />
-                    </div>    
-                  </div>
+                <div>
+                    <label for="jobTitle" class="formbold-form-label"> Job Title/ Desired Position </label>
+                    <input
+                    type="text"
+                    name="jobTitle"
+                    placeholder="Eg. Backend Developer"
+                    id="jobTitle"
+                    class="formbold-form-input"
+                    />
+                </div>
 
-                  <div>
-                    <a class="proLinks" href=""> Add Education  </a>
+                 
+
+                  <div class="links">
+                    <a class="proLinks" href=""> Add Education
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" fill="currentColor" class="addIcon bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                          </svg>    
+                    </a>
                     
                   </div>
 
-                  <div>
-                    <a class="proLinks" href=""> Add Skills </a>
+                  <div class="links">
+                    <a class="proLinks" href=""> Add Skills
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" fill="currentColor" class="addIcon bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                          </svg>    
+                    </a>
                   </div>
 
-                  <div>
-                    <a class="proLinks" href=""> Add Experience </a>
+                  <div class="links">
+                    <a class="proLinks" href=""> Add Experience
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" fill="currentColor" class="addIcon bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                          </svg>    
+                    </a>
                   </div>
   
                    
@@ -174,25 +179,17 @@
       
               <div class="formbold-form-step-3">
                 <div class="formbold-form-confirm">
-                        <label for="message" class="formbold-form-label"> Add CV (Optional) </label>
-                        <textarea
-                        rows="3"
-                        name="message"
-                        id="message"
-                        placeholder="Add short summary about your career"
-                        class="formbold-form-input"
-                ></textarea>
-
-                <label for="jobTitle" class="formbold-form-label"> Add Certifications (if any) </label>
-                <input
-                type="text"
-                name="jobTitle"
-                placeholder="Eg. Backend Developer"
-                id="jobTitle"
-                class="formbold-form-input"
-                />
+                        <label for="file" class="formbold-form-label"> Add CV (.pdf/.docx/.doc) </label>
+                        <input type="file" name="file" id="file" accept=".pdf,.doc,.docx">
                    
                 </div>
+                <div class="formbold-form-confirm">
+                     
+
+            <label for="fileUpload" class="formbold-form-label"> Add Certifications (if any) </label>
+             <input type="file" id="fileUpload" name="files[]" multiple><br>
+               
+            </div>
               </div>
       
               <div class="formbold-form-btn-wrapper">
