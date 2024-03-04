@@ -258,6 +258,15 @@ body{
   body{
     height: 110vh;
   }
+
+  .modal-content{
+    width: 25% !important;
+  }
+
+  .form-select option {
+    font-size: 12px;  
+    width: 10% !important;
+  }
   
 }
 
@@ -283,4 +292,163 @@ body{
   .text{
     display: block;
   }
+
+  .modal-form{
+    max-width: 98% !important;
+  }
+
+  .btn-close{
+    margin-left: 10px !important;
+  }
+
+  .form-select option {
+    font-size: 12px; 
+    width: 100%;
+  }
+
+}
+
+/* -------------------------modal------------------------------------- */
+
+.btn-close{
+  padding: 10px;
+  margin-left: 500px;
+}
+
+.btn-close:active{
+  border: none !important;
+}
+
+.modal-form{
+  padding: 20px;
+  max-width: 100%;
+}
+.text-modal{
+  display: block;
+  padding: 10px;
+}
+
+.modalbtn{
+  float: right !important;
+  margin-bottom: 20px;
+}
+
+.modal-content{
+  width: 750px !important;
+}
+.modalContainer{
+  width: 100%;
+}
+
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="date"]::placeholder,
+::placeholder
+ {
+  font-size: 14px; 
+}
+
+
+
+.form-select:focus{
+  border: 1px solid  var(--primary) !important;
+  box-shadow: none !important;
+}
+
+.btn-close:focus{
+  box-shadow: none !important;
+}
+
+.form-select option {
+  /* font-size: 12px;  */
+  width: 50% !important;
+}
+
+.btn-skill{
+  margin-top: 10px;
+}
+
+
+/* ------------------ Skills --------------------------- */
+::selection{
+  color: #fff;
+  background: #5372F0;
+}
+.wrapper{
+  width: 496px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px 25px 20px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.06);
+}
+.wrapper :where(.title, li, li i, .details){
+  display: flex;
+  align-items: center;
+}
+.title img{
+  max-width: 21px;
+}
+.title h2{
+  font-size: 21px;
+  font-weight: 600;
+  margin-left: 8px;
+}
+.wrapper .content{
+  margin: 10px 0;
+}
+.content p{
+  font-size: 15px;
+}
+.content ul{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 7px;
+  margin: 12px 0;
+  border-radius: 5px;
+  border: 1px solid #a6a6a6;
+}
+.content ul  li{
+  color: #333;
+  margin: 4px 3px;
+  list-style: none;
+  border-radius: 5px;
+  background: #F2F2F2;
+  padding: 5px 8px 5px 10px;
+  border: 1px solid #e3e1e1;
+}
+.content ul li i{
+  height: 20px;
+  width: 20px;
+  color: #808080;
+  margin-left: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: #dfdfdf;
+  justify-content: center;
+}
+.content ul input{
+  flex: 1;
+  padding: 5px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+.wrapper .details{
+  justify-content: space-between;
+}
+.details button{
+  border: none;
+  outline: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 9px 15px;
+  border-radius: 5px;
+  background: #5372F0;
+  transition: background 0.3s ease;
+}
+.details button:hover{
+  background: #2c52ed;
 }
