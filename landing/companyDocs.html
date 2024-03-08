@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    
+   
     <link rel="stylesheet" href="css/registration.css" />
   </head>
   <body>
@@ -13,17 +13,17 @@
     <section class="container">
         <div class="formbold-steps">
             <ul>
-                <li class="formbold-step-menu1  ">
+                <li class="formbold-step-menu1 ">
                     <span>1</span>
-                    <p> Personal Details </p>
+                    <p> Account Details </p>
                 </li>
                 <li class="formbold-step-menu2 ">
                     <span>2</span>
-                    <p>Additional Details </p>
+                    <p>Company Details </p>
                 </li>
                 <li class="formbold-step-menu3 active">
                     <span>3</span>
-                    <p> Documents (if any) </p>
+                    <p> Verification docs </p>
                 </li>
                  
             </ul>
@@ -32,18 +32,18 @@
       <form action="#" class="form">
 
         <div class="input-box">
-          <label>Add CV (.pdf/.docx/.doc)*</label>
-          <input type="file" name="file" id="file" accept=".pdf,.doc,.docx" required>
+          <label>Add logo (.jpg/.png)*</label>
+          <input type="file" name="file" id="file" accept="image/jpeg,image/png" required>
          </div>  
 
         <div class="input-box">
-          <label> Add Certifications (if any)</label>
-          <input type="file" id="fileUpload" name="files[]" multiple><br>
+          <label> Add Verification (Registration Certificate)*</label>
+          <input type="file" id="fileUpload" name="file" accept=".pdf/.doc/.docx" required ><br>
         </div>
          
         <p class="terms"> By submitting this form, you agree to our <a href=""> Terms and Conditions.</a></p>
         <div class="add-btn">
-          <a class="back-btn" href="additional.html"> Back </a>
+          <a class="back-btn" href="companyDetails.html"> Back </a>
           <input class="next-btn" type="submit" value="Submit"> 
          </div> 
        

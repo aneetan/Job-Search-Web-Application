@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!---Coding By CodingLab | www.codinglabweb.com--->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--<title>Registration Form in HTML CSS</title>-->
+    <!---Custom CSS File--->
+    <link rel="stylesheet" href="css/registration.css" />
+  </head>
+  <body>
+
+    <section class="container">
+        <div class="formbold-steps">
+            <ul>
+                <li class="formbold-step-menu1 active ">
+                    <span>1</span>
+                    <p> Account Details </p>
+                </li>
+                <li class="formbold-step-menu2 ">
+                    <span>2</span>
+                    <p>Company Details </p>
+                </li>
+                <li class="formbold-step-menu3">
+                    <span>3</span>
+                    <p> Verification docs </p>
+                </li>
+                 
+            </ul>
+        </div>
+
+        <p class="login"> Already have account? <a href="adminLogin.html"> Login</a></p>
+      
+      <form action="companyDetails.html" class="form">
+
+        <div class="column">
+            <div class="input-box">
+                <label>Company Name</label>
+                <input type="text" name="companyName" id="companyName" placeholder="Enter company name" />
+                <div class="error"></div>
+              </div>
+      
+              <div class="input-box">
+                <label>Email</label>
+                <input type="email" name="companyEmail" id="companyEmail" placeholder="Enter company email"  />
+                <div class="error"></div>
+
+              </div>
+        </div>
+        <div class="column">
+            <div class="input-box">
+                <label>Password</label>
+                <input type="password" name="companyPassword" id="companyPassword" placeholder="Enter password" />
+                <div class="error"></div>
+
+              </div>
+      
+              <div class="input-box">
+                <label>Confirm Password</label>
+                <input type="password" name="companyConfirmPw" id="companyConfirmPw" placeholder="Re-enter your password"  />
+                <div class="error"></div>
+
+              </div>
+        </div>
+         
+        
+        <div class="add-btn">
+        <input class="next-btn" type="submit" value="Next"> 
+
+        </div>
+         
+      </form>
+    </section>
+
+    <script src="js/register.js"></script>
+  </body>
+</html>
