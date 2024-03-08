@@ -1,0 +1,301 @@
+/* Import Google font - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+:root {
+    --primary: #148FA8;
+    --secondary: #008080;
+    --light: #F7F8FC;
+    --dark: #333333;
+    --background: #060D23;
+    --background-hover: #383D4F;
+    --primary-blue: #00E0FE;
+    --blue-gray: #f4fcff;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-image:linear-gradient(to bottom, rgba(20, 143, 168, 0.75), rgba(86, 136, 182, 0.75)),
+    url('../img/register.jpg');
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+.container {
+  position: relative;
+  max-width: 700px !important;
+  width: 100%;
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.container header {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 500;
+  text-align: center;
+}
+.container .form {
+  margin-top: 2px;
+}
+.form .input-box {
+  width: 100%;
+  margin-top: 20px;
+}
+.input-box label {
+    font-weight: 500;
+  color: #333;
+}
+::placeholder{
+  color: #aba7a7;
+  font-weight: 400 !important;
+  font-size: 14px;
+
+}
+.form :where(.input-box input),
+textarea {
+  position: relative;
+  height: 50px;
+  width: 100%;
+  outline: none;
+  font-size: 1rem;
+  color: #707070;
+  margin-top: 8px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0 15px;
+}
+input[type=file]{
+    border: none;
+}
+textarea{
+    resize: none !important;
+}
+.input-box input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+.form .column {
+  display: flex;
+  column-gap: 15px;
+}
+.address :where(input, .select-box) {
+  margin-top: 15px;
+}
+.select-box select {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  border: none;
+  color: #707070;
+  font-size: 1rem;
+}
+.form button {
+  height: 55px;
+  width: 100%;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgb(130, 106, 251);
+}
+.form button:hover {
+  background: rgb(88, 56, 250);
+}
+/*Responsive*/
+@media screen and (max-width: 500px) {
+  .form .column {
+    flex-wrap: wrap;
+  }
+  .form :where(.gender-option, .gender) {
+    row-gap: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+    .formbold-steps ul li p{
+        display: none;
+    }
+
+      .form-select option {
+        font-size: 9px; 
+        width: 100%;
+      }
+}
+
+@media screen and (max-width: 768px){
+
+}
+
+
+
+/* ------------------- Form Bold Steps--------------------------- */
+.formbold-steps {
+    padding-bottom: 2px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #DDE3EC;
+  }
+  .formbold-steps ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    gap: 40px;
+  }
+  .formbold-steps li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #536387;
+    
+  }
+  .formbold-steps li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #DDE3EC;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: #536387;
+  }
+  .formbold-steps li.active {
+    color: #07074D;;
+    
+  }
+  .formbold-steps li.active span {
+    background: var(--primary);
+    color: #FFFFFF;
+  }
+
+
+  /* ------------------------ form button ------------------------ */
+  .next-btn,
+  .proceed-btn{
+    background-color: var(--primary);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: var(--light);
+    margin-top: 30px;
+    font-size: 16px;
+  }
+
+  /* ---------------------additional ----------------------- */
+  .links{
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 500;
+  }
+
+  .add-btn{
+    float: right;
+  }
+
+  .links svg{
+    height: 24px;
+    width: 24px;
+    float: right;
+  }
+
+  .back-btn{
+    text-decoration: none;
+    margin-right: 20px;
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  /* -------------------------modal--------------------------------------------- */
+
+   .head-text{
+    font-weight: 500;
+    color: var(--secondary);
+    margin-left: 20px;
+   }
+
+   .exit{
+    /* margin-left: 450px; */
+    margin: 10px;
+    float: right !important;
+   }
+  .modalContainer form{
+    margin: 0 20px;
+  }
+
+  .proceed-btn{
+    float: right;
+    margin-bottom: 10px;
+  }
+
+  .edu-header{
+    width: 100% !important;
+  }
+
+  .edu-header p{
+    margin-top: 4px;
+  }
+
+  .formbold-steps ul li p{
+    margin-top: 10px;
+  }
+
+
+  .terms{
+    font-size: 14px;
+    margin: 8px;
+    color: #707070;
+  }
+
+
+  /* ---------------------- education block ------------------------- */
+  .edu-details,
+  .ex-details{
+    border-radius: 8px;
+    border: 1px solid #e8e0e0;
+    /* box-shadow: 2px 2px 20px rgba(158, 155, 155, 0.3);  */
+    background: #FFFFFF;
+    padding: 12px;
+  }
+
+  .edu-details h6,
+  .ex-details h6{
+    font-size: 16px;
+    color: var(--primary);
+  }
+
+  .edu-details p,
+  .ex-details p{
+    font-size: 14px;
+    margin: 0px !important;
+  }
+
+  .error{
+    color: red;
+    font-size: 12px;
+  }
+
+  .login{
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .login a{
+    color: var(--primary);
+  }

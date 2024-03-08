@@ -28,7 +28,7 @@
     <div class="container">
     <div class="formbold-main-wrapper">
         <div class="formbold-form-wrapper">
-          <form action="" method="POST">
+          <form id="form" action="index.html" method="POST">
             <div class="text"> Register now </div>
               <div class="formbold-steps">
                   <ul>
@@ -62,6 +62,7 @@
                       id="name"
                       class="formbold-form-input"
                       />
+                      <div class="error"></div>
                   </div>
                   <div>
                       <label for="email" class="formbold-form-label"> Email address </label>
@@ -72,6 +73,7 @@
                       id="email"
                       class="formbold-form-input"
                       />
+                      <div class="error"></div>
                   </div>
                 </div>
         
@@ -85,6 +87,7 @@
                         placeholder="Enter password"
                         class="formbold-form-input"
                         />
+                        <div class="error"></div>
                     </div>
                     <div>
                         <label for="confirmPw" class="formbold-form-label"> Confirm Password</label>
@@ -95,6 +98,7 @@
                         id="confirmPw"
                         class="formbold-form-input"
                         />
+                        <div class="error"></div>
                     </div>
                 </div>
 
@@ -108,6 +112,7 @@
                         placeholder="Kathmandu, Nepal"
                         class="formbold-form-input"
                         />
+
                     </div>
                     <div>
                         <label for="number" class="formbold-form-label"> Phone Number </label>
@@ -120,6 +125,8 @@
                         />
                     </div>
                 </div>
+
+                 
                
               </div>
       
@@ -158,13 +165,13 @@
                     
                   </div>
 
-                  <div class="links">
+                  <!-- <div class="links">
                     <a class="proLinks" href="" data-bs-toggle="modal" data-bs-target="#skillModal"> Add Skills
                         <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" fill="currentColor" class="addIcon bi bi-plus" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
                           </svg>    
                     </a>
-                  </div>
+                  </div> -->
 
                   <div class="links">
                     <a class="proLinks" href=""  data-bs-toggle="modal" data-bs-target="#experienceModal"> Add Experience
@@ -173,14 +180,19 @@
                           </svg>    
                     </a>
                   </div>
+                  
+
+                  
+
   
+
                    
               </div>
 
 
               <!-- ------------------------------ Form 3 ------------------------------------------------------- -->
       
-              <div class="formbold-form-step-3">
+              <div id="form-3" class="formbold-form-step-3">
                 <div class="formbold-form-confirm">
                         <label for="file" class="formbold-form-label"> Add CV (.pdf/.docx/.doc) </label>
                         <input type="file" name="file" id="file" accept=".pdf,.doc,.docx">
@@ -193,12 +205,18 @@
              <input type="file" id="fileUpload" name="files[]" multiple><br>
                
             </div>
+
+            
+
               </div>
+
       
               <div class="formbold-form-btn-wrapper">
                 <button class="formbold-back-btn">
                   Back
                 </button>
+
+                 <a  class="form-btn-a" href="index.html">
       
                 <button class="formbold-btn">
                     Next Step
@@ -213,7 +231,11 @@
                     </defs>
                     </svg>
                 </button>
+
+              </a>
               </div>
+
+              
           </form>
         </div>
       </div>
@@ -249,7 +271,7 @@
                       type="text"
                       name="degree"
                       placeholder="Ex: Business"
-                      id="email"
+                      id="degree"
                       class="formbold-form-input"
                       required/>
                   </div>
@@ -348,7 +370,7 @@
                 <div class="formbold-input-flex">
                     <div>
                         <label for="field" class="formbold-form-label"> Employment Type </label>
-                        <select class="form-select" aria-label="Default select example">
+                        <select class="form-select " aria-label="Default select example">
                           <option selected> Please Select</option>
                           <option value="Full-Time"> Full-Time</option>
                           <option value="Part-Time"> Part-Time</option>
@@ -393,6 +415,7 @@
                 </div>
 
                 <input class="formbold-btn modalbtn" type="submit" value="Proceed">
+
             </form>
           </div>
           
@@ -403,39 +426,12 @@
 
 
 
-    <!-- -------------------------------- Skills ---------------------------------------- -->
-    <div class="modal fade" id="skillModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content pop">
-            <button type="button" class="btn-close exit" data-bs-dismiss="modal" aria-label="Close"></button>
-           
-            <div class="container modalContainer">
-             
-              <div class="wrapper">
-                <div class="title">
-
-                  <h2>Tags</h2>
-                </div>
-                <div class="content">
-                  <p>Press enter or add a comma after each tag</p>
-                  <ul><input type="text" spellcheck="false"></ul>
-                </div>
-                <div class="details">
-                  <p><span>10</span> tags are remaining</p>
-                  <button>Remove All</button>
-                </div>
-              </div>
-
-             
-          </div>
-          
-          </div>
-        </div>
-      </div>
+     
     </div>
     
     
 
+    <script src="js/register.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
@@ -454,6 +450,18 @@
       
         const formSubmitBtn = document.querySelector('.formbold-btn')
         const formBackBtn = document.querySelector('.formbold-back-btn')
+
+        
+formBackBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    stepMenuThree.classList.remove('active');
+    stepMenuTwo.classList.add('active');
+
+    stepThree.classList.remove('active');
+    stepTwo.classList.add('active');
+
+    formSubmitBtn.textContent = 'Next Step';
+});
       
         formSubmitBtn.addEventListener("click", function(event){
           event.preventDefault()
@@ -489,7 +497,7 @@
               stepTwo.classList.remove('active')
               stepThree.classList.add('active')
       
-              formBackBtn.classList.remove('active')
+              // formBackBtn.classList.add('active')
               formSubmitBtn.textContent = 'Submit'
             } else if(stepMenuThree.className == 'formbold-step-menu3 active') {
               document.querySelector('form').submit()
