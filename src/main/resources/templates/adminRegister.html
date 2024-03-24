@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Registration Form </title>
+  <!---Custom CSS File--->
+  <link rel="stylesheet" th:href="@{css/registration.css}" />
+</head>
+<body>
+
+<section class="container">
+  <div class="formbold-steps">
+    <ul>
+      <li class="formbold-step-menu1 active ">
+        <span>1</span>
+        <p> Account Details </p>
+      </li>
+      <li class="formbold-step-menu2 ">
+        <span>2</span>
+        <p>Company Details </p>
+      </li>
+      <li class="formbold-step-menu3">
+        <span>3</span>
+        <p> Verification docs </p>
+      </li>
+
+
+    </ul>
+  </div>
+
+  <p class="login"> Already have account? <a href="adminLogin.html"> Login</a></p>
+  <div class="error">
+
+    <p th:text="${error}" style="color:red;"> </p>
+  </div>
+
+  <form action="/adminReg" method="post" id="adminForm" class="form">
+
+    <div class="column">
+      <div class="input-box">
+        <label>Company Name</label>
+        <input type="text" name="companyName" id="companyName" placeholder="Enter company name" />
+        <div class="error"></div>
+      </div>
+
+      <div class="input-box">
+        <label>Email</label>
+        <input type="email" name="companyEmail" id="companyEmail" placeholder="Enter company email"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+    <div class="column">
+      <div class="input-box">
+        <label>Password</label>
+        <input type="password" name="companyOriginPassword" id="companyPassword" placeholder="Enter password" />
+        <div class="error"></div>
+
+      </div>
+
+      <div class="input-box">
+        <label>Confirm Password</label>
+        <input type="password" name="companyPassword" id="companyConfirmPw" placeholder="Re-enter your password"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+
+
+    <div class="add-btn">
+      <input class="next-btn" type="submit" value="Next">
+
+    </div>
+
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById("adminForm");
+  const name = document.getElementById("companyName");
+  const email = document.getElementById("companyEmail");
+  const password = document.getElementById("companyPassword");
+  const confirmpw = document.getElementById("companyConfirmPw");
+
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if (validateInputs()) {
+      this.submit();
+    }
+  });
+
+
+  // Error Message
+  const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+    inputControl.classList.remove('success');
+  }
+
+
+  //success message
+  const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.add('success');
+    inputControl.classList.remove('error');
+  }
+
+
+  //email validation
+  const isValidEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  //check for strong password
+  const isValidPassword = password => {
+    const pw =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    return pw.test(String(password).toLowerCase());
+  }
+
+
+  //check for phone number
+  function isValidPhoneNumber(phoneNumber) {
+    // Regular expression to match 10 digits
+    var regex = /^\d{10}$/;
+
+    // Test the phone num against the regex
+    return regex.test(phoneNumber);
+  }
+
+  const validateInputs = () => {
+    const emailValue = email.value.trim();
+    const nameValue = name.value;
+    const passwordValue = password.value.trim();
+    const confirmpwValue = confirmpw.value.trim();
+
+
+    let isValid = true;
+
+    //check email validation
+    if(emailValue === '') {
+      setError(email, 'Email is required');
+      isValid=false;
+    } else if(!isValidEmail(emailValue)) {
+      setError(email, 'Insert valid email address');
+      isValid=false;
+    } else {
+      setSuccess(email);
+    }
+
+
+    //check for name validation
+    if (nameValue === '') {
+      setError(name, 'Name is required');
+      isValid=false;
+    } else {
+      setSuccess(name);
+    }
+
+    //check password validation
+    if(passwordValue === '') {
+      setError(password, 'Password is required');
+      isValid=false;
+    } else if(passwordValue.length < 7) {
+      setError(password,'Password must be 7 characters');
+      isValid=false;
+    } else if (!isValidPassword(passwordValue)) {
+      setError(password,'Please insert strong password');
+      isValid=false;
+    } else {
+      setSuccess(password);
+    }
+
+    //check for matching password
+    if(confirmpwValue === '') {
+      setError(confirmpw, 'Please confirm your password');
+      isValid=false;
+    } else if(confirmpwValue !== passwordValue) {
+      setError(confirmpw, "Password doesn't match");
+      isValid=false;
+    } else {
+      setSuccess(confirmpw);
+    }
+    return isValid;
+  }
+
+</script>
+</body>
+</html>

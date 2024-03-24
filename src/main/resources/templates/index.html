@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title> JobPortal </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link th:href="@{img/favicon.ico}" rel="icon">
+
+    <!-- Font awesome -->
+<!--    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">-->
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css}" crossorigin="anonymous">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+    <link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+
+    <!-- Icon Font Stylesheet -->
+    <link th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css}" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet">
+    <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<!-- Spinner Start -->
+<!--<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">-->
+<!--    <div class="spinner-border text-primary" role="status"></div>-->
+<!--</div>-->
+<!-- Spinner End -->
+
+
+<!-- Navbar Start -->
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+
+    <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class=" logo navbar-brand ms-4 ms-lg-0">
+            <img class="logo" th:src="@{/img/logo.png}"  alt="logo"> <span class="fw-bold text-primary m-0"> JobSearch </span>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="about.html" class="nav-item nav-link"> Hire </a>
+                <a href="product.html" class="nav-item nav-link"> About Us</a>
+                <!-- <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="blog.html" class="dropdown-item">Blog Grid</a>
+                        <a href="feature.html" class="dropdown-item">Our Features</a>
+                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                        <a href="404.html" class="dropdown-item">404 Page</a>
+                    </div>
+                </div> -->
+                <a href="contact.html" class="nav-item nav-link"> FAQs</a>
+            </div>
+            <div class="d-none d-lg-flex ms-2">
+                <a th:href="@{/userLogin}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Login</a>
+            </div>
+        </div>
+    </nav>
+</div>
+<!-- Navbar End -->
+
+
+<!-- Carousel Start -->
+<div class=" content-page container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+    <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img class=" content-img" src="img/landingbg.png" alt="Image">
+                <div class="carousel-caption">
+                    <div class="container">
+                        <div class="row justify-content-start">
+                            <div class="col-lg-7">
+                                <h4 class="landing-txt display-2 mb-5 animated slideInDown"> Elevate Your Career:<span>  Where Opportunities Meet Ambition </span></h4>
+                                <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Get Started</a>
+                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> Available jobs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+
+    <!-- Hire Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="about-img position-relative overflow-hidden p-5 pe-0">
+                        <img class="img-fluid w-100" src="img/about.jpg" alt="hire">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <h4 class=" landing-txt display-5 mb-4"> Simplify Hiring: <span> Empower Your Team Today </span></h4>
+                    <p class="mb-4">Streamline your hiring process for optimal team performance. </p>
+                    <a class="btn btn-primary rounded-pill py-3 px-5 mt-3" th:href="@{/adminLogin}"> Start Hiring Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Hire End -->
+
+
+    <!-- Get started Start -->
+    <div class=" get-started container-fluid bg-light bg-icon my-5 py-6">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h4 class="start-text display-5 mb-3"> Easy Steps</h4>
+                <p> Your gateway to countless career opportunities</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class=" icon-edit bg-white text-center h-80 p-4 p-xl-5">
+                        <img class="img-fluid mb-4" src="img/login.png" alt="">
+                        <h4 class="mb-3"> Login </h4>
+                        <p class="mb-4"> Create an account entering your personal details and required information. </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="icon-edit bg-white text-center h-100 p-4 p-xl-5">
+                        <img class="img-fluid mb-4" src="img/cv.png" alt="">
+                        <h4 class="mb-3"> CV/Resume</h4>
+                        <p class="mb-4"> Introduce your professionalism with the achievements, goals and awards.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="icon-edit bg-white text-center h-100 p-4 p-xl-5">
+                        <img class="img-fluid mb-4" src="img/apply.png" alt="">
+                        <h4 class="mb-3"> Apply </h4>
+                        <p class="mb-4"> Browse the available jobs and apply in single click. </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Get started End -->
+
+
+    <!-- Job Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-0 gx-5 align-items-end">
+                <div class="col-lg-6">
+                    <div class="icon-edit section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                        <h4 class=" available-jobs display-5 mb-3"> Available jobs</h4>
+                        <p style="font-size: 16px;"> Login for more personalized experience!</p>
+                    </div>
+                </div>
+                <!-- <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
+                    <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegetable</a>
+                        </li>
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruits </a>
+                        </li>
+                        <li class="nav-item me-0">
+                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Fresh</a>
+                        </li>
+                    </ul>
+                </div> -->
+            </div>
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane fade show p-0 active">
+                    <div class="row g-4">
+                        <!-- -------------------1--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status"> 1 open positions </div>
+                                    <img src="img/logo.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -------------------2--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status"> 1 open positions </div>
+                                    <img src="img/logo.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -------------------3--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status"> 1 open positions </div>
+                                    <img src="img/logo.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -------------------4--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status"> 1 open positions </div>
+                                    <img src="img/logo.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -------------------5--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status"> 1 open positions </div>
+                                    <img src="img/logo.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- -------------------6--------------------------------- -->
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                            <div class="product-item">
+                                <div class="job-cards">
+                                    <div class="status no-open"> 0 open positions </div>
+                                    <img src="img/fb.png" alt="logo">
+                                    <h2> Senior Copywriter</h2>
+                                    <p class="company"> Company Name</p>
+                                    <p class="description">
+                                        An energetic passionate person for a versatile post.
+                                    </p>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
+                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+
+                                    <div class="more-details">
+                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
+                            <a class="btn btn-primary rounded-pill py-3 px-5" href=""> See more jobs </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Job End -->
+
+
+    <!-- FAQs Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
+                <h1 class="display-5 mb-3"> FAQs</h1>
+                <p>Find quick answers to common questions about our job search application!</p>
+            </div>
+
+            <div class="faq-container">
+                <details>
+                    <summary>
+                    <span class="faq-title">
+                        How do I create an account?
+                    </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="expand-icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 6l6 6l-6 6"></path>
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        To create an account, click on the "Login" button located in the top-right corner of the page. Then, select "Create Account" and follow the prompts to enter your personal details and required information.
+                    </div>
+                </details>
+                <details>
+                    <summary>
+                    <span class="faq-title">
+                        How do I apply for a job?
+                    </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="expand-icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 6l6 6l-6 6"></path>
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        To apply for a job, first, make sure you are logged in to your account. Then,
+                        navigate to the "Available Jobs" section, browse the listings, and click on the job you're interested in. Finally, click the "Apply" button and
+                        follow the instructions to complete your application.</div>
+                </details>
+                <details>
+                    <summary>
+                        <span class="faq-title"> Can I upload my CV/Resume? </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="expand-icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 6l6 6l-6 6"></path>
+                        </svg>
+                    </summary>
+                    <div class="faq-content">
+                        Yes, you can upload your CV/Resume to your profile.
+                        After logging in, go to the "CV/Resume" section and follow the instructions to upload
+                        your professional achievements, goals, and awards.
+                    </div>
+                </details>
+                <details>
+                    <summary>
+                        <span class="faq-title">Can I add a job description representing company?</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="expand-icon" width="24" height="24" viewBox="0 0 24 24"
+                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 6l6 6l-6 6"></path>
+                        </svg>
+                    </summary>
+                    <div class="faq-content">Yes, just click on the Hire on the navbar, register if you are new and you can
+                        add jobs with descriptions and other attributes</div>
+                </details>
+            </div>
+        </div>
+    </div>
+    <!-- Blog End -->
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <a href="index.html" class=" logo navbar-brand ms-4 ms-lg-0">
+                        <img style="width: 50px;" class="logo" src="img/logo.png" alt="logo"> <span class="fw-bold text-primary m-0"> JobSearch </span>
+                    </a>
+                    <p> "Connecting Talent to Opportunity: Your Path to Success Starts Here!"</p>
+
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Getting Started</h4>
+                    <a class="btn btn-link" href="">Login</a>
+                    <a class="btn btn-link" href="">Available jobs</a>
+                    <a class="btn btn-link" href="">Manual</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4">Quick Links</h4>
+                    <a class="btn btn-link" href="">Hire Now</a>
+                    <a class="btn btn-link" href="">FAQs</a>
+                    <a class="btn btn-link" href="">Terms & Conditions</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-light mb-4"> Contact Us</h4>
+                    <p><i class="fa fa-envelope me-3"></i>jobsearch@email.com</p>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a href="#">JobSearch</a>, All Right Reserved.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script th:src="@{https://code.jquery.com/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/lib/wow/wow.min.js}"></script>
+    <script th:src="@{/lib/easing/easing.min.js}"></script>
+    <script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+    <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+    <!-- Template Javascript -->
+    <script th:src="@{/js/main.js}"></script>
+    <script th:src="@{/js/script.js}"></script>
+</div>
+</body>
+</html>
