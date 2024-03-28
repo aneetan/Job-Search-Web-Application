@@ -1,11 +1,8 @@
 package com.example.jobportal.controller;
 
-import com.example.jobportal.model.Company;
-import com.example.jobportal.model.CompanyDetails;
-import com.example.jobportal.model.CompanyDocs;
-import com.example.jobportal.repository.CompanyDetailsRepository;
-import com.example.jobportal.repository.CompanyRepository;
-import com.example.jobportal.repository.companyDocsRepository;
+import com.example.jobportal.model.*;
+import com.example.jobportal.repository.*;
+import com.example.jobportal.service.FileService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,7 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -76,9 +76,6 @@ public class JobController {
         Company company = new Company(c.getCompanyName(), c.getCompanyEmail(), hashedPassword);
         cRepo.save(company);
 
-        System.out.println(company);
-        System.out.println(cRepo);
-
         model.addAttribute("Company", company);
         return "companyDetails.html";
     }
@@ -87,8 +84,7 @@ public class JobController {
     public String goToCompanyDocs(@ModelAttribute CompanyDetails cd,@ModelAttribute("Company") Company company, Model model){
         CompanyDetails companyDetails = new CompanyDetails(cd.getCompanyAddress(), cd.getIndustry(), cd.getEmployeeNo(), cd.getCompanyContact(), cd.getCompanyUrl());
 
-//        Company comp = (Company) model.getAttribute("Company");
-        companyDetails.setCompany(company); // Set the Company reference
+        companyDetails.setCompany(company);
         System.out.println(company);
         System.out.println(companyDetails);
 
@@ -102,7 +98,7 @@ public class JobController {
     @PostMapping("/saveCompanyData")
     public String registerCompany(@ModelAttribute CompanyDocs doc, @ModelAttribute("Company") Company company, Model model){
         CompanyDocs companyDocs = new CompanyDocs(doc.getLogoName(), doc.getVerifiedDocName());
-        companyDocs.setCompany(company); // Set the CompanyDetails reference
+        companyDocs.setCompany(company);
 
         docsRepo.save(companyDocs);
 
@@ -112,6 +108,13 @@ public class JobController {
 
 
 //    ------------------user login and registration -----------------------------------
+    @Autowired
+    private PersonalDetailsRepository pRepo;
+
+    @Autowired
+    private AdditionalDetailsRepository addRepo;
+    @Autowired
+    private FileRepository uRepo;
     @GetMapping("/userLogin")
     public String login(){
         return "login.html";
@@ -123,16 +126,91 @@ public class JobController {
     }
 
     @PostMapping("/goToAdditional")
-    public  String goToAdditional(){
+    public  String goToAdditional(@ModelAttribute("personalDetails") PersonalDetails details, Model model){
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(details.getPassword());
+
+        // Check if email already exists in the database
+        if (pRepo.existsByEmail(details.getEmail())) {
+            model.addAttribute("error", "Email already exists");
+            return "registration.html";
+        }
+
+        PersonalDetails pd = new PersonalDetails(details.getEmail(), details.getName(), hashedPassword, details.getAddress(), details.getPhoneNo());
+        pRepo.save(pd);
+
+        model.addAttribute("pDetails", pd);
         return "additional.html";
     }
 
+
     @PostMapping("/goTodocs")
-    public String goToDocs(){
+    public String goToDocs(@ModelAttribute additionalDetails add, @ModelAttribute("pDetails") PersonalDetails details, Model model){
+        additionalDetails addDetails = new additionalDetails(add.getBio(), add.getJobTitle());
+        addDetails.setPersonalDetails(details);
+
+        model.addAttribute("pDetails", details);
+        addRepo.save(addDetails);
+
+        model.addAttribute("add", addDetails);
+
         return "docs.html";
     }
 
+    @Autowired
+    private EducationRepository eduRepo;
 
+    @PostMapping(value = "/submitEducation", produces = "text/plain", consumes = "application/json")
+    @ResponseBody
+    public String submitEducation(@RequestBody Education formData, Model model) {
+        Education education = new Education(formData.getSchool(), formData.getDegree(), formData.getField(), formData.getGrade(), formData.getStartDate(), formData.getEndDate());
+        education.setPersonalDetails(formData.getPersonalDetails());
+        eduRepo.save(education);
+
+        return "additional.html";
+    }
+
+    @Autowired
+    private ExperienceRepository exRepo;
+
+    @PostMapping(value = "/submitExperience", produces = "text/plain", consumes = "application/json")
+    @ResponseBody
+    public Experience submitExperience(@RequestBody Experience formData, Model model) {
+        // Save the experience data
+        Experience experience = new Experience(formData.getTitle(), formData.getCompany(), formData.getEmpType(), formData.getLocationType(), formData.getStartDateEx(), formData.getEndDateEx());
+        experience.setPersonalDetails(formData.getPersonalDetails());
+        exRepo.save(experience);
+
+        List<Experience> experienceList = new ArrayList<>(); // Assuming findAll() retrieves all experiences
+        experienceList.add(experience);
+        return formData;
+    }
+
+    @Autowired
+    private FileService fileService;
+
+    @Autowired
+    private FileRepository fRepo;
+
+    @PostMapping("/userRegister")
+    public String registerUser( @ModelAttribute userDocs u,  @ModelAttribute("pDetails") PersonalDetails details,  @RequestParam("cv") MultipartFile cv,
+                                @RequestParam("profile") MultipartFile profile) throws IOException {
+
+        String cvFileName = cv.getOriginalFilename();
+        fileService.saveFile(cv, cvFileName);
+
+        String profileFileName = profile.getOriginalFilename();
+        fileService.saveFile(profile, profileFileName);
+
+        System.out.println(details);
+        userDocs docs = new userDocs(cvFileName, profileFileName);
+        docs.setPersonalDetails(details);
+
+        fRepo.save(docs);
+
+        // Redirect to success page
+        return "companyLanding.html";
+    }
 
 
 }

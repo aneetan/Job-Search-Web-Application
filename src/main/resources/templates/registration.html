@@ -31,6 +31,10 @@
   </div>
 
   <p class="login"> Already have account? <a href="/userLogin"> Login</a></p>
+  <div class="error">
+
+    <p th:text="${error}" style="color:red;"> </p>
+  </div>
 
   <form action="/goToAdditional" class="form" method="post" id="form">
 
@@ -39,6 +43,7 @@
         <label>Full Name</label>
         <input type="text" name="name" id="name" placeholder="Enter full name" />
         <div class="error"></div>
+
       </div>
 
       <div class="input-box">

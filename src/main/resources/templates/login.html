@@ -33,7 +33,8 @@
         <div class="title"> Welcome back!</div>
 
         <div class="error">
-          Username or password is invalid!
+
+          <p th:text="${login}" style="color:red;"> </p>
         </div>
         <form action="/loginUser" method="post">
           <div class="input-boxes">

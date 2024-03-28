@@ -16,6 +16,12 @@ public class additionalDetails {
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private PersonalDetails personalDetails;
 
+    public additionalDetails(){
 
+    }
 
+    public additionalDetails(String bio, String jobTitle) {
+        this.bio = bio;
+        this.jobTitle = jobTitle;
+    }
 }
