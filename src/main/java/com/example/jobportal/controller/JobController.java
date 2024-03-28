@@ -213,4 +213,45 @@ public class JobController {
     }
 
 
+    @PostMapping("/loginUser")
+    public String userLogin(@ModelAttribute PersonalDetails p, HttpSession session, Model model){
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashPw = encoder.encode(p.getPassword());
+
+        String adminEmail = "admin@gmail.com";
+        String adminPw = encoder.encode("admin@123");
+
+        if (p.getEmail().equals(adminEmail) && encoder.matches(p.getPassword(), adminPw)) {
+            session.setAttribute("activeUser", adminEmail);
+            session.setMaxInactiveInterval(30);
+            return "superAdmin.html";
+        } else {
+            PersonalDetails user = pRepo.findByEmail(p.getEmail());
+            if (user != null && encoder.matches(p.getPassword(), user.getPassword())){
+                session.setAttribute("activeUser", p.getEmail());
+                session.setMaxInactiveInterval(30);
+                return "userLanding.html";
+            } else {
+                model.addAttribute("login", "Invalid username or password");
+                return "login.html";
+            }
+        }
+    }
+
+
+
+    @GetMapping("/approvedComp")
+    public String approvedCompanies(){
+        return "approvedComp.html";
+    }
+
+    @GetMapping("/superAdmin")
+    public String superAdmin(){
+        return "superAdmin.html";
+    }
+
+
+
+
+
 }
