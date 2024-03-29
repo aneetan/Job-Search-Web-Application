@@ -3,6 +3,7 @@ package com.example.jobportal.controller;
 import com.example.jobportal.model.*;
 import com.example.jobportal.repository.*;
 import com.example.jobportal.service.FileService;
+import com.example.jobportal.service.MailService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -273,9 +274,13 @@ public class JobController {
         return "superAdmin.html";
     }
 
+    @Autowired
+    private MailService mailService;
+
 
     @GetMapping("/approve/{id}")
-    public String approveComp(@PathVariable("id") int id, Model model, HttpSession session){
+    public String approveComp(@PathVariable("id") int id, Model model,
+                              @ModelAttribute MailStructure mailStructure, HttpSession session){
         if(session.getAttribute("activeUser") == null) {
             session.setAttribute("login", "Please login first");
             return "login.html";
@@ -286,6 +291,11 @@ public class JobController {
 
         cRepo.save(company);
 
+        mailStructure.setSubject("Approval of company");
+        mailStructure.setMessage("Your email for Job Search has been approved. You can now add jobs.");
+
+        mailService.sendMail(company.getCompanyEmail(), mailStructure);
+//        mailService.sendMail("anee.neu15@gmail.com", mailStructure);
 
         model.addAttribute("dataList", docsRepo.findAll());
 
