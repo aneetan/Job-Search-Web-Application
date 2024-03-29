@@ -27,6 +27,19 @@
     height: auto;
     width: 50px;
   }
+
+  .approve-btn{
+    text-decoration: none;
+    padding: 10px 20px !important;
+  }
+
+  .badge-gradient-success{
+    background: var(--primary) !important;
+  }
+
+  .badge-gradient-danger{
+    background: #DF4D36 ;
+  }
 </style>
 <body>
 <div class="container-scroller">
@@ -141,45 +154,31 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr th:each="entity: ${dataList}">
                       <td>
-                        <img src="img/face1.jpg" class="me-2" alt="image"> F1soft
+                        <img th:src="@{'uploadImg/' + ${entity.logoName}}" class="me-2" alt="image">
+                        <span th:text="${entity.company.companyName}"> Name </span>
                       </td>
-                      <td> Lalitpur </td>
-                      <td> 9812345678 </td>
-                      <td> Dec 5, 2017 </td>
-                      <td> WD-12345 </td>
-                      <td> WD-12345 </td>
+                      <td th:text="${entity.companyDetails.companyAddress}"></td>
+                      <td th:text="${entity.companyDetails.companyContact}"></td>
                       <td>
-                        <a href=""> View Details</a>
+                        <a th:text="${entity.companyDetails.companyUrl}" th:href="${entity.companyDetails.companyUrl}" target="_blank"> </a>
+                      </td>
+                      <td th:text="${entity.companyDetails.industry}"></td>
+                      <td th:text="${entity.companyDetails.employeeNo}"></td>
+                      <td>
+                        <a th:href="@{'uploadImg/' + ${entity.verifiedDocName}}" target="_blank">View Document</a>
                       </td>
 
+                                            <td>
+                                              <span> Approved </span>
+                                            </td>
+
                       <td>
-                        <label class="badge badge-gradient-success">  Approved </label>
+                        <a  class="approve-btn badge badge-gradient-danger" th:href="@{'/decline/' + ${entity.company.companyId}}"> Decline </a>
                       </td>
-
-
                     </tr>
 
-                    <tr>
-                      <td>
-                        <img src="img/face1.jpg" class="me-2" alt="image"> F1soft
-                      </td>
-                      <td> Lalitpur </td>
-                      <td> 9812345678 </td>
-                      <td> Dec 5, 2017 </td>
-                      <td> WD-12345 </td>
-                      <td> WD-12345 </td>
-                      <td>
-                        <a href=""> View Details</a>
-                      </td>
-
-                      <td>
-                        <label class="badge badge-gradient-success">  Approved </label>
-
-                      </td>
-
-                    </tr>
                     </tbody>
                   </table>
                 </div>

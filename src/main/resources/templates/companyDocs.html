@@ -30,30 +30,28 @@
     </ul>
   </div>
 
-  <form action="/saveCompanyData" method="post" class="form">
+  <form action="/saveCompanyData" method="post" class="form" enctype="multipart/form-data">
 
     <input type="hidden" name="companyId" th:value="${Company.companyId}">
     <input type="hidden" name="companyName" th:value="${Company.companyName}">
     <input type="hidden" name="companyEmail" th:value="${Company.companyEmail}">
     <input type="hidden" name="companyPassword" th:value="${Company.companyPassword}">
 
-<!--    <input type="hidden" name="companyAddress" th:value="${cd.companyAddress}">-->
-<!--    <input type="hidden" name="companyContact" th:value="${cd.companyAddress}">-->
-<!--    <input type="hidden" name="companyURL" th:value="${cd.companyAddress}">-->
-<!--    <input type="hidden" name="employeeNo" th:value="${cd.companyAddress}">-->
-<!--    <input type="hidden" name="industry" th:value="${cd.companyAddress}">-->
-
-
-
+    <input type="hidden" name="companyDetailsId" th:value="${cd.companyDetailsId}">
+    <input type="hidden" name="companyAddress" th:value="${cd.companyAddress}">
+    <input type="hidden" name="industry" th:value="${cd.industry}">
+    <input type="hidden" name="employeeNo" th:value="${cd.employeeNo}">
+    <input type="hidden" name="companyContact" th:value="${cd.companyContact}">
+    <input type="hidden" name="companyUrl" th:value="${cd.companyUrl}">
 
     <div class="input-box">
       <label>Add logo (.jpg/.png)*</label>
-      <input type="file" name="logoName" id="file" accept="image/jpeg,image/png" required>
+      <input type="file" name="logo" id="file" accept="image/jpeg,image/png" required>
     </div>
 
     <div class="input-box">
       <label> Add Verification (Registration Certificate)*</label>
-      <input type="file" id="fileUpload" name="verifiedDocName" accept=".pdf/.doc/.docx/.jpeg/.png" required ><br>
+      <input type="file" id="fileUpload" name="docName" accept=".pdf/.doc/.docx/.jpeg/.png" required ><br>
     </div>
 
     <p class="terms"> By submitting this form, you agree to our <a href=""> Terms and Conditions.</a></p>

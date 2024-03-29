@@ -15,6 +15,7 @@ public class Company {
     private String companyName;
     private String companyEmail;
     private String companyPassword;
+    private String status;
 
 //    @OneToOne(mappedBy = "company", cascade = CascadeType.PERSIST)
 //    @JoinColumn(name = "companyDetailsId")

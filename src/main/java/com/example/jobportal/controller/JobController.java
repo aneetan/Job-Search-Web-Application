@@ -74,6 +74,7 @@ public class JobController {
         }
 
         Company company = new Company(c.getCompanyName(), c.getCompanyEmail(), hashedPassword);
+        company.setStatus("Pending");
         cRepo.save(company);
 
         model.addAttribute("Company", company);
@@ -96,9 +97,18 @@ public class JobController {
     }
 
     @PostMapping("/saveCompanyData")
-    public String registerCompany(@ModelAttribute CompanyDocs doc, @ModelAttribute("Company") Company company, Model model){
-        CompanyDocs companyDocs = new CompanyDocs(doc.getLogoName(), doc.getVerifiedDocName());
+    public String registerCompany(@ModelAttribute CompanyDocs doc, @ModelAttribute("Company") Company company,@ModelAttribute("cd") CompanyDetails cd, Model model,
+                                  @RequestParam("logo") MultipartFile logo, @RequestParam("docName") MultipartFile docName ) throws IOException {
+
+        String logoName = logo.getOriginalFilename();
+        fileService.saveFile(logo, logoName);
+
+        String verfiedDocName = docName.getOriginalFilename();
+        fileService.saveFile(docName, verfiedDocName);
+
+        CompanyDocs companyDocs = new CompanyDocs(logoName, verfiedDocName);
         companyDocs.setCompany(company);
+        companyDocs.setCompanyDetails(cd);
 
         docsRepo.save(companyDocs);
 
@@ -194,7 +204,7 @@ public class JobController {
 
     @PostMapping("/userRegister")
     public String registerUser( @ModelAttribute userDocs u,  @ModelAttribute("pDetails") PersonalDetails details,  @RequestParam("cv") MultipartFile cv,
-                                @RequestParam("profile") MultipartFile profile) throws IOException {
+                                @RequestParam("profile") MultipartFile profile, Model model) throws IOException {
 
         String cvFileName = cv.getOriginalFilename();
         fileService.saveFile(cv, cvFileName);
@@ -208,13 +218,15 @@ public class JobController {
 
         fRepo.save(docs);
 
+        model.addAttribute("login", "Please login to continue");
+
         // Redirect to success page
-        return "companyLanding.html";
+        return "login.html";
     }
 
 
     @PostMapping("/loginUser")
-    public String userLogin(@ModelAttribute PersonalDetails p, HttpSession session, Model model){
+    public String userLogin(@ModelAttribute PersonalDetails p, @ModelAttribute CompanyDetails cd, HttpSession session, Model model, @ModelAttribute CompanyDocs d){
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         String hashPw = encoder.encode(p.getPassword());
 
@@ -224,12 +236,18 @@ public class JobController {
         if (p.getEmail().equals(adminEmail) && encoder.matches(p.getPassword(), adminPw)) {
             session.setAttribute("activeUser", adminEmail);
             session.setMaxInactiveInterval(30);
+
+
+            model.addAttribute("dataList", docsRepo.findByCompany_Status("Pending"));
+
             return "superAdmin.html";
+
         } else {
             PersonalDetails user = pRepo.findByEmail(p.getEmail());
             if (user != null && encoder.matches(p.getPassword(), user.getPassword())){
                 session.setAttribute("activeUser", p.getEmail());
                 session.setMaxInactiveInterval(30);
+
                 return "userLanding.html";
             } else {
                 model.addAttribute("login", "Invalid username or password");
@@ -241,12 +259,53 @@ public class JobController {
 
 
     @GetMapping("/approvedComp")
-    public String approvedCompanies(){
+    public String approvedCompanies(Model model, @ModelAttribute CompanyDocs doc){
+
+        model.addAttribute("dataList", docsRepo.findByCompany_Status("Approved"));
+
         return "approvedComp.html";
     }
 
     @GetMapping("/superAdmin")
-    public String superAdmin(){
+    public String superAdmin(Model model){
+        model.addAttribute("dataList", docsRepo.findAll());
+
+        return "superAdmin.html";
+    }
+
+
+    @GetMapping("/approve/{id}")
+    public String approveComp(@PathVariable("id") int id, Model model, HttpSession session){
+        if(session.getAttribute("activeUser") == null) {
+            session.setAttribute("login", "Please login first");
+            return "login.html";
+        }
+
+        Company company = cRepo.getById(id);
+        company.setStatus("Approved");
+
+        cRepo.save(company);
+
+
+        model.addAttribute("dataList", docsRepo.findAll());
+
+        return "superAdmin.html";
+    }
+
+    @GetMapping("/decline/{id}")
+    public String declineComp(@PathVariable("id") int id, Model model, HttpSession session){
+        if(session.getAttribute("activeUser") == null) {
+            session.setAttribute("login", "Please login first");
+            return "login.html";
+        }
+
+        Company company = cRepo.getById(id);
+        company.setStatus("Declined");
+
+        cRepo.save(company);
+
+
+        model.addAttribute("dataList", docsRepo.findAll());
         return "superAdmin.html";
     }
 

@@ -20,6 +20,7 @@ public class CompanyDetails {
     private Company company;
 
 
+
     public CompanyDetails(){
 
     }

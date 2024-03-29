@@ -1,9 +1,11 @@
 package com.example.jobportal.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
+@Data
 public class CompanyDocs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,21 +16,20 @@ public class CompanyDocs {
     @JoinColumn(name = "companyId", referencedColumnName = "companyId")
     private  Company company;
 
+    private String verifiedDocName;
+
+    @OneToOne
+    @JoinColumn(name = "companyDetailsId", referencedColumnName = "companyDetailsId")
+    private  CompanyDetails companyDetails;
+
+    public CompanyDocs(){
+
+    }
     public CompanyDocs(String logoName, String verifiedDocName) {
         this.logoName = logoName;
         this.verifiedDocName = verifiedDocName;
     }
 
-    private String verifiedDocName;
-
-    public CompanyDocs(){
-
-    }
-    public CompanyDocs(String logoName, Company company, String verifiedDocName) {
-        this.logoName = logoName;
-        this.company = company;
-        this.verifiedDocName = verifiedDocName;
-    }
 
 
     public int getDocId() {
