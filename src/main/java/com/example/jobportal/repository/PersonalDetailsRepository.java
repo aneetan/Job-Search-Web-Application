@@ -11,4 +11,6 @@ public interface PersonalDetailsRepository extends JpaRepository<PersonalDetails
     PersonalDetails findByEmail(@Param("email") String email);
     boolean existsByEmail(String email);
 
+    PersonalDetails findAllByUserId(int userId);
+
 }

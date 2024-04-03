@@ -1,9 +1,11 @@
 package com.example.jobportal.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
 @Entity
+@Data
 public class CompanyDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,61 +32,5 @@ public class CompanyDetails {
         this.employeeNo = employeeNo;
         this.companyContact = companyContact;
         this.companyUrl = companyUrl;
-    }
-
-    public int getCompanyDetailsId() {
-        return companyDetailsId;
-    }
-
-    public void setCompanyDetailsId(int companyDetailsId) {
-        this.companyDetailsId = companyDetailsId;
-    }
-
-    public String getCompanyAddress() {
-        return companyAddress;
-    }
-
-    public void setCompanyAddress(String companyAddress) {
-        this.companyAddress = companyAddress;
-    }
-
-    public String getIndustry() {
-        return industry;
-    }
-
-    public void setIndustry(String industry) {
-        this.industry = industry;
-    }
-
-    public String getEmployeeNo() {
-        return employeeNo;
-    }
-
-    public void setEmployeeNo(String employeeNo) {
-        this.employeeNo = employeeNo;
-    }
-
-    public String getCompanyContact() {
-        return companyContact;
-    }
-
-    public void setCompanyContact(String companyContact) {
-        this.companyContact = companyContact;
-    }
-
-    public String getCompanyUrl() {
-        return companyUrl;
-    }
-
-    public void setCompanyUrl(String companyUrl) {
-        this.companyUrl = companyUrl;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 }

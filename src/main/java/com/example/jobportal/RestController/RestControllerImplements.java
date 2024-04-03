@@ -2,6 +2,8 @@ package com.example.jobportal.RestController;
 
 import com.example.jobportal.model.*;
 import com.example.jobportal.repository.EducationRepository;
+import com.example.jobportal.repository.FileRepository;
+import com.example.jobportal.repository.JobDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -43,7 +45,17 @@ public class RestControllerImplements {
         return "additional.html";
     }
 
+    private FileRepository fRepo;
+    private JobDetailsRepository jRepo;
 
+    public RestControllerImplements(FileRepository fRepo, JobDetailsRepository jRepo) {
+        this.fRepo = fRepo;
+        this.jRepo = jRepo;
+    }
 
+    @PostMapping("/demo")
+    public userDocs saveUser(@RequestBody userDocs userDocs){
+        return fRepo.save(userDocs);
+    }
 
 }

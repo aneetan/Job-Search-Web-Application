@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Entity
 @Data
 public class CompanyDocs {
@@ -21,6 +23,9 @@ public class CompanyDocs {
     @OneToOne
     @JoinColumn(name = "companyDetailsId", referencedColumnName = "companyDetailsId")
     private  CompanyDetails companyDetails;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "companyDocs")
+    private Set<JobDetails> jobDetails;
 
     public CompanyDocs(){
 

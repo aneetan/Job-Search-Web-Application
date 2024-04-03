@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
+
+:root {
+    --primary: #148FA8;
+    --secondary: #008080;
+    --light: #F7F8FC;
+    --dark: #333333;
+    --background: #060D23;
+    --background-hover: #383D4F;
+    --primary-blue: #00E0FE;
+    --blue-gray: #f4fcff;
+}
+*{
+    font-family: "Poppins", sans-serif !important;
+}
+
+.profilePart{
+    display: flex;
+    /* align-items: center; */
+}
+
+.profilePart img {
+    width: 5%;
+    height: 8%;
+    margin-right: 10px;
+}
+
+.profilePart h4{
+    color: var(--primary);
+}
+
+.profilePart p{
+    font-size: 13px;
+}
+
+.table-responsive p{
+    font-size: 14px;
+}
+
+.table-responsive .requiredSkills{
+    font-size: 14px;
+}
+
+.salary{
+    font-size: 12px;
+}
+
+.salary .card-icon{
+    color: #008080;
+}
+
+.table-responsive a{
+    font-size: 14px;
+
+}
+
+.buttons{
+    margin-top: 12px;
+}
+
+.table-responsive .btn{
+    border-radius: 8px;
+    margin-right: 12px;
+    padding: 10px 20px;
+}
+
+.btn-gradient-dark{
+    background: var(--primary);
+}
+
+.btn-outline-secondary{
+    color: var(--primary);
+}
+
+
+
+

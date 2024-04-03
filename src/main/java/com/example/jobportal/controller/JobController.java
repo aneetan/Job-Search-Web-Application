@@ -2,9 +2,11 @@ package com.example.jobportal.controller;
 
 import com.example.jobportal.model.*;
 import com.example.jobportal.repository.*;
+import com.example.jobportal.service.ApplicantService;
 import com.example.jobportal.service.FileService;
 import com.example.jobportal.service.MailService;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 @Controller
 public class JobController {
@@ -43,11 +47,19 @@ public class JobController {
         String hashPw = encoder.encode(c.getCompanyPassword());
 
         Company company = cRepo.findByCompanyEmail(c.getCompanyEmail());
-        System.out.println(hashPw);
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        CompanyDetails companyDetails = cdRepo.findByCompany(company);
+        System.out.println(docs);
 
         if (company != null && encoder.matches(c.getCompanyPassword(), company.getCompanyPassword())){
-            session.setAttribute("activeCompany", c.getCompanyEmail());
-            session.setMaxInactiveInterval(30);
+            session.setAttribute("activeCompany", company);
+            session.setAttribute("activeDetails", companyDetails);
+//            session.setMaxInactiveInterval(30);
+            model.addAttribute("data", docs);
+
+
+            List<Applicant> applicants = appRepo.findAll();
+            model.addAttribute("applicants", applicants);
 
             return "companylanding.html";
         } else {
@@ -204,7 +216,8 @@ public class JobController {
     private FileRepository fRepo;
 
     @PostMapping("/userRegister")
-    public String registerUser( @ModelAttribute userDocs u,  @ModelAttribute("pDetails") PersonalDetails details,  @RequestParam("cv") MultipartFile cv,
+    public String registerUser( @ModelAttribute userDocs u,  @ModelAttribute("pDetails") PersonalDetails details,
+                                @ModelAttribute("add") additionalDetails add, @RequestParam("cv") MultipartFile cv,
                                 @RequestParam("profile") MultipartFile profile, Model model) throws IOException {
 
         String cvFileName = cv.getOriginalFilename();
@@ -216,6 +229,7 @@ public class JobController {
         System.out.println(details);
         userDocs docs = new userDocs(cvFileName, profileFileName);
         docs.setPersonalDetails(details);
+        docs.setAdditionalDetails(add);
 
         fRepo.save(docs);
 
@@ -224,6 +238,8 @@ public class JobController {
         // Redirect to success page
         return "login.html";
     }
+    @Autowired
+    private JobDetailsRepository jdRepo;
 
 
     @PostMapping("/loginUser")
@@ -245,9 +261,19 @@ public class JobController {
 
         } else {
             PersonalDetails user = pRepo.findByEmail(p.getEmail());
+            userDocs docs = fRepo.getAllByPersonalDetails(user);
+
             if (user != null && encoder.matches(p.getPassword(), user.getPassword())){
-                session.setAttribute("activeUser", p.getEmail());
-                session.setMaxInactiveInterval(30);
+                session.setAttribute("activeUser", user);
+
+//                session.setMaxInactiveInterval(30);
+
+                model.addAttribute("data", docs);
+
+
+
+                //pass the attribute of unapplied jobs by the user in dashboard
+                model.addAttribute("job", applicantService.findUnappliedJobs(docs));
 
                 return "userLanding.html";
             } else {
@@ -257,6 +283,8 @@ public class JobController {
         }
     }
 
+
+//    ------------------------------ Super Admin -------------------------------------------------
 
 
     @GetMapping("/approvedComp")
@@ -269,7 +297,8 @@ public class JobController {
 
     @GetMapping("/superAdmin")
     public String superAdmin(Model model){
-        model.addAttribute("dataList", docsRepo.findAll());
+        model.addAttribute("dataList", docsRepo.findByCompany_Status("Pending"));
+
 
         return "superAdmin.html";
     }
@@ -291,19 +320,21 @@ public class JobController {
 
         cRepo.save(company);
 
-        mailStructure.setSubject("Approval of company");
-        mailStructure.setMessage("Your email for Job Search has been approved. You can now add jobs.");
-
+        mailStructure.setSubject("Response of Company Submission");
+        mailStructure.setMessage("Dear concern,\n\n" +
+                "Based on the proof you have provided, your company has been approved. You can now post jobs! Have a great time!!\n\n"+
+                "Warm regards,\n" +
+                "JobSearch\n");
         mailService.sendMail(company.getCompanyEmail(), mailStructure);
 //        mailService.sendMail("anee.neu15@gmail.com", mailStructure);
 
-        model.addAttribute("dataList", docsRepo.findAll());
+        model.addAttribute("dataList", docsRepo.findByCompany_Status("Approved"));
 
-        return "superAdmin.html";
+        return "approvedComp.html";
     }
 
     @GetMapping("/decline/{id}")
-    public String declineComp(@PathVariable("id") int id, Model model, HttpSession session){
+    public String declineComp(@PathVariable("id") int id, Model model, HttpSession session, @ModelAttribute MailStructure mailStructure){
         if(session.getAttribute("activeUser") == null) {
             session.setAttribute("login", "Please login first");
             return "login.html";
@@ -314,12 +345,220 @@ public class JobController {
 
         cRepo.save(company);
 
+        mailStructure.setSubject("Response of Company Submission");
+        mailStructure.setMessage("Dear concern,\n\n" +
+                "After careful review and consideration, we regret to inform you that we will not be moving forward with your company at this time. Please provide us the effective document in this email!\n\n"+
+                "Warm regards,\n" +
+                "JobSearch\n");
 
-        model.addAttribute("dataList", docsRepo.findAll());
-        return "superAdmin.html";
+        mailService.sendMail(company.getCompanyEmail(), mailStructure);
+//        mailService.sendMail("anee.neu15@gmail.com", mailStructure);
+
+        model.addAttribute("dataList", docsRepo.findByCompany_Status("Declined"));
+        return "declinedCompany.html";
     }
 
 
+    @GetMapping("/declinedCompany")
+    public String declinedCompany(Model model){
+        model.addAttribute("dataList", docsRepo.findByCompany_Status("Declined"));
+        return "declinedCompany.html";
+    }
+
+
+    @GetMapping("/logoutAdmin")
+    public String logoutAdmin(HttpSession session, Model model){
+        session.invalidate();
+        return "login.html";
+    }
+
+//------------------------------ Company Landing ----------------------------------------------
+    @GetMapping("/companyLanding")
+    public String goToCompanyLanding(HttpSession session, Model model){
+        if(session.getAttribute("activeUser") == null) {
+            session.setAttribute("login", "Please login first");
+            return "adminLogin.html";
+        }
+
+        List<Applicant> applicants = appRepo.findAll();
+        model.addAttribute("applicants", applicants);
+
+        return "companylanding.html";
+    }
+
+    @GetMapping("/viewJob")
+    public String viewJobCandidate(HttpSession session, Model model){
+        Company company = (Company) session.getAttribute("activeCompany");
+
+        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        model.addAttribute("jobDetails", jobDetails);
+
+        return "viewJobsCompany.html";
+    }
+
+    @GetMapping("/dismiss/{jobId}")
+    private String dissmissJob(HttpSession session, Model model, @PathVariable int jobId){
+        JobDetails details = jdRepo.findAllByJobId(jobId);
+        details.setJobStatus("Expired");
+
+        jdRepo.save(details);
+
+        Company company = (Company) session.getAttribute("activeCompany");
+
+        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        model.addAttribute("jobDetails", jobDetails);
+
+        return "viewJobsCompany.html";
+    }
+
+    @GetMapping("/addJobs")
+    public String addJobs(HttpSession session, Model model) {
+        Company activeCompany = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.findAllByCompany(activeCompany);
+        System.out.println(docs);
+
+        if (activeCompany == null) {
+            model.addAttribute("login", "Please login first");
+            return "adminLogin.html";
+        }
+
+        if(activeCompany.getStatus().equals("Pending")) {
+            model.addAttribute("error", "Your company request is under approval! Please wait for confirmation mail.");
+
+        } else if (activeCompany.getStatus().equals("Declined")) {
+
+            model.addAttribute("error", "Sorry! Your approval is declined.");
+        }
+
+        model.addAttribute("Company", activeCompany);
+        model.addAttribute("data", docs);
+        model.addAttribute("details", docs.getCompanyDetails());
+        return "addJobsCompany.html";
+    }
+
+    @PostMapping("/postJob")
+    public String postJob(@ModelAttribute JobDetails details, @ModelAttribute("Company") Company company,
+                          HttpSession session,@ModelAttribute("data") CompanyDocs docs, @ModelAttribute("details") CompanyDetails companyDetails, Model model){
+
+        Company activeCompany = (Company) session.getAttribute("activeCompany");
+        System.out.println(company);
+        System.out.println(docs);
+        System.out.println(companyDetails);
+
+        if(activeCompany == null) {
+            model.addAttribute("login", "Please login first");
+
+            return "adminLogin.html";
+        } else if(activeCompany.getStatus().equals("Pending")){
+            model.addAttribute("error", "Your company request is under approval! Please wait for confirmation mail to add job details.");
+
+        } else if(activeCompany.getStatus().equals("Declined")){
+            model.addAttribute("error", "Sorry! Your approval is declined.");
+        } else {
+
+            LocalDate today = LocalDate.now();
+            LocalDate deadline = details.getDeadline();
+
+            JobDetails jd = new JobDetails(details.getTitle(), details.getLocation(), details.getEmpType(), details.getJobDescription(), details.getQualification(), details.getSkills(), details.getSalary(), details.getResponsibilities(), details.getDeadline());
+
+            if (deadline.isAfter(today)) {
+                jd.setJobStatus("Active");
+                String daysRemaining = String.valueOf(ChronoUnit.DAYS.between(today, deadline));
+                jd.setDaysRemaining(daysRemaining + 1);
+
+            } else {
+                jd.setJobStatus("Expired");
+                jd.setDaysRemaining("0");
+
+            }
+
+            jd.setCompany(company);
+            jd.setCompanyDocs(docs);
+
+            jdRepo.save(jd);
+
+            model.addAttribute("success", "Your job has been posted");
+        }
+        return "addJobsCompany.html";
+    }
+
+    @GetMapping("/applicantProfile")
+    public String applicantProfile(){
+        return "applicantProfile.html";
+
+    }
+
+    @GetMapping("/logoutCompany")
+    public String logoutCompany(HttpSession session){
+        session.invalidate();
+        return "adminLogin.html";
+    }
+
+
+//    ------------------------------------------- User ---------------------------------------------------
+
+    @GetMapping("/viewJobsUser")
+    public String viewJobs(@ModelAttribute PersonalDetails p, Model model, HttpSession session){
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+
+        model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+
+        return "userLanding.html";
+    }
+
+    @Autowired
+    private ApplicantRepository appRepo;
+
+    @GetMapping("/seeAppliedJobs/{userId}")
+    public String viewAppliedJobs(@PathVariable int userId, @ModelAttribute PersonalDetails p, Model model){
+        PersonalDetails user = pRepo.findAllByUserId(userId);
+        userDocs docs = fRepo.getAllByPersonalDetails(user);
+        model.addAttribute("data", docs);
+//        model.addAttribute("job", jdRepo.findAllByJobStatus("Active"));
+
+        List<JobDetails> appliedJobs = applicantService.getAppliedJobsForUser(docs);
+        List<Applicant> jobApplications = appRepo.findByUserDocs(docs);
+        model.addAttribute("job", appliedJobs);
+
+        model.addAttribute("applicant", jobApplications);
+
+        return "appliedJobs.html";
+    }
+
+    @Autowired
+    private ApplicantService applicantService;
+
+    @GetMapping("/{jobId}/apply/{userId}")
+    public String applyForJob(@ModelAttribute PersonalDetails p, @PathVariable int userId, @PathVariable int jobId, Model model, HttpSession session) {
+
+        userDocs userDoc = fRepo.getAllByPersonalDetails(pRepo.findAllByUserId(userId));
+        JobDetails jobDetails = jdRepo.findAllByJobId(jobId);
+
+        boolean hasApplied = applicantService.hasUserAppliedForJob(userDoc, jobDetails);
+
+        if (hasApplied) {
+            model.addAttribute("error", "You have already applied for job!");
+
+        } else {
+            applicantService.applyForJob(userDoc, jobDetails);
+            model.addAttribute("success", "Job applied successfully!!");
+        }
+
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+        model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+
+        return "userLanding.html";
+    }
+
+    @GetMapping("/logoutUser")
+    public String logoutUser(HttpSession session){
+        session.invalidate();
+        return "login.html";
+    }
 
 
 

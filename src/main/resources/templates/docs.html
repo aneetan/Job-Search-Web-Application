@@ -57,6 +57,11 @@
     <input type="hidden" name="address" th:value="${pDetails.address}">
     <input type="hidden" name="email" th:value="${pDetails.email}">
 
+    <input type="hidden" name="addId" th:value="${add.addId}">
+    <input type="hidden" name="bio" th:value="${add.bio}">
+    <input type="hidden" name="jobTitle" th:value="${add.jobTitle}">
+
+
     <div class="input-box">
       <label>Add CV (.pdf/.docx/.doc)*</label>
       <input type="file" name="cv" id="file" accept=".pdf,.doc,.docx" required>

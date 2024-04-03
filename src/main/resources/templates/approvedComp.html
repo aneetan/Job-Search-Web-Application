@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Purple Admin</title>
+  <base href="http://localhost:8080/">
   <!-- plugins:css -->
   <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
   <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
@@ -31,14 +32,24 @@
   .approve-btn{
     text-decoration: none;
     padding: 10px 20px !important;
+    transition: transform .2s ease-out !important;
+  }
+
+  .approve-btn:hover{
+    transform: scale(1.05) !important;
+    color: #fafafa ;
   }
 
   .badge-gradient-success{
     background: var(--primary) !important;
+    margin-right: 50px !important;
   }
-
   .badge-gradient-danger{
     background: #DF4D36 ;
+  }
+
+  .dropdown-menu a:hover{
+    color: var(--primary) !important;
   }
 </style>
 <body>
@@ -75,7 +86,7 @@
             <a class="dropdown-item" href="#">
               <i class="mdi mdi-cached me-2 text-success"></i> Activity Log </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" th:href="@{/logoutAdmin}">
               <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
           </div>
         </li>
@@ -113,11 +124,14 @@
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="pages/tables/basic-table.html">
-            <span class="menu-title">Tables</span>
+          <a class="nav-link" th:href="@{/declinedCompany}">
+            <span class="menu-title">Declined companies</span>
             <i class="mdi mdi-table-large menu-icon"></i>
+
           </a>
         </li>
+
+
       </ul>
     </nav>
     <!-- partial -->
