@@ -532,7 +532,6 @@ public class JobController {
         PersonalDetails user = pRepo.findAllByUserId(userId);
         userDocs docs = fRepo.getAllByPersonalDetails(user);
         model.addAttribute("data", docs);
-//        model.addAttribute("job", jdRepo.findAllByJobStatus("Active"));
 
         List<JobDetails> appliedJobs = applicantService.getAppliedJobsForUser(docs);
         List<Applicant> jobApplications = appRepo.findByUserDocs(docs);
@@ -659,6 +658,63 @@ public class JobController {
         return "userLanding.html";
     }
 
+    @GetMapping("/searchAppliedJobs")
+    public String searchAppliedJobs(@RequestParam("query") String query, Model model, HttpSession session){
+        PersonalDetails user = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(user);
+        model.addAttribute("data", docs);
+
+        List<JobDetails> appliedJobs = applicantService.getAppliedJobsForUser(docs);
+        List<Applicant> jobApplications = appRepo.findByUserDocs(docs);
+
+        // Filter applied jobs based on the search query
+        List<JobDetails> filteredAppliedJobs = appliedJobs.stream()
+                .filter(job -> job.getTitle().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        if (filteredAppliedJobs.isEmpty()) {
+            model.addAttribute("noJobs", "No applied jobs found for the search query!!");
+        } else {
+            Map<JobDetails, String> jobStatusMap = new HashMap<>();
+            for (Applicant applicant : jobApplications) {
+                JobDetails jobDetails = filteredAppliedJobs.stream()
+                        .filter(job -> job.getJobId() == applicant.getJobDetails().getJobId())
+                        .findFirst()
+                        .orElse(null);
+                if (jobDetails != null) {
+                    jobStatusMap.put(jobDetails, applicant.getStatus());
+                }
+            }
+
+            model.addAttribute("job", filteredAppliedJobs);
+            model.addAttribute("jobStatusMap", jobStatusMap);
+            model.addAttribute("applicant", jobApplications);
+        }
+
+        return "appliedJobs.html";
+    }
+
+    @GetMapping("/searchCompany")
+    private String searchCompany(@RequestParam("query") String query, Model model, HttpSession session){
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+
+        List<CompanyDocs> companyList = docsRepo.findByCompany_Status("Approved");
+
+        // Filter the company list based on the search query
+        List<CompanyDocs> filteredCompanyList = companyList.stream()
+                .filter(company -> company.getCompany().getCompanyName().toLowerCase().contains(query.toLowerCase()) ||
+                        company.getCompanyDetails().getCompanyAddress().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        if (filteredCompanyList.isEmpty()) {
+            model.addAttribute("noCompanies", "No companies found for the search query!!");
+        } else {
+            model.addAttribute("companyList", filteredCompanyList);
+        }
+        return "seeCompanyList.html";
+    }
 
 
 }

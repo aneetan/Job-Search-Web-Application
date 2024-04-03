@@ -42,6 +42,9 @@
     color: #148FA8 !important;
   }
 
+  .input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback){
+    width: 220px;
+  }
 
 
 
@@ -60,12 +63,12 @@
         <span class="mdi mdi-menu"></span>
       </button>
       <div class="search-field d-none d-md-block">
-        <form class="d-flex align-items-center h-100" action="#">
+        <form id="searchForm" class="d-flex align-items-center h-100" th:action="@{/searchCompany}" method="get">
           <div class="input-group">
             <div class="input-group-prepend bg-transparent">
               <i class="input-group-text border-0 mdi mdi-magnify"></i>
             </div>
-            <input type="text" class="form-control bg-transparent border-0" placeholder="Search jobs ">
+            <input type="text" id="searchInput" name="query" class="form-control bg-transparent border-0" placeholder="Search by company or address ">
           </div>
         </form>
       </div>
@@ -109,7 +112,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
 
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" th:href="@{/viewJobsUser}">
               <span class="menu-title"> View jobs</span>
               <i class="mdi mdi-briefcase menu-icon"></i>
@@ -129,7 +132,7 @@
 
 
 
-          <li class="nav-item">
+          <li class="nav-item active">
             <a class="nav-link" th:href="@{/companyList}">
               <span class="menu-title"> Approved Companies </span>
               <i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -175,6 +178,9 @@
                       </tr>
                       </thead>
                       <tbody>
+                      <tr>
+                        <p  th:text="${noCompanies}" style="color: #9C9FA6;"></p>
+                      </tr>
                       <tr th:each="entity: ${companyList}">
                         <td>
                           <img th:src="@{'uploadImg/' + ${entity.logoName}}" class="me-2" alt="image">
@@ -219,6 +225,20 @@
     <!-- page-body-wrapper ends -->
   </div>
 </div>
+
+<script th:inline="javascript">
+  /* <![CDATA[ */
+  document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', function() {
+      var query = searchInput.value.trim();
+      var url = /*[[@{/searchCompany}]]*/ + '?query=' + encodeURIComponent(query);
+      window.location.href = url;
+    });
+  });
+  /* ]]> */
+</script>
   <!-- container-scroller -->
   <!-- plugins:js -->
   <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>

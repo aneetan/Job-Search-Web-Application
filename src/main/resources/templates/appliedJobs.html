@@ -65,12 +65,12 @@
         <span class="mdi mdi-menu"></span>
       </button>
       <div class="search-field d-none d-md-block">
-        <form class="d-flex align-items-center h-100" action="#">
+        <form id="searchForm" class="d-flex align-items-center h-100" th:action="@{/searchAppliedJobs}" method="get">
           <div class="input-group">
             <div class="input-group-prepend bg-transparent">
               <i class="input-group-text border-0 mdi mdi-magnify"></i>
             </div>
-            <input type="text" class="form-control bg-transparent border-0" placeholder="Search jobs ">
+            <input type="text" id="searchInput" name="query" class="form-control bg-transparent border-0" placeholder="Search applied jobs ">
           </div>
         </form>
       </div>
@@ -221,6 +221,20 @@
   </div>
   <!-- page-body-wrapper ends -->
 </div>
+
+<script th:inline="javascript">
+  /* <![CDATA[ */
+  document.addEventListener('DOMContentLoaded', function() {
+    var searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', function() {
+      var query = searchInput.value.trim();
+      var url = /*[[@{/searchAppliedJobs}]]*/ + '?query=' + encodeURIComponent(query);
+      window.location.href = url;
+    });
+  });
+  /* ]]> */
+</script>
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>
