@@ -30,7 +30,7 @@
             </ul>
         </div>
       
-      <form action="companyDocs.html" class="form" >
+      <form action="companyDocs.html" id="adminForm" class="form" >
 
         <div class="column">
             <div class="input-box">
@@ -64,7 +64,7 @@
         </div>
         <div class="input-box">
             <label>Official website</label>
-            <input type="url" name="companyConfirmPw" id="companyConfirmPw" placeholder="Eg: www.microsoft.com"  />
+            <input type="text" name="companyWebsite" id="companyWebsite" placeholder="Eg: www.microsoft.com"  />
             <div class="error"></div>
 
           </div>
@@ -79,6 +79,119 @@
       </form>
     </section>
 
-    <script src="js/register.js"></script>
+    <script>
+      const form = document.getElementById("adminForm");
+      const address = document.getElementById("companyAddress");
+      const phoneNo = document.getElementById("contact");
+      const industry = document.getElementById("companyIndustry");
+      const empNo = document.getElementById('employee');
+      const url = document.getElementById("companyWebsite");
+
+      form.addEventListener('submit', function(e){
+          e.preventDefault();
+
+          if (validateInputs()) {
+              this.submit();
+          }
+      });
+
+
+      // Error Message
+      const setError = (element, message) => {
+          const inputControl = element.parentElement;
+          const errorDisplay = inputControl.querySelector('.error');
+
+          errorDisplay.innerText = message;
+          inputControl.classList.add('error');
+          inputControl.classList.remove('success');
+      }
+
+
+      //success message
+      const setSuccess = element => {
+          const inputControl = element.parentElement;
+          const errorDisplay = inputControl.querySelector('.error');
+
+          errorDisplay.innerText = '';
+          inputControl.classList.add('success');
+          inputControl.classList.remove('error');
+      }
+
+
+      //check for phone number
+      function isValidPhoneNumber(phoneNumber) {
+          // Regular expression to match 10 digits
+          var regex = /^\d{10}$/;
+          
+          // Test the phone num against the regex
+          return regex.test(phoneNumber);
+      }
+
+      function isValidUrl(url) {
+        var urlRegex = /^(?:https?:\/\/)?(?:www\.)?[\w\.-]+\.\w{2,}(?:\/[\w\.-]*)*\/?$/;
+        return urlRegex.test(url);
+      }
+
+      const validateInputs = () => {
+           
+          const addressValue = address.value;
+          const phoneValue = phoneNo.value.trim();
+          const industryValue = industry.value;
+          const urlValue = url.value.trim();
+          const employeeValue = empNo.value;
+
+          let isValid = true;
+          
+          //check phone validation
+          if(phoneValue === '') {
+              setError(phoneNo, 'Phone is required');
+              isValid=false;
+          } else if(!isValidPhoneNumber(phoneValue)) {
+              setError(phoneNo, 'Phone number must contain 10 digits');
+              isValid=false;
+          } else {
+              setSuccess(phoneNo);
+          }
+
+          //check for address validation
+          if (addressValue === '') {
+              setError(address, 'Address is required');
+              isValid=false;
+          } else {
+              setSuccess(address);
+          }
+
+          //check for industry validation
+          if (industryValue === '') {
+              setError(industry, 'Industry is required');
+              isValid=false;
+          } else {
+              setSuccess(industry);
+          }
+
+
+          //check for url validation
+            if(urlValue === '') {
+                setError(url, 'url is required');
+                isValid=false;
+            } else if(!isValidUrl(urlValue)) {
+                setError(url, 'Insert valid url');
+                isValid=false;
+            } else {
+                setSuccess(url);
+            }
+
+              //check for employee validation
+          if (employeeValue === '') {
+              setError(empNo, 'Enter approx employee number');
+              isValid=false;
+          } else {
+              setSuccess(empNo);
+          }
+
+          return isValid;
+      }
+
+    </script>
   </body>
 </html>

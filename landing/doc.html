@@ -8,6 +8,17 @@
     
     <link rel="stylesheet" href="css/registration.css" />
   </head>
+  <style>
+     .profile {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background-color: #ccc;
+        background-size: cover;
+        background-position: center;
+        margin-left: 30px;
+    }
+  </style>
   <body>
 
     <section class="container">
@@ -40,6 +51,12 @@
           <label> Add Certifications (if any)</label>
           <input type="file" id="fileUpload" name="files[]" multiple><br>
         </div>
+
+        <div class="input-box">
+          <label> Add Profile </label> <br>
+          <img class="profile" id="profile" src="img/profile.jpg" alt="png">
+          <input type="file" id="imgUpload" name="photo" accept="image/*" ><br>
+        </div>
          
         <p class="terms"> By submitting this form, you agree to our <a href=""> Terms and Conditions.</a></p>
         <div class="add-btn">
@@ -50,5 +67,14 @@
          
       </form>
     </section>
+
+    <script>
+      var profile = document.getElementById("profile");
+      var inputFile = document.getElementById("imgUpload");
+
+      inputFile.onchange = function(){
+        profile.src = URL.createObjectURL(inputFile.files[0]);
+      }
+    </script>
   </body>
 </html>

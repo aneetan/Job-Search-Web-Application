@@ -9,6 +9,16 @@
      <!-- ------ Bootstrap ----------- -->
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+
+     <style>
+      .edu-details{
+        display: none;
+      }
+
+      .ex-details{
+        display: none;
+      }
+     </style>
   </head>
   <body>
 
@@ -40,7 +50,7 @@
 
         <div class="input-box">
           <label>Job Title/ Desired Position</label>
-          <input type="text" name="fullName" id="name" placeholder="E.g. Project Manager"  />
+          <input type="text" name="jobTitle" id="name" placeholder="E.g. Project Manager"  />
         </div>
 
         <div class="input-box">
@@ -102,7 +112,7 @@
            
             <div class=" modalContainer">
               
-              <form action="" class="form">
+              <form action="" class="form" id="educationForm">
 
                 <div class="column">
                     <div class="input-box">
@@ -161,7 +171,7 @@
 
             </div>
             <div class="modalContainer">
-              <form action="#" class="form">
+              <form action="#" id="experienceForm" class="form">
 
                 <div class="column">
                     <div class="input-box">
@@ -228,5 +238,30 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
     
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var educationForm = document.getElementById('educationForm');
+
+      educationForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var eduDetails = document.querySelector('.edu-details');
+        eduDetails.style.display = 'block';
+      });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var experienceForm = document.getElementById('experienceForm');
+
+      experienceForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var exDetails = document.querySelector('.ex-details');
+        exDetails.style.display = 'block';
+      });
+    });
+  </script>
   </body>
 </html>
