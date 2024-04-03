@@ -4,6 +4,7 @@ import com.example.jobportal.model.*;
 import com.example.jobportal.repository.*;
 import com.example.jobportal.service.ApplicantService;
 import com.example.jobportal.service.FileService;
+import com.example.jobportal.service.JobService;
 import com.example.jobportal.service.MailService;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.User;
@@ -18,8 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class JobController {
@@ -271,9 +275,14 @@ public class JobController {
                 model.addAttribute("data", docs);
 
 
+                List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+                if (unappliedJobs.isEmpty()){
+                    model.addAttribute("noJobs", "No recent jobs!!");
+                } else{
+                    //pass the attribute of unapplied jobs by the user in dashboard
+                    model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+                }
 
-                //pass the attribute of unapplied jobs by the user in dashboard
-                model.addAttribute("job", applicantService.findUnappliedJobs(docs));
 
                 return "userLanding.html";
             } else {
@@ -463,8 +472,9 @@ public class JobController {
 
             if (deadline.isAfter(today)) {
                 jd.setJobStatus("Active");
-                String daysRemaining = String.valueOf(ChronoUnit.DAYS.between(today, deadline));
-                jd.setDaysRemaining(daysRemaining + 1);
+                long daysBetween = ChronoUnit.DAYS.between(today, deadline);
+                String daysRemaining = String.valueOf(daysBetween + 1);
+                jd.setDaysRemaining(daysRemaining);
 
             } else {
                 jd.setJobStatus("Expired");
@@ -503,7 +513,13 @@ public class JobController {
         userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
         model.addAttribute("data", docs);
 
-        model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+        List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+        if (unappliedJobs.isEmpty()){
+            model.addAttribute("noJobs", "No recent jobs!!");
+        } else{
+            //pass the attribute of unapplied jobs by the user in dashboard
+            model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+        }
 
         return "userLanding.html";
     }
@@ -520,9 +536,29 @@ public class JobController {
 
         List<JobDetails> appliedJobs = applicantService.getAppliedJobsForUser(docs);
         List<Applicant> jobApplications = appRepo.findByUserDocs(docs);
-        model.addAttribute("job", appliedJobs);
 
-        model.addAttribute("applicant", jobApplications);
+        model.addAttribute("job", appliedJobs);
+        if (jobApplications.isEmpty()){
+            model.addAttribute("noJobs", "You haven't applied for any jobs!!" );
+        } else {
+            Map<JobDetails, String> jobStatusMap = new HashMap<>();
+
+            for (Applicant applicant : jobApplications) {
+                // Find the corresponding job details for the current application
+                JobDetails jobDetails = appliedJobs.stream()
+                        .filter(job -> job.getJobId() == applicant.getJobDetails().getJobId())
+                        .findFirst()
+                        .orElse(null);
+
+                if (jobDetails != null) {
+                    // Add the status of the application to the job details
+                    jobStatusMap.put(jobDetails, applicant.getStatus());
+                }
+            }
+
+            model.addAttribute("jobStatusMap", jobStatusMap);
+            model.addAttribute("applicant", jobApplications);
+        }
 
         return "appliedJobs.html";
     }
@@ -549,7 +585,14 @@ public class JobController {
         PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
         userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
         model.addAttribute("data", docs);
-        model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+
+        List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+        if (unappliedJobs.isEmpty()){
+            model.addAttribute("noJobs", "No recent jobs!!");
+        } else{
+            //pass the attribute of unapplied jobs by the user in dashboard
+            model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+        }
 
         return "userLanding.html";
     }
@@ -558,6 +601,62 @@ public class JobController {
     public String logoutUser(HttpSession session){
         session.invalidate();
         return "login.html";
+    }
+
+    @GetMapping("/companyList")
+    public String seeCompanyList(Model model, HttpSession session){
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+
+        model.addAttribute("companyList", docsRepo.findByCompany_Status("Approved"));
+        return "seeCompanyList.html";
+    }
+
+    @GetMapping("/viewCompanyDetails/{companyId}")
+    public String viewCompanyDetails(@PathVariable int companyId, Model model, HttpSession session){
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+
+        Company company = cRepo.findByCompanyId(companyId);
+        CompanyDocs companyDocs = docsRepo.getCompanyDocsByCompany(company);
+
+        List<JobDetails> allJobs = jdRepo.findByCompanyAndJobStatus(company, "Active");
+
+        // Filter out the jobs the user has already applied for
+        List<JobDetails> unappliedJobs = allJobs.stream()
+                .filter(job -> !applicantService.hasUserAppliedForJob(docs, job))
+                .collect(Collectors.toList());
+
+        if (unappliedJobs.isEmpty()){
+            model.addAttribute("noJobs", "No recent un-applied jobs from this company!!");
+        } else {
+            model.addAttribute("jobs", unappliedJobs);
+
+        }
+        model.addAttribute("companyList", companyDocs);
+
+        return "viewCompanyDetails.html";
+    }
+
+    @Autowired
+    private JobService jobService;
+
+    @GetMapping("/search")
+    public String searchJobs(@RequestParam("query") String query, Model model, HttpSession session) {
+        PersonalDetails personalDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(personalDetails);
+        model.addAttribute("data", docs);
+
+        List<JobDetails> searchResults = jobService.searchJobs(query);
+        if (searchResults.isEmpty()){
+            model.addAttribute("noJobs", "No results found!!");
+        } else {
+            model.addAttribute("job", searchResults);
+        }
+
+        return "userLanding.html";
     }
 
 

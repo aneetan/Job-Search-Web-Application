@@ -50,6 +50,25 @@
         float: right;
         color: #148fa8;
     }
+
+    .approve-btn{
+        border: none;
+        background: #148fa8;
+        padding: 10px 20px;
+        text-decoration: none;
+        transition: transform .2s linear;
+    }
+
+    .approve-btn:hover{
+        transform: scale(1.05);
+        color: #fafafa;
+    }
+
+    .card .card-body{
+        padding: 20px 30px !important;
+    }
+
+
 </style>
 <body>
 <div class="container-scroller">
@@ -65,12 +84,12 @@
                 <span class="mdi mdi-menu"></span>
             </button>
             <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-center h-100" action="#">
+                <form id="searchForm" th:action="@{/search}" method="get">
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                             <i class="input-group-text border-0 mdi mdi-magnify"></i>
                         </div>
-                        <input type="text" class="form-control bg-transparent border-0" placeholder="Search jobs ">
+                        <input type="text" id="searchInput" name="query" class="form-control bg-transparent border-0" placeholder="Search jobs ">
                     </div>
                 </form>
             </div>
@@ -164,6 +183,9 @@
                 </div>
 
                 <p th:text="${success}" style="color:green;"> </p>
+
+                <p  th:text="${noJobs}" style="color: #9C9FA6;"></p>
+
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div style="margin-bottom: 1.5rem" class="card" th:each="job : ${job}">
@@ -200,15 +222,8 @@
 
 
                                     <div class="buttons">
-<!--                                        <form action="/${job.jobId}/apply" method="post">-->
-<!--                                            <input type="hidden" name="userId" th:value="${data.personalDetails.userId}">-->
-<!--                                            <input type="hidden" name="jobId" th:value="${job.jobId}">-->
-
-<!--                                            -->
-<!--                                        </form>-->
                                         <a  class="approve-btn badge badge-gradient-success" th:href="@{'/' + ${job.jobId} + '/apply/' + ${data.personalDetails.userId}}">
-                                            <button type="submit" class="btn btn-gradient-dark btn-icon-text"> Apply Now
-                                            </button>
+                                            Apply Now
                                         </a>
 
 
@@ -227,7 +242,7 @@
             <!-- partial:partials/_footer.html -->
             <footer class="footer">
                 <div class="container-fluid d-flex justify-content-between">
-                    <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">JobSearch - Company Panel</span>
+                    <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">JobSearch - User Panel</span>
                 </div>
             </footer>
             <!-- partial -->
@@ -236,6 +251,20 @@
     </div>
     <!-- page-body-wrapper ends -->
 </div>
+
+<script th:inline="javascript">
+    /* <![CDATA[ */
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.getElementById('searchInput');
+
+        searchInput.addEventListener('input', function() {
+            var query = searchInput.value.trim();
+            var url = /*[[@{/search}]]*/ + '?query=' + encodeURIComponent(query);
+            window.location.href = url;
+        });
+    });
+    /* ]]> */
+</script>
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>

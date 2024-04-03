@@ -82,7 +82,7 @@
               <span class="availability-status online"></span>
             </div>
             <div class="nav-profile-text">
-              <p class="mb-1 text-black" th:text="${data.personalDetails.name}">David Greymaax</p>
+              <p class="mb-1 text-black" th:text="${data.personalDetails.name}"></p>
             </div>
           </a>
           <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
@@ -147,22 +147,12 @@
         <div class="page-header">
           <h3 class="page-title">
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
-                  <i class="mdi mdi-briefcase"></i>
-
-                </span> View Jobs
+            <i class="mdi mdi-contacts menu-icon"></i>
+                </span> Applied Jobs
           </h3>
         </div>
-        <!--                <div class="row">-->
-        <!--                    -->
-        <!--                </div>-->
+        <p  th:text="${noJobs}" style="color: #9C9FA6;"></p>
 
-        <div class="error">
-
-          <p th:text="${error}" style="color:red;"> </p>
-
-        </div>
-
-        <p th:text="${success}" style="color:green;"> </p>
         <div class="row">
           <div class="col-12 grid-margin">
             <div style="margin-bottom: 1.5rem" class="card" th:each="job : ${job}">
@@ -195,8 +185,8 @@
 
                   </div>
 
-                  <div style="color: #148fa8; font-weight: 600;" th:each="applicant : ${applicant}">
-                   Status:  <span th:text="${applicant.status}"></span>
+                  <div style="color: #148fa8; font-weight: 600;" >
+                   Status:  <span th:text="${jobStatusMap.get(job)}"></span>
 
                   </div>
 
@@ -204,17 +194,7 @@
 
 
                   <div class="buttons">
-                    <!--                                        <form action="/${job.jobId}/apply" method="post">-->
-                    <!--                                            <input type="hidden" name="userId" th:value="${data.personalDetails.userId}">-->
-                    <!--                                            <input type="hidden" name="jobId" th:value="${job.jobId}">-->
 
-                    <!--                                            -->
-                    <!--                                        </form>-->
-<!--                    <a  class="approve-btn badge badge-gradient-success" th:href="@{'/' + ${job.jobId} + '/apply/' + ${data.personalDetails.userId}}">-->
-<!--                     -->
-<!--                    </a>-->
-<!--                    <button type="submit" class="btn btn-gradient-dark btn-icon-text"> Applied-->
-<!--                    </button>-->
 
 
                   </div>
