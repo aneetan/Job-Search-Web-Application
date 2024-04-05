@@ -20,13 +20,26 @@ public class JobDetails {
     private String title;
     private String location;
     private String empType;
+
+    @Lob
+    @Column(length = 100)
     private String jobDescription;
+
+    @Lob
+    @Column(length = 1000)
     private String qualification;
+
+    @Lob
+    @Column(length = 100)
     private String skills;
     private String salary;
+
+    @Lob
+    @Column(length = 1000)
     private String responsibilities;
     private LocalDate deadline;
-    private String daysRemaining;
+
+//    private String daysRemaining;
 
     private String jobStatus;
 

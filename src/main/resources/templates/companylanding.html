@@ -5,7 +5,9 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Purple Admin</title>
+    <title> Company Landing</title>
+    <base href="http://localhost:8080/">
+
     <!-- plugins:css -->
     <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
     <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
@@ -44,6 +46,21 @@
         .navbar-dropdown a:hover{
             color: #148FA8 !important;
         }
+
+        .job-btn{
+            font-size: 12px;
+            text-decoration: none;
+            background: #148fa8;
+            color: #aba7a7;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 12px;
+        }
+
+        .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown a{
+            margin-right: 100px !important;
+            font-size: 14px !important;
+        }
     </style>
 </head>
 <body>
@@ -81,14 +98,14 @@
                         </div>
                     </a>
                     <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                        <a class="dropdown-item" href="#">
+                        <a class="dropdown-item" th:href="@{/seeCompanyProfile}">
                             <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="">
                             <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/logoutCompany}">
-                            <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+                            <i class="mdi mdi-logout me-2 text-primary"></i> Logout </a>
 
                     </div>
                 </li>
@@ -134,6 +151,14 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/approvedApplicants}">
+                        <span class="menu-title"> Approved applicants</span>
+                        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+                    </a>
+                </li>
+
             </ul>
         </nav>
         <!-- partial -->
@@ -156,17 +181,26 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Job Request </h4>
+                                <p th:text="${status}"></p>
+                                <p style="color: red" th:text="${error}"></p>
 
-                                <form action="">
-                                    <select class="form-control form-job" id="exampleSelectLocation" name="locationType">
-                                        <option selected> Please select</option>
-                                        <option> Backend </option>
-                                        <option>Hybrid</option>
-                                        <option>Remote</option>
+                                <h4 class="card-title" th:text="'Job Request for ' + ${jobTitle} ">Job Request </h4>
+
+                                <form action="/getApplicants" method="get" id="jobForm">
+                                    <select class="form-control form-job" id="exampleSelectLocation" name="jobTitle" onchange="submitForm()">
+                                        <option selected> Please select job </option>
+                                        <option th:each="job : ${uniqueJob}" th:text="${job}">
+                                        </option>
 
                                     </select>
                                 </form>
+
+<!--                                <a class="job-btn" th:href="@{/getApplicants}" th:each="job : ${uniqueJob}">-->
+<!--                                    <span th:text="${job}"></span>-->
+<!--                                </a>-->
+
+
+
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -193,7 +227,7 @@
 
                                             </td>
                                             <td>
-                                                <a th:href="@{/applicantProfile}"> View Profile</a>
+                                                <a th:href="@{${applicant.applicantId} + '/applicantProfile/' + ${applicant.userDocs.personalDetails.userId}}">View Profile</a>
                                             </td>
                                         </tr>
 
@@ -221,6 +255,11 @@
     </div>
     <!-- page-body-wrapper ends -->
 </div>
+<script>
+    function submitForm() {
+        document.getElementById("jobForm").submit();
+    }
+</script>
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>

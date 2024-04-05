@@ -5,7 +5,9 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Purple Admin</title>
+  <title>Approved Applicants</title>
+  <base href="http://localhost:8080/">
+
   <!-- plugins:css -->
   <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
   <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
@@ -13,10 +15,11 @@
 
   <!-- Layout styles -->
   <link rel="stylesheet" th:href="@{css/superAdmin.css}">
+  <!-- End layout styles -->
 
   <style>
-    .btn-primary{
-      background: #148FA8 !important;
+    .form-job{
+      width: 20%;
     }
 
 
@@ -40,42 +43,6 @@
       color: #148FA8;
     }
 
-    input,
-    textarea,
-    select{
-      border: 1px solid #dfdfdf !important;
-      transition: border-color 0.3s;
-
-    }
-
-    input:focus,
-    textarea:focus,
-    select:focus{
-      border-color: #148FA8 !important;
-    }
-
-    input::placeholder,
-    textarea::placeholder,
-    select::placeholder{
-      color: #c5b8b8 !important;
-    }
-
-    .jobsubmit-btn{
-      transition: transform 0.3s;
-      border-radius: 8px;
-    }
-
-    .jobsubmit-btn:hover{
-      transform: scale(1.04);
-
-    }
-
-    .error{
-      margin-top: 10px;
-      font-size: 14px;
-      color: red;
-    }
-
     .navbar-dropdown a:hover{
       color: #148FA8 !important;
     }
@@ -94,8 +61,6 @@
       margin-right: 100px !important;
       font-size: 14px !important;
     }
-
-
   </style>
 </head>
 <body>
@@ -140,9 +105,11 @@
               <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" th:href="@{/logoutCompany}">
-              <i class="mdi mdi-logout me-2 text-primary"></i> Logout </a>
+              <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+
           </div>
         </li>
+
 
 
 
@@ -176,7 +143,7 @@
         </li>
 
 
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" th:href="@{/addJobs}">
             <span class="menu-title"> Add jobs</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -184,7 +151,7 @@
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" th:href="@{/approvedApplicants}">
             <span class="menu-title"> Approved applicants</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -198,11 +165,10 @@
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="page-header">
-          <h3 class="page-title" style="color: #148FA8;">
+          <h3 class="page-title">
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
-                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-
-                </span> Add job Details
+                  <i class="mdi mdi-home"></i>
+                </span> Dashboard
           </h3>
         </div>
         <div class="row">
@@ -212,121 +178,62 @@
         </div>
 
         <div class="row">
-
-          <div class="col-12 grid-margin stretch-card">
+          <div class="col-12 grid-margin">
             <div class="card">
               <div class="card-body">
-                <h4 class="card-title">Add job details</h4>
+                <h4 class="card-title" th:text="'Job Request for ' + ${jobTitle} ">Job Request </h4>
 
-                <div class="error">
+                <form action="/getApprovedApplicants" method="get" id="jobForm">
+                  <select class="form-control form-job" id="exampleSelectLocation" name="jobTitle" onchange="submitForm()">
+                    <option selected> Please select job </option>
+                    <option th:each="job : ${uniqueJob}" th:text="${job}">
+                    </option>
 
-                  <p th:text="${error}" style="color:red;"> </p>
-
-                </div>
-
-                <p th:text="${success}" style="color:green;"> </p>
-
-
-
-                <form action="/postJob" method="post" class="forms-sample">
-
-                  <input type="hidden" name="companyId" th:value="${Company.companyId}">
-                  <input type="hidden" name="companyName" th:value="${Company.companyName}">
-                  <input type="hidden" name="companyEmail" th:value="${Company.companyEmail}">
-                  <input type="hidden" name="companyPassword" th:value="${Company.companyPassword}">
-                  <input type="hidden" name="status" th:value="${Company.status}">
-
-                  <input type="hidden" name="companyDetailsId" th:value="${details.companyDetailsId}">
-                  <input type="hidden" name="companyAddress" th:value="${details.companyAddress}">
-                  <input type="hidden" name="industry" th:value="${details.industry}">
-                  <input type="hidden" name="employeeNo" th:value="${details.employeeNo}">
-                  <input type="hidden" name="companyContact" th:value="${details.companyContact}">
-                  <input type="hidden" name="companyUrl" th:value="${details.companyUrl}">
-
-                  <input type="hidden" name="docId" th:value="${data.docId}">
-                  <input type="hidden" name="logoName" th:value="${data.logoName}">
-                  <input type="hidden" name="verifiedDocName" th:value="${data.verifiedDocName}">
-
-                  <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" name="title" id="title" placeholder="Eg: Backend Developer">
-                  </div>
-
-                  <div class="form-group">
-
-                  </div>
-
-                  <div class="row">
-                    <div class="col-md-6">
-                      <div class="form-group row">
-                        <label for="exampleSelectLocation"> Location Type: </label>
-
-                        <div class="col-sm-9">
-                          <select class="form-control" id="exampleSelectLocation" name="location" >
-                            <option disabled selected> Please select -----------------------   </option>
-                            <option>On-site</option>
-                            <option>Hybrid</option>
-                            <option>Remote</option>
-
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group row">
-                        <label for="exampleSelectEmp"> Employment Type: </label>
-
-
-                        <div class="col-sm-9">
-                          <select class="form-control" id="exampleSelectEmp" name="empType">
-                            <option disabled selected> Please select -----------------------</option>
-                            <option>Full-Time</option>
-                            <option>Part-Time</option>
-                            <option>Freelance</option>
-                            <option>Internship</option>
-                            <option>Apprenticeship</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleTextarea2">Job Description</label>
-                    <textarea class="form-control" name="jobDescription" id="exampleTextarea2" rows="1" placeholder="Add short job description"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleTextarea3">Qualification</label>
-                    <textarea class="form-control" name="qualification" id="exampleTextarea3" rows="4" placeholder="Add required qualification"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleTextarea4">Required Skills</label>
-                    <textarea class="form-control" name="skills" id="exampleTextarea4" rows="2" placeholder="Add required skills for job"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="salary">Expected Salary (per month)</label>
-                    <input type="text" class="form-control" name="salary" id="salary" placeholder="Eg: Negotiable">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="exampleTextarea1"> Key Responsibilties</label>
-                    <textarea class="form-control" name="responsibilities" id="exampleTextarea1" rows="4" placeholder="Describe Key Responsibilties for the title"></textarea>
-                  </div>
-
-                  <div class="form-group">
-                    <label for="deadline">Add deadline</label>
-                    <input type="date" class="form-control" name="deadline" id="deadline" placeholder="yyyy-mm-dd">
-
-                  </div>
-
-
-
-                  <button type="submit" class="btn jobsubmit-btn btn-primary me-2"> Add job </button>
+                  </select>
                 </form>
+
+                <!--                                <a class="job-btn" th:href="@{/getApplicants}" th:each="job : ${uniqueJob}">-->
+                <!--                                    <span th:text="${job}"></span>-->
+                <!--                                </a>-->
+
+
+
+                <div class="table-responsive">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th> Name </th>
+                      <th> Email </th>
+                      <th> Contact </th>
+                      <th> CV </th>
+                      <!-- <th> View Profile </th> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <span th:text="${noApplicant}"> </span>
+
+                    <tr th:each="applicant : ${applicants}">
+                      <td>
+                        <img  th:src="@{'/uploadImg/' + ${applicant.userDocs.profileName}}" class="me-2" alt="image">
+                        <span th:text="${applicant.userDocs.personalDetails.name}"></span>
+                      </td>
+                      <td th:text="${applicant.userDocs.personalDetails.email}"></td>
+
+                      <td th:text="${applicant.userDocs.personalDetails.phoneNo}"></td>
+
+                      <td>
+                        <a th:href="@{'/uploadImg/' + ${applicant.userDocs.cvName}}" target="_blank">View CV</a>
+
+                      </td>
+                      <td>
+                        <a th:href="@{/applicantProfile}"> View Profile</a>
+                      </td>
+                    </tr>
+
+
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -334,7 +241,6 @@
 
 
       </div>
-
       <!-- content-wrapper ends -->
       <!-- partial:partials/_footer.html -->
       <footer class="footer">
@@ -348,6 +254,11 @@
   </div>
   <!-- page-body-wrapper ends -->
 </div>
+<script>
+  function submitForm() {
+    document.getElementById("jobForm").submit();
+  }
+</script>
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>

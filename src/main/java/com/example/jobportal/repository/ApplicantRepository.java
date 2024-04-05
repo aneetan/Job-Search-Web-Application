@@ -13,5 +13,11 @@ public interface ApplicantRepository extends JpaRepository<Applicant, Integer> {
 
     List<Applicant> findByUserDocs(userDocs userDocs);
 
+    Applicant findByUserDocsAndApplicantId(userDocs userDocs, int applicantId);
+
+    List<Applicant> findByJobDetails(JobDetails jobDetails);
+
+    List<Applicant> findByJobDetailsAndStatus(JobDetails jobDetails, String status);
+
 
 }

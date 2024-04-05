@@ -53,7 +53,6 @@ public class JobController {
         Company company = cRepo.findByCompanyEmail(c.getCompanyEmail());
         CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
         CompanyDetails companyDetails = cdRepo.findByCompany(company);
-        System.out.println(docs);
 
         if (company != null && encoder.matches(c.getCompanyPassword(), company.getCompanyPassword())){
             session.setAttribute("activeCompany", company);
@@ -61,9 +60,28 @@ public class JobController {
 //            session.setMaxInactiveInterval(30);
             model.addAttribute("data", docs);
 
+            // Retrieve job details for the company
+            List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
 
-            List<Applicant> applicants = appRepo.findAll();
-            model.addAttribute("applicants", applicants);
+            // Create a map to hold job details and associated applicants
+            List<Applicant> selectedApplicants = new ArrayList<>();
+
+            // Iterate through each job posted by the company
+            for (JobDetails job : jobDetailsList) {
+                // Retrieve applicants with status "pending" for the current job
+                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+
+                // Add applicants to the list of selected applicants
+                selectedApplicants.addAll(applicantsForJob);
+            }
+
+            List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+            // Add unique job locations to the model
+            model.addAttribute("uniqueJob", uniqueJob);
+            model.addAttribute("applicants", selectedApplicants);
+            model.addAttribute("jobTitle", "All jobs");
+
 
             return "companylanding.html";
         } else {
@@ -276,9 +294,13 @@ public class JobController {
 
 
                 List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+                Map<JobDetails, Long> daysRemainingMap = jobService.calculateDaysRemainingForJobs(unappliedJobs);
+
                 if (unappliedJobs.isEmpty()){
                     model.addAttribute("noJobs", "No recent jobs!!");
                 } else{
+                    model.addAttribute("days", daysRemainingMap);
+
                     //pass the attribute of unapplied jobs by the user in dashboard
                     model.addAttribute("job", applicantService.findUnappliedJobs(docs));
                 }
@@ -367,13 +389,11 @@ public class JobController {
         return "declinedCompany.html";
     }
 
-
     @GetMapping("/declinedCompany")
     public String declinedCompany(Model model){
         model.addAttribute("dataList", docsRepo.findByCompany_Status("Declined"));
         return "declinedCompany.html";
     }
-
 
     @GetMapping("/logoutAdmin")
     public String logoutAdmin(HttpSession session, Model model){
@@ -389,15 +409,43 @@ public class JobController {
             return "adminLogin.html";
         }
 
-        List<Applicant> applicants = appRepo.findAll();
-        model.addAttribute("applicants", applicants);
+        Company company = (Company) session.getAttribute("activeCompany");
+        session.setAttribute("activeCompany", company);
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants with status "pending" for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+
+            // Add applicants to the list of selected applicants
+            selectedApplicants.addAll(applicantsForJob);
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("applicants", selectedApplicants);
+        model.addAttribute("jobTitle", "All jobs");
 
         return "companylanding.html";
     }
 
     @GetMapping("/viewJob")
     public String viewJobCandidate(HttpSession session, Model model){
+
         Company company = (Company) session.getAttribute("activeCompany");
+        session.setAttribute("activeCompany", company);
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
 
         List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
         model.addAttribute("jobDetails", jobDetails);
@@ -409,6 +457,24 @@ public class JobController {
     private String dissmissJob(HttpSession session, Model model, @PathVariable int jobId){
         JobDetails details = jdRepo.findAllByJobId(jobId);
         details.setJobStatus("Expired");
+
+        jdRepo.save(details);
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        session.setAttribute("activeCompany", company);
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        model.addAttribute("jobDetails", jobDetails);
+
+        return "viewJobsCompany.html";
+    }
+
+    @GetMapping("/close/{jobId}")
+    private String closeJob(HttpSession session, Model model, @PathVariable int jobId){
+        JobDetails details = jdRepo.findAllByJobId(jobId);
+        details.setJobStatus("Inactive");
 
         jdRepo.save(details);
 
@@ -454,11 +520,12 @@ public class JobController {
         System.out.println(docs);
         System.out.println(companyDetails);
 
-        if(activeCompany == null) {
-            model.addAttribute("login", "Please login first");
-
-            return "adminLogin.html";
-        } else if(activeCompany.getStatus().equals("Pending")){
+//        if(activeCompany == null) {
+//            model.addAttribute("login", "Please login first");
+//
+//            return "adminLogin.html";
+//        }
+        if(activeCompany.getStatus().equals("Pending")){
             model.addAttribute("error", "Your company request is under approval! Please wait for confirmation mail to add job details.");
 
         } else if(activeCompany.getStatus().equals("Declined")){
@@ -467,19 +534,15 @@ public class JobController {
 
             LocalDate today = LocalDate.now();
             LocalDate deadline = details.getDeadline();
+            long daysRemaining = ChronoUnit.DAYS.between(today, deadline);
 
             JobDetails jd = new JobDetails(details.getTitle(), details.getLocation(), details.getEmpType(), details.getJobDescription(), details.getQualification(), details.getSkills(), details.getSalary(), details.getResponsibilities(), details.getDeadline());
 
             if (deadline.isAfter(today)) {
                 jd.setJobStatus("Active");
-                long daysBetween = ChronoUnit.DAYS.between(today, deadline);
-                String daysRemaining = String.valueOf(daysBetween + 1);
-                jd.setDaysRemaining(daysRemaining);
 
             } else {
                 jd.setJobStatus("Expired");
-                jd.setDaysRemaining("0");
-
             }
 
             jd.setCompany(company);
@@ -487,15 +550,10 @@ public class JobController {
 
             jdRepo.save(jd);
 
+            model.addAttribute("days", daysRemaining);
             model.addAttribute("success", "Your job has been posted");
         }
         return "addJobsCompany.html";
-    }
-
-    @GetMapping("/applicantProfile")
-    public String applicantProfile(){
-        return "applicantProfile.html";
-
     }
 
     @GetMapping("/logoutCompany")
@@ -514,6 +572,7 @@ public class JobController {
         model.addAttribute("data", docs);
 
         List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+
         if (unappliedJobs.isEmpty()){
             model.addAttribute("noJobs", "No recent jobs!!");
         } else{
@@ -668,20 +727,21 @@ public class JobController {
         List<Applicant> jobApplications = appRepo.findByUserDocs(docs);
 
         // Filter applied jobs based on the search query
-        List<JobDetails> filteredAppliedJobs = appliedJobs.stream()
-                .filter(job -> job.getTitle().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+        List<JobDetails> filteredAppliedJobs = jdRepo.findByTitleContainingIgnoreCase(query);
 
+        //if no jobs found
         if (filteredAppliedJobs.isEmpty()) {
             model.addAttribute("noJobs", "No applied jobs found for the search query!!");
         } else {
+
+            //map jobdetails with status
             Map<JobDetails, String> jobStatusMap = new HashMap<>();
             for (Applicant applicant : jobApplications) {
-                JobDetails jobDetails = filteredAppliedJobs.stream()
-                        .filter(job -> job.getJobId() == applicant.getJobDetails().getJobId())
-                        .findFirst()
-                        .orElse(null);
+                //foreach applicant retrieved jobdetails
+                JobDetails jobDetails = jdRepo.findByJobId(applicant.getJobDetails().getJobId());
+
                 if (jobDetails != null) {
+                    //save the status of the associated job found
                     jobStatusMap.put(jobDetails, applicant.getStatus());
                 }
             }
@@ -703,10 +763,9 @@ public class JobController {
         List<CompanyDocs> companyList = docsRepo.findByCompany_Status("Approved");
 
         // Filter the company list based on the search query
-        List<CompanyDocs> filteredCompanyList = companyList.stream()
-                .filter(company -> company.getCompany().getCompanyName().toLowerCase().contains(query.toLowerCase()) ||
-                        company.getCompanyDetails().getCompanyAddress().toLowerCase().contains(query.toLowerCase()))
-                .collect(Collectors.toList());
+        List<CompanyDocs> filteredCompanyList =
+                docsRepo.findByCompany_CompanyNameContainingIgnoreCaseOrCompanyDetails_CompanyAddressContainingIgnoreCaseAndCompany_Status(
+                query, query, "Approved");
 
         if (filteredCompanyList.isEmpty()) {
             model.addAttribute("noCompanies", "No companies found for the search query!!");
@@ -716,5 +775,214 @@ public class JobController {
         return "seeCompanyList.html";
     }
 
+    @GetMapping("/getApplicants")
+    public String getApplicantsForJob(@RequestParam("jobTitle") String jobTitle, Model model, HttpSession session) {
+        // Retrieve applicants for the selected job title
+        List<Applicant> applicants = jobService.getApplicantsByJobTitle(jobTitle);
 
+        // Pass the list of applicants to the view
+        model.addAttribute("applicants", applicants);
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+
+        model.addAttribute("jobTitle", jobTitle);
+
+        // Return the view name
+        return "companyLanding.html";
+    }
+
+    @GetMapping("/approvedApplicants")
+    private String approvedApplicants(HttpSession session, Model model){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.findAllByCompany(company);
+        model.addAttribute("data", docs);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Approved");
+
+            // Add applicants to the list of selected applicants
+            selectedApplicants.addAll(applicantsForJob);
+        }
+
+        if (selectedApplicants.isEmpty()){
+            model.addAttribute("noApplicant", "No approved Applicants!!");
+        } else {
+            model.addAttribute("applicants", selectedApplicants);
+
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("jobTitle", "All jobs");
+
+        return "approvedApplicants.html";
+    }
+
+    @GetMapping("/getApprovedApplicants")
+    public String getApprovedApplicantsForJob(@RequestParam("jobTitle") String jobTitle, Model model, HttpSession session) {
+        // Retrieve applicants for the selected job title
+        List<Applicant> applicants = jobService.getApprovedApplicantsByJobTitle(jobTitle);
+
+        // Pass the list of applicants to the view
+        model.addAttribute("applicants", applicants);
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+
+        model.addAttribute("jobTitle", jobTitle);
+
+        // Return the view name
+        return "approvedApplicants.html";
+    }
+
+
+    @GetMapping("{applicantId}/applicantProfile/{userId}")
+    public String applicantProfile(HttpSession session, Model model, @PathVariable int userId, @PathVariable int applicantId){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+
+        PersonalDetails personal = pRepo.findAllByUserId(userId);
+        userDocs user = fRepo.getAllByPersonalDetails(personal);
+
+        model.addAttribute("education", eduRepo.findAllByPersonalDetails(personal));
+        model.addAttribute("experience", exRepo.findAllByPersonalDetails(personal));
+
+        model.addAttribute("applicantId", applicantId);
+        model.addAttribute("user", user);
+
+
+        return "applicantProfile.html";
+
+    }
+
+    @GetMapping("{applicantId}/approveApplicant/{userId}")
+    public String approveApplicant(HttpSession session, Model model, @PathVariable int userId,
+                                   @ModelAttribute MailStructure mailStructure, @PathVariable int applicantId){
+        PersonalDetails personal = pRepo.findAllByUserId(userId);
+        userDocs userDocs = fRepo.getAllByPersonalDetails(personal);
+
+        JobDetails jobDetails = jdRepo.findByUserDocs(userDocs);
+        Applicant applicant = appRepo.findByUserDocsAndApplicantId(userDocs, applicantId);
+        applicant.setStatus("Approved");
+        appRepo.save(applicant);
+
+        mailService.sendApprovalEmail(personal.getEmail(), personal.getName(), applicant.getJobDetails().getTitle(), applicant.getJobDetails().getCompany().getCompanyName());
+
+//        mailService.sendMail(personal.getEmail(), mailStructure);
+//        mailService.sendMail("anee.neu15@gmail.com", mailStructure);
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetails(job);
+
+            // Add applicants to the list of selected applicants
+            selectedApplicants.addAll(applicantsForJob);
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+
+
+
+        // Add unique job locations to the model
+        model.addAttribute("status", "Applicant has been approved successfully");
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("applicants", selectedApplicants);
+        model.addAttribute("jobTitle", "All jobs");
+
+        return "companylanding.html";
+    }
+
+    @GetMapping("{applicantId}/declineApplicant/{userId}")
+    public String declineApplicant(HttpSession session, Model model, @PathVariable int userId,
+                                   @ModelAttribute MailStructure mailStructure, @PathVariable int applicantId){
+        PersonalDetails personal = pRepo.findAllByUserId(userId);
+        userDocs userDocs = fRepo.getAllByPersonalDetails(personal);
+
+        JobDetails jobDetails = jdRepo.findByUserDocs(userDocs);
+        Applicant applicant = appRepo.findByUserDocsAndApplicantId(userDocs, applicantId);
+        applicant.setStatus("Declined");
+
+        mailService.sendRejectionEmail(personal.getEmail(), personal.getName(), applicant.getJobDetails().getTitle(), applicant.getJobDetails().getCompany().getCompanyName());
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants with status "pending" for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+
+            // Add applicants to the list of selected applicants
+            selectedApplicants.addAll(applicantsForJob);
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+
+
+
+        // Add unique job locations to the model
+        model.addAttribute("error", "Applicant has been declined successfully");
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("applicants", selectedApplicants);
+        model.addAttribute("jobTitle", "All jobs");
+
+        return "companylanding.html";
+    }
+
+    @GetMapping("/seeCompanyProfile")
+    public String seeCompanyProfile(HttpSession session, Model model){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+        model.addAttribute("companyList", docs);
+
+        return "companyProfile.html";
+    }
 }

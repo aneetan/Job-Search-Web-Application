@@ -7,6 +7,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>View Jobs- Company</title>
+  <base href="http://localhost:8080/">
   <!-- plugins:css -->
   <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
   <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
@@ -39,6 +40,27 @@
   .sidebar .nav .nav-item.active > .nav-link i{
     color: #148FA8;
   }
+
+  .navbar-dropdown a:hover{
+    color: #148FA8 !important;
+  }
+
+  .job-btn{
+    font-size: 12px;
+    text-decoration: none;
+    background: #148fa8;
+    color: #aba7a7;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 12px;
+  }
+
+  .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown a{
+    margin-right: 100px !important;
+    font-size: 14px !important;
+  }
+
+
 </style>
 <body>
 <div class="container-scroller">
@@ -67,19 +89,22 @@
         <li class="nav-item nav-profile dropdown">
           <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="nav-profile-img">
-              <img src="img/face1.jpg" alt="image">
+              <img th:src="@{'uploadImg/' + ${data.logoName}}" alt="image">
               <span class="availability-status online"></span>
             </div>
             <div class="nav-profile-text">
-              <p class="mb-1 text-black">David Greymaax</p>
+              <p class="mb-1 text-black" th:text="${data.company.companyName}"></p>
             </div>
           </a>
           <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item" th:href="@{/seeCompanyProfile}">
               <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">
-              <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+            <a class="dropdown-item" href="">
+              <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" th:href="@{/logoutCompany}">
+              <i class="mdi mdi-logout me-2 text-primary"></i> Logout </a>
           </div>
         </li>
 
@@ -107,7 +132,7 @@
 
         <li class="nav-item active">
           <a class="nav-link" th:href="@{/viewJob}">
-            <span class="menu-title"> View added jobs</span>
+            <span class="menu-title"> View active jobs</span>
             <i class="mdi mdi-briefcase menu-icon"></i>
 
 
@@ -123,6 +148,14 @@
           </a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/approvedApplicants}">
+            <span class="menu-title"> Approved applicants</span>
+            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+          </a>
+        </li>
+
       </ul>
     </nav>
     <!-- partial -->
@@ -133,7 +166,7 @@
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
                   <i class="mdi mdi-briefcase"></i>
 
-                </span> View Jobs
+                </span> Active Jobs
           </h3>
         </div>
         <div class="row">
@@ -143,8 +176,8 @@
         </div>
         <div class="row">
           <div class="col-12 grid-margin">
-            <div class="card">
-              <div class="card-body" th:each="job : ${jobDetails}">
+            <div class="card" th:each="job : ${jobDetails}">
+              <div class="card-body">
                 <div class="profilePart">
                   <img th:src="@{'/uploadImg/' + ${job.companyDocs.logoName}}" alt="">
 
@@ -167,6 +200,9 @@
 
                   </div>
 
+                  <div style="color: #148fa8" class="requiredSkills" th:text="'Status: ' + ${job.jobStatus}"> </div>
+
+
 
                   <a href="#"> View Details </a>
 
@@ -175,6 +211,11 @@
 
                     <a href="">
                       <button type="button" class="btn btn-gradient-dark btn-icon-text"> Edit <i class="mdi mdi-file-check btn-icon-append"></i>
+                      </button>
+                    </a>
+
+                    <a th:href="@{'/close/' + ${job.jobId}}">
+                      <button type="button" class=" close-btn btn btn-gradient-dark btn-icon-text"> Close job <i class="mdi mdi-file-check btn-icon-append"></i>
                       </button>
                     </a>
 
@@ -195,6 +236,8 @@
 
                 </div>
               </div>
+              <hr>
+
             </div>
           </div>
         </div>

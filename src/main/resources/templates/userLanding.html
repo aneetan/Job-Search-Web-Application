@@ -186,11 +186,12 @@
 
                 <p  th:text="${noJobs}" style="color: #9C9FA6;"></p>
 
+
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div style="margin-bottom: 1.5rem" class="card" th:each="job : ${job}">
                             <div class="card-body">
-                                <span class="days" th:text="${job.daysRemaining} + ' days remaining'"></span>
+                                <span class="days" th:text="'Deadline: ' + ${job.deadline} "></span>
 
                                 <div class="profilePart">
 
@@ -203,10 +204,7 @@
                                     </div>
                                 </div>
 
-                                <!-- <h4 class="card-title">
-                                  Backend Developer
-                                  <div class="type"></div>
-                                </h4> -->
+
                                 <div class="table-responsive">
                                     <p class="jobdescription" th:text="${job.jobDescription}"> </p>
 
