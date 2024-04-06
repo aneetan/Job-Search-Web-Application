@@ -3,6 +3,7 @@ package com.example.jobportal.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -20,9 +21,11 @@ public class Experience {
     private String locationType;
 
     @JsonFormat(pattern = "yyyy-MM", shape = JsonFormat.Shape.STRING)
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date startDateEx;
 
     @JsonFormat(pattern = "yyyy-MM", shape = JsonFormat.Shape.STRING)
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date endDateEx;
 
     public Experience(){

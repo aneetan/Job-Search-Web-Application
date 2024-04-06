@@ -19,14 +19,17 @@ public class PersonalDetails {
     private String address;
     private String phoneNo;
 
-    @OneToMany(mappedBy="personalDetails")
+    @OneToMany(mappedBy="personalDetails", cascade = CascadeType.ALL)
     private List<Education> eduList;
 
-    @OneToMany(mappedBy="personalDetails")
+    @OneToMany(mappedBy="personalDetails", cascade = CascadeType.ALL)
     private List<Experience> exList;
 
-    @OneToMany(mappedBy="personalDetails")
-    private List<Certifications> certificateList;
+    @OneToOne(mappedBy = "personalDetails", cascade = CascadeType.ALL)
+    private additionalDetails additionalDetails;
+
+    @OneToOne(mappedBy = "personalDetails", cascade = CascadeType.ALL)
+    private userDocs userDocs;
 
     public PersonalDetails(){
 
@@ -35,6 +38,13 @@ public class PersonalDetails {
         this.email = email;
         this.name = name;
         this.password = password;
+        this.address = address;
+        this.phoneNo = phoneNo;
+    }
+
+    public PersonalDetails(String email, String name, String address, String phoneNo) {
+        this.email = email;
+        this.name = name;
         this.address = address;
         this.phoneNo = phoneNo;
     }

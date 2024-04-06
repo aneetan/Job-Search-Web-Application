@@ -12,5 +12,7 @@ import java.util.List;
 public interface ExperienceRepository  extends JpaRepository<Experience, Integer> {
     List<Experience> findAllByPersonalDetails(PersonalDetails personalDetails);
 
+    Experience findAllByExId(int exId);
+
 
 }

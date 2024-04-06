@@ -9,6 +9,9 @@ public class additionalDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int addId;
+
+    @Lob
+    @Column(length = 100)
     private String bio;
     private String jobTitle;
 

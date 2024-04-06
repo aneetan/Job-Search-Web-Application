@@ -289,7 +289,7 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <a class="btn btn-info btn-edit " href="">
+                                                <a class="btn btn-info btn-edit " th:href="@{'/editCompany/' + ${companyList.company.companyId}}">
                                                     Edit Details
                                                 </a>
 
@@ -316,7 +316,7 @@
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                                                 </a>
 
-                                                                <a th:href="@{'/deleteCompany/' + ${companyList.company.companyEmail}}" >
+                                                                <a th:href="@{'/deleteCompany/' + ${companyList.company.companyId}}" >
                                                                     <button type="button" class="btn btn-primary btn-edit"> Delete </button>
                                                                 </a>
                                                             </div>

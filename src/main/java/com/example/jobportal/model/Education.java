@@ -3,6 +3,7 @@ package com.example.jobportal.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -20,9 +21,11 @@ public class Education {
     private String grade;
 
     @JsonFormat(pattern = "yyyy-MM", shape = JsonFormat.Shape.STRING)
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM", shape = JsonFormat.Shape.STRING)
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date endDate;
 
     public Education(){

@@ -11,6 +11,12 @@
   <!-- plugins:css -->
   <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
   <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
+
+  <link rel='stylesheet' th:href='@{https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css}'>
+
+  <script th:src="@{https://code.jquery.com/jquery-3.5.1.min.js}"></script>
+
+  <script th:src='@{https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js}'></script>
   <!-- endinject -->
 
   <!-- Layout styles -->
@@ -43,6 +49,10 @@
 
   .navbar-dropdown a:hover{
     color: #148FA8 !important;
+  }
+
+  .buttons a{
+    text-decoration: none;
   }
 
   .job-btn{
@@ -166,7 +176,7 @@
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
                   <i class="mdi mdi-briefcase"></i>
 
-                </span> Active Jobs
+                </span> All Jobs
           </h3>
         </div>
         <div class="row">
@@ -204,7 +214,7 @@
 
 
 
-                  <a href="#"> View Details </a>
+                  <a th:href="@{'/viewJobDetails/' + ${job.jobId}}"> View Details </a>
 
 
                   <div class="buttons">
@@ -214,20 +224,96 @@
                       </button>
                     </a>
 
-                    <a th:href="@{'/close/' + ${job.jobId}}">
-                      <button type="button" class=" close-btn btn btn-gradient-dark btn-icon-text"> Close job <i class="mdi mdi-file-check btn-icon-append"></i>
+                      <button type="button" class=" close-btn btn btn-gradient-dark btn-icon-text" data-toggle="modal" data-target="#closeModal"> Close job <i class="mdi mdi-close-box btn-icon-append"></i>
                       </button>
-                    </a>
 
-                    <a th:href="@{'/dismiss/' + ${job.jobId}}">
-                      <button type="button" class="btn btn-gradient-dark btn-icon-text"> Dismiss <i class="mdi mdi-file-check btn-icon-append"></i>
-                      </button>
-                    </a>
+                      <div class="modal fade" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel2"> Confirm</h5>
+                              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure to close the job?
+                              <p style="color: #aba7a7; font-size: 14px;"> You will no longer recieve applicant!</p>
+                            </div>
+                            <div class="modal-footer">
+                              <a th:href="@{/closeModal}">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                              </a>
 
-                    <a href="">
-                      <button type="button" class="btn btn-outline-secondary btn-icon-text"> Delete   <i class="mdi mdi-delete  btn-icon-append"></i>
+                              <a th:href="@{'/close/' + ${job.jobId}}">
+                                <button type="button" class="btn btn-gradient-dark btn-icon-text"> Yes, Close </button>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <button type="button" class="btn btn-gradient-dark btn-icon-text" data-toggle="modal" data-target="#dissmissModal"> Dismiss <i class="mdi mdi-playlist-remove btn-icon-append"></i>
                       </button>
-                    </a>
+
+                      <div class="modal fade" id="dissmissModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel1"> Confirm</h5>
+                              <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              Are you sure to dissmiss the job?
+                              <p style="color: #aba7a7; font-size: 14px;"> This will change the status to dismiss!</p>
+                            </div>
+                            <div class="modal-footer">
+                              <a th:href="@{/closeModal}">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                              </a>
+
+                              <a th:href="@{'/dismiss/' + ${job.jobId}}">
+                                <button type="button" class="btn btn-gradient-dark btn-icon-text"> Yes, Dissmiss </button>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                    <button type="button" class="btn btn-outline-secondary btn-icon-text" data-toggle="modal" data-target="#exampleModal"> Delete   <i class="mdi mdi-delete  btn-icon-append"></i>
+                      </button>
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"> Confirm</h5>
+                            <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure to delete the job?
+                          </div>
+                          <div class="modal-footer">
+                            <a th:href="@{/closeModal}">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </a>
+
+                            <a href="">
+                              <button type="button" class="btn btn-gradient-dark btn-icon-text"> Yes, Delete </button>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+
 
 
 

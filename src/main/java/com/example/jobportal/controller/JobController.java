@@ -398,7 +398,7 @@ public class JobController {
     @GetMapping("/logoutAdmin")
     public String logoutAdmin(HttpSession session, Model model){
         session.invalidate();
-        return "login.html";
+        return "index.html";
     }
 
 //------------------------------ Company Landing ----------------------------------------------
@@ -559,7 +559,7 @@ public class JobController {
     @GetMapping("/logoutCompany")
     public String logoutCompany(HttpSession session){
         session.invalidate();
-        return "adminLogin.html";
+        return "index.html";
     }
 
 
@@ -658,7 +658,7 @@ public class JobController {
     @GetMapping("/logoutUser")
     public String logoutUser(HttpSession session){
         session.invalidate();
-        return "login.html";
+        return "index.html";
     }
 
     @GetMapping("/companyList")
@@ -697,6 +697,7 @@ public class JobController {
 
         return "viewCompanyDetails.html";
     }
+
 
     @Autowired
     private JobService jobService;
@@ -964,9 +965,6 @@ public class JobController {
 
         List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
 
-
-
-
         // Add unique job locations to the model
         model.addAttribute("error", "Applicant has been declined successfully");
         model.addAttribute("uniqueJob", uniqueJob);
@@ -985,4 +983,320 @@ public class JobController {
 
         return "companyProfile.html";
     }
+
+    @GetMapping("/seeUserProfile")
+    public String seeUserProfile(HttpSession session, Model model){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(details);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+
+        return "userProfile.html";
+    }
+
+    @GetMapping("/viewJobDetails/{jobId}")
+    public String viewJobDetailsCompany(HttpSession session, Model model, @PathVariable int jobId){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        JobDetails details = jdRepo.findByJobId(jobId);
+        model.addAttribute("job", details);
+        return "jobDetailsCompany.html";
+    }
+
+    @GetMapping("/viewJobDetailsUser/{jobId}")
+    public  String viewJobDetailsUser(HttpSession session, Model model, @PathVariable int jobId){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+        model.addAttribute("data", docs);
+
+        JobDetails details = jdRepo.findByJobId(jobId);
+        model.addAttribute("job", details);
+        return "jobDetailsUser.html";
+    }
+
+    @GetMapping("/edit/{userId}")
+    private String editUser(HttpSession session, Model model, @PathVariable int userId){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+
+        return "userEditProfile.html";
+    }
+
+    @PostMapping("/editUserDetails")
+    private String editUserDetails(HttpSession session, Model model, @ModelAttribute("data") userDocs data){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+
+        // Retrieve the necessary objects from userDocs
+        PersonalDetails personalDetails = data.getPersonalDetails();
+        additionalDetails additionalDetails = data.getAdditionalDetails();
+        personalDetails.setPassword(pDetails.getPassword());
+        // Save/update PersonalDetails
+        pRepo.save(personalDetails);
+
+        additionalDetails.setPersonalDetails(personalDetails);
+        // Save/update additionalDetails
+        addRepo.save(additionalDetails);
+
+        data.setPersonalDetails(personalDetails);
+        data.setAdditionalDetails(additionalDetails);
+        // Save/update userDocs
+        fRepo.save(data);
+
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(pDetails);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(pDetails);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+        return "userProfile.html";
+    }
+
+    @GetMapping("/editEdu/{eduId}")
+    private String editEducation(HttpSession session, Model model, @PathVariable int eduId){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        Education education = eduRepo.findAllByEduId(eduId);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("edu", education);
+
+        return "editEducation.html";
+    }
+
+    @PostMapping("/editEduDetails")
+    private String editEduDetails(HttpSession session, Model model,  @ModelAttribute("edu") Education edu){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+
+        edu.setPersonalDetails(pDetails);
+        eduRepo.save(edu);
+
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(pDetails);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(pDetails);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+        return "userProfile.html";
+
+    }
+
+    @GetMapping("/editEx/{exId}")
+    private String editExperience(HttpSession session, Model model, @PathVariable int exId){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        Experience experience = exRepo.findAllByExId(exId);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("ex", experience);
+
+        return "editExperience.html";
+    }
+
+    @PostMapping("/editExDetails")
+    private String editExDetails(HttpSession session, Model model,  @ModelAttribute("ex") Experience ex){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+
+        ex.setPersonalDetails(pDetails);
+        exRepo.save(ex);
+
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(pDetails);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(pDetails);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+        return "userProfile.html";
+
+    }
+
+    @GetMapping("/addEducation")
+    public String addEducation(HttpSession session, Model model){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+
+        return "addEducation.html";
+    }
+
+    @PostMapping("/addEduDetails")
+    private String addEduDetails(HttpSession session, Model model, @ModelAttribute Education edu){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+
+        edu.setPersonalDetails(pDetails);
+        eduRepo.save(edu);
+
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(pDetails);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(pDetails);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+        return "userProfile.html";
+    }
+
+    @GetMapping("/addExperience")
+    private String addExperience(HttpSession session, Model model){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+
+        return "addExperience.html";
+    }
+
+    @PostMapping("/addExDetails")
+    private String addExDetails(HttpSession session, Model model, @ModelAttribute Experience ex){
+        PersonalDetails pDetails = (PersonalDetails) session.getAttribute("activeUser");
+
+        ex.setPersonalDetails(pDetails);
+        exRepo.save(ex);
+
+        userDocs docs = fRepo.getAllByPersonalDetails(pDetails);
+
+        List<Education> educationList = eduRepo.findAllByPersonalDetails(pDetails);
+        List<Experience> experienceList = exRepo.findAllByPersonalDetails(pDetails);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("user", docs);
+        model.addAttribute("education", educationList);
+        model.addAttribute("experience", experienceList);
+
+        return "userProfile.html";
+    }
+
+    @GetMapping("/deleteUser/{userId}")
+    private String deleteUser(HttpSession session, @PathVariable int userId){
+        session.invalidate();
+        pRepo.deleteById(userId);
+        return "index.html";
+    }
+
+    @GetMapping("/changePw")
+    private String changePwForm(HttpSession session, Model model){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+
+        return "changePwForm.html";
+    }
+
+    @PostMapping("/verifyPwUser")
+    private String verifyPw(HttpSession session, Model model, @ModelAttribute PersonalDetails p){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (encoder.matches(p.getPassword(), details.getPassword())){
+            model.addAttribute("data", docs);
+            return "changePwUser.html";
+
+        } else {
+            model.addAttribute("data", docs);
+            model.addAttribute("error", "Invalid Password");
+            return "changePwForm.html";
+        }
+    }
+
+    @PostMapping("/submitPwUser")
+    private String changePw(HttpSession session, Model model, @ModelAttribute PersonalDetails p){
+        PersonalDetails details = (PersonalDetails) session.getAttribute("activeUser");
+        userDocs docs = fRepo.getAllByPersonalDetails(details);
+
+        model.addAttribute("data", docs);
+
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashPw = encoder.encode(p.getPassword());
+        details.setPassword(hashPw);
+        pRepo.save(details);
+
+        List<JobDetails> unappliedJobs = applicantService.findUnappliedJobs(docs);
+        Map<JobDetails, Long> daysRemainingMap = jobService.calculateDaysRemainingForJobs(unappliedJobs);
+
+        if (unappliedJobs.isEmpty()){
+            model.addAttribute("noJobs", "No recent jobs!!");
+        } else{
+            model.addAttribute("days", daysRemainingMap);
+
+            //pass the attribute of unapplied jobs by the user in dashboard
+            model.addAttribute("job", applicantService.findUnappliedJobs(docs));
+        }
+
+        model.addAttribute("success", "Password changed successfully");
+        return "userLanding.html";
+    }
+
+    @GetMapping("/editCompany/{companyId}")
+    public String editCompany(HttpSession session, Model model, @PathVariable int companyId){
+        Company company = cRepo.findByCompanyId(companyId);
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        return "editCompanyDetails.html";
+    }
+
+    @PostMapping("/editCompanyDetails")
+    public String editCompanyDetails(HttpSession session, Model model, @ModelAttribute("data") CompanyDocs data){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        // Retrieve the necessary objects from userDocs
+        Company c = data.getCompany();
+        c.setCompanyPassword(company.getCompanyPassword());
+        c.setStatus(company.getStatus());
+        cRepo.save(c);
+
+        CompanyDetails cd = data.getCompanyDetails();
+        cd.setCompany(c);
+        cdRepo.save(cd);
+
+        data.setCompanyDetails(cd);
+        data.setCompany(c);
+        data.setVerifiedDocName(docs.getVerifiedDocName());
+        docsRepo.save(data);
+
+        model.addAttribute("data", docs);
+        model.addAttribute("companyList", docs);
+        return "companyProfile.html";
+    }
+
+    @GetMapping("/deleteCompany/{companyId}")
+    public String deleteCompany(HttpSession session, @PathVariable int companyId){
+        session.invalidate();
+        cRepo.deleteById(companyId);
+        return "index.html";
+    }
+
 }

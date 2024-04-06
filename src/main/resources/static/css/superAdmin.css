@@ -12163,6 +12163,16 @@ code {
     background: #333333;
     color: #ffffff; }
 
+.content-wrapper{
+    padding: 1.5rem 1.5rem !important;
+    background: #F2F8F8 !important;
+}
+
+.footer{
+    background: #F2F8F8 !important;
+
+}
+
 .btn-behance {
     background: #1769ff;
     color: #ffffff; }

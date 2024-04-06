@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Applicant Profile</title>
+  <base href="http://localhost:8080/">
+
+  <!-- endinject -->
+
+  <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
+
+  <!-- Layout styles -->
+  <link rel="stylesheet" th:href="@{css/superAdmin.css}">
+
+  <!-- Layout styles -->
+  <!-- End layout styles -->
+
+  <link rel="stylesheet" th:href="@{css/profile.css}">
+
+  <link rel='stylesheet' th:href='@{https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css}'>
+
+  <script th:src="@{https://code.jquery.com/jquery-3.5.1.min.js}"></script>
+
+  <script th:src='@{https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js}'></script>
+
+  <style>
+    .form-job{
+      width: 20%;
+    }
+
+
+    .navbar .navbar-brand-wrapper .navbar-brand img{
+      height: 70px;
+      width: 180px;
+    }
+
+    .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img{
+      width: 60px;
+      height: 60px;
+    }
+
+    .page-title .page-title-icon{
+      background: #148FA8 !important;
+    }
+
+
+    .sidebar .nav .nav-item.active > .nav-link .menu-title,
+    .sidebar .nav .nav-item.active > .nav-link i{
+      color: #148FA8;
+    }
+
+    .navbar-dropdown a:hover{
+      color: #148FA8 !important;
+    }
+
+    .btn-approve,
+    .btn-decline{
+      margin-top: 10px !important;
+    }
+
+    .btn-primary{
+      color: #fafafa !important;
+      background-color: #148fa8 !important;
+      border-color: #148fa8 !important;
+    }
+
+    .btn-decline{
+      background-color: #fafafa !important;
+      color: #148fa8 !important;
+      margin-left: 6px !important;
+    }
+
+    .card a{
+      text-decoration: none;
+      color: #148FA8;
+
+    }
+
+    .card a i{
+      float: right;
+      padding: 10px;
+      font-size: 30px;
+    }
+
+    .card .card-body{
+      padding: 20px !important;
+      margin-top: 0px;
+    }
+
+    .school{
+      border: 1px solid #aba7a7;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+
+
+  </style>
+</head>
+<body>
+<div class="container-scroller">
+
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" href="index.html"><img src="img/jobsearchlogo.png" alt="logo" /></a>
+      <a class="navbar-brand brand-logo-mini" href="index.html"><img src="img/logo.png" alt="logo" /></a>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+        <span class="mdi mdi-menu"></span>
+      </button>
+      <div class="search-field d-none d-md-block">
+
+      </div>
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item nav-profile dropdown">
+          <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="nav-profile-img">
+              <img th:src="@{'uploadImg/' + ${data.profileName}}" alt="image">
+              <span class="availability-status online"></span>
+            </div>
+            <div class="nav-profile-text">
+              <p class="mb-1 text-black" th:text="${data.personalDetails.name}"></p>
+            </div>
+          </a>
+          <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" th:href="@{/seeUserProfile}">
+              <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">
+              <i class="mdi mdi-key me-2 text-primary"></i> Change Password </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" th:href="@{/logoutUser}">
+              <i class="mdi mdi-logout me-2 text-primary"></i> Signout </a>
+          </div>
+        </li>
+
+
+
+
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <span class="mdi mdi-menu"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+
+        <li class="nav-item ">
+          <a class="nav-link" th:href="@{/viewJobsUser}">
+            <span class="menu-title"> View jobs</span>
+            <i class="mdi mdi-briefcase menu-icon"></i>
+
+
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{'/seeAppliedJobs/' + ${data.personalDetails.userId}}">
+
+            <span class="menu-title"> Applied jobs  </span>
+            <i class="mdi mdi-contacts menu-icon"></i>
+
+          </a>
+        </li>
+
+
+
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/companyList}">
+            <span class="menu-title"> Approved Companies </span>
+            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="row">
+          <div class="col-12 grid-margin">
+            <div class="card">
+              <a href="">
+                <i class="mdi mdi-close close-btn"></i>
+              </a>
+
+              <div class="card-body">
+                <div class="main-body">
+
+                  <div class="row gutters-sm">
+                    <div class="col-md-4 mb-3">
+                      <div class="card">
+                        <div class="card-body">
+                          <div class="d-flex flex-column align-items-center text-center">
+                            <img th:src="@{'uploadImg/' + ${user.profileName}}" alt="Admin" class="rounded-circle" width="150">
+                            <div class=" profileHead mt-3">
+                              <h6 th:text="${user.personalDetails.name}"></h6>
+                              <p class="text-secondary mb-1" th:text="${user.additionalDetails.jobTitle}"></p>
+                              <p class="text-muted font-size-sm" th:text="${user.personalDetails.address}"></p>
+
+                              <a th:href="@{'/edit/' + ${user.personalDetails.userId}}">
+                                <button class="btn btn-approve"> Edit details</button>
+                              </a>
+
+
+
+                              <button type="button" class="btn btn-primary btn-decline" data-toggle="modal" data-target="#exampleModal">
+                                Delete
+                              </button>
+
+
+
+                              <!--                                                            Modal for confirmation-->
+
+                              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel"> Confirm</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      Are you sure to delete your user Profile?
+                                    </div>
+                                    <div class="modal-footer">
+                                      <a th:href="@{/closeModal}">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                      </a>
+
+                                      <a th:href="@{'/deleteUser/' + ${user.personalDetails.userId}}">
+                                        <button type="button" class="btn btn-primary"> Yes, Delete </button>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+                              <!--                                                            Modal Ends here-->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card mt-3">
+                        <ul class="list-group list-group-flush">
+
+                          <li class="list-group-item justify-content-between align-items-center ">
+                            <h6 style="color: #148FA8;">Bio </h6>
+                            <p th:text="${user.additionalDetails.bio}">
+
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card mb-3">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="${user.personalDetails.name}">
+
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="${user.personalDetails.email}">
+
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="${user.personalDetails.phoneNo}">
+
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text="${user.personalDetails.address}">
+
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h6 class="mb-0">CV</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <a th:href="@{'uploadImg/' + ${user.cvName}}" target="_blank">
+                                View
+                              </a>
+                            </div>
+                          </div>
+                          <hr>
+                        </div>
+                      </div>
+
+                      <div class="row gutters-sm">
+                        <div class="col-sm-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-1">  Education
+                                <a th:href="@{/addEducation}" style="margin-left: 120px; cursor: pointer;">
+                                  <i  style="font-size: 18px;" class="mdi mdi-plus"></i>
+                                </a>
+                              </h6>
+
+                              <div class="school" th:each="edu : ${education}">
+                                <span style="font-size: 16px; color: #148fa8" th:text="${edu.school} + ' (' + ${edu.degree} + ')'"> </span>  <a style="font-size: 10px; text-decoration: underline;" th:href="@{'/editEdu/' + ${edu.eduId}}"> Edit </a> <br>
+                                <!--                                                                <span style="color: #aba7a7; font-size: 12px;" th:text="$"> Start Date - End Date</span>-->
+                                <span style="color: #aba7a7; font-size: 12px;" th:text="${#dates.format(edu.startDate, 'MMM yyyy')} + ' - ' + ${#dates.format(edu.endDate, 'MMM yyyy')}"></span>
+
+
+                                <div class="edu-details">
+                                  <span style="font-size: 12px;" th:text="${edu.field}"> </span> <br>
+                                  <span style="font-size: 12px;" th:text="'Grade : ' + ${edu.grade}"> </span>
+                                </div>
+                              </div>
+
+
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                          <div class="card h-100">
+                            <div class="card-body">
+                              <h6 class="d-flex align-items-center mb-3"> Experience
+                                <a style="margin-left: 112px; cursor: pointer;" th:href="@{/addExperience}">
+                                  <i  style="font-size: 18px;" class="mdi mdi-plus"></i>
+                                </a>
+                              </h6>
+
+
+                              <div class="school" th:each="ex : ${experience}">
+                                <span style="font-size: 16px; color: #148fa8" th:text="${ex.title}"> </span>  <a style="font-size: 10px; text-decoration: underline;" th:href="@{'/editEx/' + ${ex.exId}}"> Edit </a> <br>
+                                <span style="color: #aba7a7; font-size: 12px;" th:text="${#dates.format(ex.startDateEx, 'MMM yyyy')} + ' - ' + ${#dates.format(ex.endDateEx, 'MMM yyyy')}"></span>
+
+
+                                <div class="edu-details">
+                                  <span style="font-size: 12px;" th:text="'Company : ' + ${ex.company}"> Company: Microsoft </span> <br>
+                                  <span style="font-size: 12px;" th:text="${ex.locationType} + ' | ' + ${ex.empType}"> On-site | Full Time</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+          <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">JobSearch - User Panel</span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+
+<script>
+
+</script>
+<!--!&#45;&#45; container-scroller &ndash;&gt;-->
+<!-- plugins:js -->
+<script th:src="@{vendors/js/vendor.bundle.base.js}"></script>
+
+<!-- jQuery -->
+<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}" integrity="sha256-k2WSCIexnAmQhsOqJhvzxuUuhfLG9qt9BPCYYU0l2Bo=" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js}" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CGp6Uar18Qm+7x" crossorigin="anonymous"></script>
+
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{js/jquery.cookie.js}" type="text/javascript"></script>
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{js/off-canvas.js}"></script>
+<script th:src="@{js/hoverable-collapse.js}"></script>
+<script th:src="@{js/misc.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page -->
+<script th:src="@{js/dashboard.js}"></script>
+<!-- End custom js for this page -->
+</body>
+</html>

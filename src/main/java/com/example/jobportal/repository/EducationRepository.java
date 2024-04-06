@@ -11,4 +11,6 @@ import java.util.List;
 public interface EducationRepository extends JpaRepository<Education, Integer> {
 
     List<Education> findAllByPersonalDetails(PersonalDetails personalDetails);
+
+    Education findAllByEduId(int eduId);
 }

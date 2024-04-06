@@ -20,9 +20,14 @@ public class Company {
     private String companyPassword;
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "company", cascade = CascadeType.ALL)
     private Set<JobDetails> jobDetails;
 
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private CompanyDetails companyDetails;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private CompanyDocs companyDocs;
 
     public Company(){
 
