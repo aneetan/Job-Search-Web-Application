@@ -38,5 +38,10 @@ public class FileService {
         return user;
     }
 
+    public Page<userDocs> findByUsernameContainingIgnoreCaseWithPagination(String username, int offset, int pageSize) {
+        Pageable pageable = PageRequest.of(offset, pageSize);
+        return fileRepository.findByPersonalDetailsNameContainingIgnoreCase(username, pageable);
+    }
+
 
 }

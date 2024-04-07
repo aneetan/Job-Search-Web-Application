@@ -1406,6 +1406,37 @@ public class JobController {
         return "userTable.html";
     }
 
+
+    @GetMapping("/searchCompanyAdmin")
+    public String searchCompanyAdmin(@RequestParam("query") String query, Model model){
+
+        List<CompanyDocs> docs = docsRepo.findByCompany_CompanyNameContainingIgnoreCaseOrCompanyDetails_CompanyAddressContainingIgnoreCaseAndCompany_Status(query, query, "Approved");
+        if (docs.isEmpty()){
+            model.addAttribute("noCompanies", "No data found");
+        }
+        model.addAttribute("dataList", docs);
+        return "approvedComp.html";
+    }
+
+    @GetMapping("/searchDeclinedCompanyAdmin")
+    public String searchDeclinedCompanyAdmin(@RequestParam("query") String query, Model model){
+
+        List<CompanyDocs> docs = docsRepo.findByCompany_CompanyNameContainingIgnoreCaseAndCompany_Status( query, "Declined");
+        if (docs.isEmpty()){
+            model.addAttribute("noCompanies", "No data found");
+        }
+        model.addAttribute("dataList", docs);
+        return "declinedCompany.html";
+    }
+
+    @GetMapping("/searchByUser")
+    public String searchByUser(@RequestParam(defaultValue = "0") int offset, @RequestParam("query") String query,
+                              @RequestParam(defaultValue = "5") int pageSize, Model model){
+
+        Page<userDocs> userPagination = fileService.findByUsernameContainingIgnoreCaseWithPagination(query, offset, pageSize);
+        model.addAttribute("dataList", userPagination);
+        return "userTable.html";
+    }
     @GetMapping("/deleteJobDetails/{jobId}")
     public String deleteJob(HttpSession session,Model model, @PathVariable int jobId){
 

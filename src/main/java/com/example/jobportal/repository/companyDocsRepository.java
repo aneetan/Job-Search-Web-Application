@@ -25,4 +25,6 @@ public interface companyDocsRepository extends JpaRepository<CompanyDocs, Intege
     List<CompanyDocs>  findByCompany_CompanyNameContainingIgnoreCaseOrCompanyDetails_CompanyAddressContainingIgnoreCaseAndCompany_Status(String nameQuery, String addressQuery, String status);
 
 
+    List<CompanyDocs> findByCompany_CompanyNameContainingIgnoreCaseAndCompany_Status(String companyName, String status);
+
 }
