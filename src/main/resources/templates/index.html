@@ -8,7 +8,6 @@
     <meta content="" name="description">
     <base href="http://localhost:8080/">
 
-
     <!-- Favicon -->
     <link th:href="@{img/favicon.ico}" rel="icon">
 
@@ -53,19 +52,10 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.html" class="nav-item nav-link active">Home</a>
-                <a href="about.html" class="nav-item nav-link"> Hire </a>
-                <a href="product.html" class="nav-item nav-link"> About Us</a>
-                <!-- <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="blog.html" class="dropdown-item">Blog Grid</a>
-                        <a href="feature.html" class="dropdown-item">Our Features</a>
-                        <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                        <a href="404.html" class="dropdown-item">404 Page</a>
-                    </div>
-                </div> -->
-                <a href="contact.html" class="nav-item nav-link"> FAQs</a>
+                <a href="#home" class="nav-item nav-link active">Home</a>
+                <a href="#hire" class="nav-item nav-link"> Hire </a>
+                <a href="#aboutus" class="nav-item nav-link"> About Us</a>
+                <a href="#FAQs" class="nav-item nav-link"> FAQs</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
                 <a th:href="@{/userLogin}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Login</a>
@@ -77,7 +67,7 @@
 
 
 <!-- Carousel Start -->
-<div class=" content-page container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
+<div id="home" class=" content-page container-fluid p-0 mb-5 wow fadeIn" data-wow-delay="0.1s">
     <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -87,8 +77,8 @@
                         <div class="row justify-content-start">
                             <div class="col-lg-7">
                                 <h4 class="landing-txt display-2 mb-5 animated slideInDown"> Elevate Your Career:<span>  Where Opportunities Meet Ambition </span></h4>
-                                <a href="" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Get Started</a>
-                                <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> Available jobs</a>
+                                <a th:href="@{/userLogin}" class="btn btn-primary rounded-pill py-sm-3 px-sm-5"> Get Started</a>
+                                <a href="#jobs" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> Available jobs</a>
                             </div>
                         </div>
                     </div>
@@ -100,7 +90,7 @@
 
 
     <!-- Hire Start -->
-    <div class="container-xxl py-5">
+    <div id="hire" class="container-xxl py-5">
         <div class="container">
             <div class="row g-5 align-items-center">
                 <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
@@ -120,7 +110,7 @@
 
 
     <!-- Get started Start -->
-    <div class=" get-started container-fluid bg-light bg-icon my-5 py-6">
+    <div id="aboutus" class=" get-started container-fluid bg-light bg-icon my-5 py-6">
         <div class="container">
             <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                 <h4 class="start-text display-5 mb-3"> Easy Steps</h4>
@@ -156,7 +146,7 @@
 
 
     <!-- Job Start -->
-    <div class="container-xxl py-5">
+    <div id="jobs" class="container-xxl py-5">
         <div class="container">
             <div class="row g-0 gx-5 align-items-end">
                 <div class="col-lg-6">
@@ -165,155 +155,28 @@
                         <p style="font-size: 16px;"> Login for more personalized experience!</p>
                     </div>
                 </div>
-                <!-- <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
-                    <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary border-2 active" data-bs-toggle="pill" href="#tab-1">Vegetable</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-2">Fruits </a>
-                        </li>
-                        <li class="nav-item me-0">
-                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">Fresh</a>
-                        </li>
-                    </ul>
-                </div> -->
+
             </div>
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     <div class="row g-4">
-                        <!-- -------------------1--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="product-item">
-                                <div class="job-cards">
-                                    <div class="status"> 1 open positions </div>
-                                    <img src="img/logo.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
-                                    </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
 
-                                    <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- -------------------2--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="product-item">
-                                <div class="job-cards">
-                                    <div class="status"> 1 open positions </div>
-                                    <img src="img/logo.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
-                                    </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
-
-                                    <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- -------------------3--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="product-item">
-                                <div class="job-cards">
-                                    <div class="status"> 1 open positions </div>
-                                    <img src="img/logo.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
-                                    </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
-
-                                    <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- -------------------4--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="product-item">
-                                <div class="job-cards">
-                                    <div class="status"> 1 open positions </div>
-                                    <img src="img/logo.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
-                                    </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
-
-                                    <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- -------------------5--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
-                            <div class="product-item">
-                                <div class="job-cards">
-                                    <div class="status"> 1 open positions </div>
-                                    <img src="img/logo.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
-                                    </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
-
-                                    <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- -------------------6--------------------------------- -->
-                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s" th:each="data : ${data}">
                             <div class="product-item">
                                 <div class="job-cards">
-                                    <div class="status no-open"> 0 open positions </div>
-                                    <img src="img/fb.png" alt="logo">
-                                    <h2> Senior Copywriter</h2>
-                                    <p class="company"> Company Name</p>
-                                    <p class="description">
-                                        An energetic passionate person for a versatile post.
+                                    <img th:src="@{'uploadImg/' + ${data.companyDocs.logoName}}" alt="logo">
+                                    <h2 th:text="${data.title}"> </h2>
+                                    <p class="company" th:text="${data.company.companyName}"> Company Name</p>
+                                    <p class="description" th:text="${data.jobDescription}">
+
                                     </p>
-                                    <div class="salary"> <i class="bi bi-briefcase"></i>  Negotiable</div>
-                                    <div class="location"> <i class="bi bi-geo-alt"></i> Kathmandu</div>
-                                    <div class="experience"> <i class="bi bi-briefcase"></i> 5 years+</div>
+                                    <div class="salary"> <i class="bi bi-briefcase"></i>  <span th:text="${data.salary}"></span></div>
+                                    <div class="location"> <i class="bi bi-geo-alt"></i> <span th:text="${data.location}"></span></div>
 
                                     <div class="more-details">
-                                        <a href="" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
+                                        <a th:href="@{/moreDetails}" class="btn btn-secondary rounded-pill py-sm-3 px-sm-5 ms-3"> More details </a>
                                     </div>
 
                                 </div>
@@ -323,7 +186,7 @@
 
 
                         <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                            <a class="btn btn-primary rounded-pill py-3 px-5" href=""> See more jobs </a>
+                            <a class="btn btn-primary rounded-pill py-3 px-5" th:href="@{/seeMoreJobs}"> See more jobs </a>
                         </div>
                     </div>
                 </div>
@@ -334,7 +197,7 @@
 
 
     <!-- FAQs Start -->
-    <div class="container-xxl py-5">
+    <div id="FAQs" class="container-xxl py-5">
         <div class="container">
             <div class="section-header text-center mx-auto mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
                 <h1 class="display-5 mb-3"> FAQs</h1>
@@ -354,7 +217,7 @@
                         </svg>
                     </summary>
                     <div class="faq-content">
-                        To create an account, click on the "Login" button located in the top-right corner of the page. Then, select "Create Account" and follow the prompts to enter your personal details and required information.
+                        To create an account, click on the "Login" button located in the top-right corner of the page. Then, select "Sign up" and follow the prompts to enter your personal details and required information.
                     </div>
                 </details>
                 <details>
@@ -370,8 +233,7 @@
                     </summary>
                     <div class="faq-content">
                         To apply for a job, first, make sure you are logged in to your account. Then,
-                        navigate to the "Available Jobs" section, browse the listings, and click on the job you're interested in. Finally, click the "Apply" button and
-                        follow the instructions to complete your application.</div>
+                        browse the listings, and click on the job you're interested in. Finally, click the "Apply" button  </div>
                 </details>
                 <details>
                     <summary>
@@ -384,8 +246,6 @@
                     </summary>
                     <div class="faq-content">
                         Yes, you can upload your CV/Resume to your profile.
-                        After logging in, go to the "CV/Resume" section and follow the instructions to upload
-                        your professional achievements, goals, and awards.
                     </div>
                 </details>
                 <details>
@@ -419,14 +279,14 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Getting Started</h4>
-                    <a class="btn btn-link" href="">Login</a>
-                    <a class="btn btn-link" href="">Available jobs</a>
-                    <a class="btn btn-link" href="">Manual</a>
+                    <a class="btn btn-link" th:href="@{/userLogin}">Login</a>
+                    <a class="btn btn-link" href="#jobs">Available jobs</a>
+                    <a class="btn btn-link" href="#aboutus">Manual</a>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <h4 class="text-light mb-4">Quick Links</h4>
-                    <a class="btn btn-link" href="">Hire Now</a>
-                    <a class="btn btn-link" href="">FAQs</a>
+                    <a class="btn btn-link" href="#hire">Hire Now</a>
+                    <a class="btn btn-link" href="#FAQs">FAQs</a>
                     <a class="btn btn-link" href="">Terms & Conditions</a>
                 </div>
                 <div class="col-lg-3 col-md-6">

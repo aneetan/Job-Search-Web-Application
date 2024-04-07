@@ -37,9 +37,42 @@ public class JobController {
     private companyDocsRepository docsRepo;
 
     @GetMapping("/")
-    public String frontPage()
+    public String frontPage(Model model)
     {
+        List<JobDetails> details = jdRepo.findAll();
+        List<JobDetails> activeJobs = new ArrayList<>();
+
+        for (JobDetails job : details) {
+            if (job.getJobStatus().equals("Active")) {
+                activeJobs.add(job);
+                if (activeJobs.size() == 4) {
+                    break; // Break the loop once you've found 4 active jobs
+                }
+            }
+        }
+        model.addAttribute("data", activeJobs);
         return "index.html";
+    }
+
+    @GetMapping("/seeMoreJobs")
+    public  String seeMoreJobs(Model model){
+        List<JobDetails> details = jdRepo.findAll();
+        model.addAttribute("data", details);
+        return "seeMoreJobs.html";
+    }
+
+    @GetMapping("/searchJobsGuest")
+    public String searchJobsGuest(Model model, @RequestParam("query") String query){
+        List<JobDetails> details = jdRepo.findByTitleContainingIgnoreCase(query);
+        model.addAttribute("data", details);
+        return "seeMoreJobs.html";
+    }
+    @GetMapping("/moreDetails")
+    public String moreDetails(Model model, HttpSession session){
+        if (session.getAttribute("activeUser") == null){
+            model.addAttribute("login", "Please login to continue");
+        }
+        return "login.html";
     }
 
     @GetMapping("/adminLogin")
