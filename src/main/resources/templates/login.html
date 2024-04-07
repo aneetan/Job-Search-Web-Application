@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title> Login and Registration Form in HTML & CSS | CodingLab </title>
+  <title> Login form </title>
   <link rel="stylesheet" th:href="@{css/login.css}">
   <!-- Fontawesome CDN Link -->
   <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css}">
@@ -46,7 +46,7 @@
               <i class="fas fa-lock"></i>
               <input type="password" placeholder="Enter your password" name="password">
             </div>
-            <div class="text"><a href="#">Forgot password?</a></div>
+            <div class="text"><a th:href="@{/forgotPwForm}">Forgot password?</a></div>
             <div class="button input-box">
               <input type="submit" value="Login">
             </div>

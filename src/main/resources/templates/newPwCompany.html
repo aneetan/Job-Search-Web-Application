@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title> Forgot pw form </title>
+  <link rel="stylesheet" th:href="@{css/login.css}">
+  <!-- Fontawesome CDN Link -->
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    .input-box{
+      position: relative;
+    }
+    .error{
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      margin-top: 20px !important;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="cover">
+    <div class="front">
+      <img th:src="@{img/hire.jpg}" alt="">
+      <div class="text">
+        <span class="text-1">Simplify Hiring,<br> Amplify Results!</span>
+        <span class="text-2">Let's get connected</span>
+      </div>
+    </div>
+    <div class="back">
+      <!--<img class="backImg" src="images/backImg.jpg" alt="">-->
+      <div class="text">
+        <span class="text-1">Complete miles of journey <br> with one step</span>
+        <span class="text-2">Let's get started</span>
+      </div>
+    </div>
+  </div>
+  <div class="forms">
+    <div class="form-content">
+      <div class="login-form">
+
+      <div style="color: #148FA8;" class="title"> Forgot Password?</div>
+      <div style="color: #757575;" class="text sign-up-text">  Your new password must be different from previously used password.  </div>
+
+      <form action="/resetPwCompany" method="post" id="resetPw">
+        <div class="input-boxes">
+          <div class="input-box">
+            <i class="fas fa-lock"></i>
+
+            <input type="password" placeholder="Enter new password" id="newPassword" name="companyPassword">
+            <div class="error"> </div>
+
+          </div>
+          <!-- <div class="error"> This is error</div> -->
+
+          <div class="input-box">
+            <i class="fas fa-lock"></i>
+            <input type="password" placeholder="Re-enter your password" id="confirmPw" name="confirmPw">
+            <div class="error"></div>
+
+          </div>
+
+          <div style="margin-top: 50px;" class="button input-box">
+            <input type="submit" value="Update">
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+  const form = document.getElementById("resetPw");
+  const password = document.getElementById("newPassword");
+  const confirmpw = document.getElementById("confirmPw");
+
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if (validateInputs()) {
+      this.submit();
+    }
+  });
+
+
+  // Error Message
+  const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+  }
+
+
+  //success message
+  const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.remove('error');
+  }
+
+  //check for strong password
+  const isValidPassword = password => {
+    const pw =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    return pw.test(String(password).toLowerCase());
+  }
+
+  const validateInputs = () => {
+    const passwordValue = password.value.trim();
+    const confirmpwValue = confirmpw.value.trim();
+
+    let isValid = true;
+
+    //check password validation
+    if(passwordValue === '') {
+      setError(password, 'Password is required');
+      isValid=false;
+    } else if(passwordValue.length < 7) {
+      setError(password,'Password must be 7 characters');
+      isValid=false;
+    } else if (!isValidPassword(passwordValue)) {
+      setError(password,'Please insert strong password');
+      isValid=false;
+    } else {
+      setSuccess(password);
+    }
+
+    //check for matching password
+    if(confirmpwValue === '') {
+      setError(confirmpw, 'Please confirm your password');
+      isValid=false;
+    } else if(confirmpwValue !== passwordValue) {
+      setError(confirmpw, "Password doesn't match");
+      isValid=false;
+    } else {
+      setSuccess(confirmpw);
+    }
+    return isValid;
+  }
+</script>
+</body>
+</html>

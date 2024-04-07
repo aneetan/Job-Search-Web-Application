@@ -2,10 +2,7 @@ package com.example.jobportal.controller;
 
 import com.example.jobportal.model.*;
 import com.example.jobportal.repository.*;
-import com.example.jobportal.service.ApplicantService;
-import com.example.jobportal.service.FileService;
-import com.example.jobportal.service.JobService;
-import com.example.jobportal.service.MailService;
+import com.example.jobportal.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +71,130 @@ public class JobController {
         }
         return "login.html";
     }
+
+//    ------------------------------------ Forgot pw --------------------------------------------
+    @GetMapping("/forgotPwForm")
+    public String forgotPwForm(){
+        return "forgotPw.html";
+    }
+
+    @Autowired
+    private OtpService otpService;
+    @PostMapping("/forgotPw")
+    public String forgotPw(@ModelAttribute PersonalDetails p, Model model, HttpSession session){
+        if (pRepo.existsByEmail(p.getEmail())) {
+            String otp = otpService.generateOtp();
+            otpService.sendOtp(p.getEmail(), otp );
+            session.setAttribute("email", p.getEmail());
+            session.setAttribute("otp", otp);
+            return "verifyOtp.html";
+        } else {
+            model.addAttribute("error", "Email not found");
+            return "forgotPw.html";
+        }
+    }
+
+    @PostMapping("/verifyOtp")
+    public String verifyOtp(Model model, @RequestParam("code") String enteredOtp, HttpSession session){
+        String storedEmail = (String) session.getAttribute("email");
+        String storedOtp = (String) session.getAttribute("otp");
+        if (storedOtp != null && storedOtp.equals(enteredOtp)) {
+            session.setAttribute("email", storedEmail);
+            return "newPw.html";
+        } else {
+            // OTP is invalid
+            model.addAttribute("error", "Invalid OTP");
+            return "verifyOtp.html";
+        }
+    }
+
+    @PostMapping("/resetPw")
+    private String resetPw( Model model, HttpSession session,  @RequestParam("password") String newPassword){
+        String email = (String) session.getAttribute("email");
+        PersonalDetails p = pRepo.findByEmail(email);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashPw = encoder.encode(newPassword);
+
+        p.setPassword(hashPw);
+        pRepo.save(p);
+
+        session.invalidate();
+
+        model.addAttribute("login", "Please login to proceed");
+        return "login.html";
+    }
+
+    @GetMapping("/resendOTP")
+    public String resendOTP(HttpSession session){
+        String email = (String) session.getAttribute("email");
+        String otp = otpService.generateOtp();
+        otpService.sendOtp(email, otp );
+        session.setAttribute("email", email);
+        session.setAttribute("otp", otp);
+
+        return "verifyOtp.html";
+    }
+
+    @GetMapping("/forgotPwCompany")
+    public String forgotPwCompany(){
+        return "forgotPwCompany.html";
+    }
+
+    @PostMapping("/forgotPassCompany")
+    public String forgotCompanyPw(@ModelAttribute Company c, Model model, HttpSession session){
+        if (cRepo.existsByCompanyEmail(c.getCompanyEmail())) {
+            String otp = otpService.generateOtp();
+            otpService.sendOtp(c.getCompanyEmail(), otp );
+            session.setAttribute("email", c.getCompanyEmail());
+            session.setAttribute("otp", otp);
+            return "verifyOtpCompany.html";
+        } else {
+            model.addAttribute("error", "Email not found");
+            return "forgotPwCompany.html";
+        }
+    }
+
+    @PostMapping("/verifyOtpCompany")
+    public String verifyOtpCompany(Model model, @RequestParam("code") String enteredOtp, HttpSession session){
+        String storedEmail = (String) session.getAttribute("email");
+        String storedOtp = (String) session.getAttribute("otp");
+        if (storedOtp != null && storedOtp.equals(enteredOtp)) {
+            session.setAttribute("email", storedEmail);
+            return "newPwCompany.html";
+        } else {
+            // OTP is invalid
+            model.addAttribute("error", "Invalid OTP");
+            return "verifyOtpCompany.html";
+        }
+    }
+
+    @GetMapping("/resendOTPCompany")
+    public String resendOTPCompany(HttpSession session){
+        String email = (String) session.getAttribute("email");
+        String otp = otpService.generateOtp();
+        otpService.sendOtp(email, otp );
+        session.setAttribute("email", email);
+        session.setAttribute("otp", otp);
+
+        return "verifyOtpCompany.html";
+    }
+
+    @PostMapping("/resetPwCompany")
+    private String resetPwCompany( Model model, HttpSession session,  @RequestParam("companyPassword") String newPassword){
+        String email = (String) session.getAttribute("email");
+        Company company = cRepo.findByCompanyEmail(email);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashPw = encoder.encode(newPassword);
+
+        company.setCompanyPassword(hashPw);
+        cRepo.save(company);
+
+        session.invalidate();
+
+        model.addAttribute("login", "Please login to proceed");
+        return "adminLogin.html";
+    }
+
 
     @GetMapping("/adminLogin")
     public String adminLogin(){
