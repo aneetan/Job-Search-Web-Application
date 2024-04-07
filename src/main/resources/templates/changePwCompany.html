@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>View Jobs- Company</title>
+  <title>Change Pw- User</title>
   <base href="http://localhost:8080/">
+
   <!-- plugins:css -->
   <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
   <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
@@ -23,63 +23,89 @@
   <link rel="stylesheet" th:href="@{css/superAdmin.css}">
   <link rel="stylesheet" th:href="@{css/cards.css}">
 
-  <!-- End layout styles -->
+  <style>
+    .btn-primary{
+      background: #148FA8 !important;
+    }
+
+
+    .navbar .navbar-brand-wrapper .navbar-brand img{
+      height: 70px;
+      width: 180px;
+    }
+
+    .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img{
+      width: 60px;
+      height: 60px;
+    }
+
+    .page-title .page-title-icon{
+      background: #148FA8 !important;
+    }
+
+
+    .sidebar .nav .nav-item.active > .nav-link .menu-title,
+    .sidebar .nav .nav-item.active > .nav-link i{
+      color: #148FA8;
+    }
+
+    input,
+    textarea,
+    select{
+      border: 1px solid #dfdfdf !important;
+      transition: border-color 0.3s;
+
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus{
+      border-color: #148FA8 !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder,
+    select::placeholder{
+      color: #c5b8b8 !important;
+    }
+
+    .jobsubmit-btn{
+      transition: transform 0.3s;
+      border-radius: 8px;
+    }
+
+    .jobsubmit-btn:hover{
+      transform: scale(1.04);
+
+    }
+
+
+    .stretch-card > .card{
+      min-width: 70%;
+      margin-left: 75px;
+      width: 25%;
+    }
+
+    .error{
+      font-size: 12px;
+      color: red;
+    }
+  </style>
+
+
+
+
+
+  </style>
 </head>
-
-<style>
-  .navbar .navbar-brand-wrapper .navbar-brand img{
-    height: 70px;
-    width: 180px;
-  }
-
-  .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img{
-    width: 60px;
-    height: 60px;
-  }
-
-  .page-title .page-title-icon{
-    background: #148FA8 !important;
-  }
-
-
-  .sidebar .nav .nav-item.active > .nav-link .menu-title,
-  .sidebar .nav .nav-item.active > .nav-link i{
-    color: #148FA8;
-  }
-
-  .navbar-dropdown a:hover{
-    color: #148FA8 !important;
-  }
-
-  .buttons a{
-    text-decoration: none;
-  }
-
-  .job-btn{
-    font-size: 12px;
-    text-decoration: none;
-    background: #148fa8;
-    color: #aba7a7;
-    padding: 10px;
-    margin-right: 10px;
-    border-radius: 12px;
-  }
-
-  .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown a{
-    margin-right: 100px !important;
-    font-size: 14px !important;
-  }
-
-
-</style>
 <body>
 <div class="container-scroller">
 
   <!-- partial:partials/_navbar.html -->
   <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
     <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <a class="navbar-brand brand-logo" href=""><img src="img/jobsearchlogo.png" alt="logo" /></a>
-      <a class="navbar-brand brand-logo-mini" href=""><img src="img/logo.png" alt="logo" /></a>
+      <a class="navbar-brand brand-logo" href="index.html"><img src="img/jobsearchlogo.png" alt="logo" /></a>
+      <a class="navbar-brand brand-logo-mini" href="index.html"><img src="img/logo.png" alt="logo" /></a>
     </div>
     <div class="navbar-menu-wrapper d-flex align-items-stretch">
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -110,14 +136,14 @@
             <a class="dropdown-item" th:href="@{/seeCompanyProfile}">
               <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="">
+            <a class="dropdown-item" th:href="@{/companyChangePw}">
               <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" th:href="@{/logoutCompany}">
               <i class="mdi mdi-logout me-2 text-primary"></i> Logout </a>
+
           </div>
         </li>
-
 
 
 
@@ -132,17 +158,18 @@
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
-        <li class="nav-item">
+        <li class="nav-item active">
           <a class="nav-link" th:href="@{/companyLanding}">
             <span class="menu-title"> Applicants</span>
             <i class="mdi mdi-contacts menu-icon"></i>
+
           </a>
         </li>
 
 
-        <li class="nav-item active">
+        <li class="nav-item">
           <a class="nav-link" th:href="@{/viewJob}">
-            <span class="menu-title"> View active jobs</span>
+            <span class="menu-title"> View added jobs</span>
             <i class="mdi mdi-briefcase menu-icon"></i>
 
 
@@ -150,7 +177,7 @@
         </li>
 
 
-        <li class="nav-item ">
+        <li class="nav-item">
           <a class="nav-link" th:href="@{/addJobs}">
             <span class="menu-title"> Add jobs</span>
             <i class="mdi mdi-format-list-bulleted menu-icon"></i>
@@ -172,74 +199,47 @@
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="page-header">
-          <h3 class="page-title">
+          <h3 class="page-title" style="color: #148FA8;">
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
-                  <i class="mdi mdi-briefcase"></i>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
 
-                </span> All Jobs
+                </span> Change Credentials
           </h3>
         </div>
+
         <div class="row">
 
-
-
-        </div>
-        <div class="row">
-          <div class="col-12 grid-margin">
-            <p style="color: red" th:text="${error}"></p>
-            <div class="card" th:each="job : ${jobDetails}">
+          <div class="col-12 grid-margin stretch-card">
+            <div class="card">
               <div class="card-body">
+                <h4 class="card-title">Enter your current password</h4>
 
-                <div class="profilePart">
-                  <img th:src="@{'/uploadImg/' + ${job.companyDocs.logoName}}" alt="">
+                <form method="post" action="/submitPwCompany" class="forms-sample" id="changePw">
 
-                  <div class="info">
-                    <h4 th:text="${job.title}"> </h4>
-                    <p th:text="${job.empType} + ' | ' + ${job.location}">    </p>
-                  </div>
-                </div>
-
-
-                <div class="table-responsive">
-                  <p class="jobdescription" th:text="${job.jobDescription}"> </p>
-
-
-                  <div class="requiredSkills" th:text="'Skills Required: ' + ${job.skills}"> </div>
-                  <div class="salary">
-                    <i class="mdi mdi-currency-usd card-icon"></i>
-                    <span th:text="${job.salary}"></span>
-
-
+                  <div class="form-group">
+                    <label style="color: black;" >New Password</label>
+                    <input type="password" class="form-control" id="newPw" name="companyPassword" placeholder="Enter new password" >
+                    <div class="error"></div>
                   </div>
 
-                  <div style="color: #148fa8" class="requiredSkills" th:text="'Status: ' + ${job.jobStatus}"> </div>
-
-
-
-                  <a th:href="@{'/viewJobDetails/' + ${job.jobId}}"> View Details </a>
-
-
-                  <div class="buttons">
-
-                    <a th:href="@{'/editJob/' + ${job.jobId}}">
-                      <button type="button" class="btn btn-gradient-dark btn-icon-text"> Edit <i class="mdi mdi-file-check btn-icon-append"></i>
-                      </button>
-                    </a>
-
-
+                  <div class="form-group">
+                    <label  style="color: black;" >Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmPw" placeholder="Confirm password" >
+                    <div class="error"></div>
                   </div>
 
-                </div>
+
+
+                  <button type="submit" class="btn jobsubmit-btn btn-primary me-2"> Next </button>
+                </form>
               </div>
-              <hr>
-
             </div>
           </div>
         </div>
 
 
-
       </div>
+
       <!-- content-wrapper ends -->
       <!-- partial:partials/_footer.html -->
       <footer class="footer">
@@ -255,6 +255,81 @@
 </div>
 <!-- container-scroller -->
 <!-- plugins:js -->
+<script>
+  const form = document.getElementById("changePw");
+  const password = document.getElementById("newPw");
+  const confirmpw = document.getElementById("confirmPw");
+
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if (validateInputs()) {
+      this.submit();
+    }
+  });
+
+
+  // Error Message
+  const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+  }
+
+
+  //success message
+  const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.remove('error');
+  }
+
+  //check for strong password
+  const isValidPassword = password => {
+    const pw =  /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
+    return pw.test(String(password).toLowerCase());
+  }
+
+  const validateInputs = () => {
+    const passwordValue = password.value.trim();
+    const confirmpwValue = confirmpw.value.trim();
+
+    let isValid = true;
+
+    //check password validation
+    if(passwordValue === '') {
+      setError(password, 'Password is required');
+      isValid=false;
+    } else if(passwordValue.length < 7) {
+      setError(password,'Password must be 7 characters');
+      isValid=false;
+    } else if (!isValidPassword(passwordValue)) {
+      setError(password,'Please insert strong password');
+      isValid=false;
+    } else {
+      setSuccess(password);
+    }
+
+    //check for matching password
+    if(confirmpwValue === '') {
+      setError(confirmpw, 'Please confirm your password');
+      isValid=false;
+    } else if(confirmpwValue !== passwordValue) {
+      setError(confirmpw, "Password doesn't match");
+      isValid=false;
+    } else {
+      setSuccess(confirmpw);
+    }
+    return isValid;
+  }
+</script>
+
+
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>
 <!-- endinject -->
 <!-- Plugin js for this page -->

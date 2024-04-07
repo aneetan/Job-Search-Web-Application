@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Company Landing</title>
+    <title>Edit Profile- Company</title>
     <base href="http://localhost:8080/">
 
     <!-- plugins:css -->
@@ -15,11 +15,10 @@
 
     <!-- Layout styles -->
     <link rel="stylesheet" th:href="@{css/superAdmin.css}">
-    <!-- End layout styles -->
 
     <style>
-        .form-job{
-            width: 20%;
+        .btn-primary{
+            background: #148FA8 !important;
         }
 
 
@@ -43,25 +42,57 @@
             color: #148FA8;
         }
 
-        .navbar-dropdown a:hover{
-            color: #148FA8 !important;
+        input,
+        textarea,
+        select{
+            border: 1px solid #dfdfdf !important;
+            transition: border-color 0.3s;
+
         }
 
-        .job-btn{
+        input:focus,
+        textarea:focus,
+        select:focus{
+            border-color: #148FA8 !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder,
+        select::placeholder{
+            color: #c5b8b8 !important;
+        }
+
+        .jobsubmit-btn{
+            transition: transform 0.3s;
+            border-radius: 8px;
+        }
+
+        .jobsubmit-btn:hover{
+            transform: scale(1.04);
+
+        }
+        .profile {
+            width: 70px;
+            height: 70px;
+            border: 1px solid #c5b8b8;
+            border-radius: 50%;
+            background-color: #fafafa;
+            background-size: cover;
+            background-position: center;
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .error{
             font-size: 12px;
-            text-decoration: none;
-            background: #148fa8;
-            color: #aba7a7;
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 12px;
+            color: red;
         }
 
-        .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown a{
-            margin-right: 100px !important;
-            font-size: 14px !important;
+        label{
+            color: black;
         }
     </style>
+
 </head>
 <body>
 <div class="container-scroller">
@@ -101,7 +132,7 @@
                         <a class="dropdown-item" th:href="@{/seeCompanyProfile}">
                             <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="@{/companyChangePw}">
+                        <a class="dropdown-item" href="">
                             <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{/logoutCompany}">
@@ -109,7 +140,6 @@
 
                     </div>
                 </li>
-
 
 
 
@@ -165,78 +195,107 @@
         <div class="main-panel">
             <div class="content-wrapper">
                 <div class="page-header">
-                    <h3 class="page-title">
+                    <h3 class="page-title" style="color: #148FA8;">
                 <span class="page-title-icon bg-gradient-primary text-white me-2">
-                  <i class="mdi mdi-home"></i>
-                </span> Dashboard
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+                </span> Edit Job Details
                     </h3>
                 </div>
-                <div class="row">
-
-
-
-                </div>
 
                 <div class="row">
-                    <div class="col-12 grid-margin">
+
+                    <div class="col-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <p th:text="${status}"></p>
-                                <p style="color: red" th:text="${error}"></p>
-                                <p style="color: green" th:text="${success}"></p>
+                                <h4 class="card-title">Edit details</h4>
+
+                                <form action="/editJobDetails" method="post" class="forms-sample" th:object="${job}">
+                                    <input type="hidden" name="companyId" th:field="*{company.companyId}">
+                                    <input type="hidden" name="jobId" th:field="*{jobId}">
 
 
-                                <h4 class="card-title" th:text="'Job Request for ' + ${jobTitle} ">Job Request </h4>
+                                    <div class="form-group">
+                                        <label for="title">Title</label>
+                                        <input type="text" class="form-control" name="title" id="title" th:field="*{title}">
+                                    </div>
 
-                                <form action="/getApplicants" method="get" id="jobForm">
-                                    <select class="form-control form-job" id="exampleSelectLocation" name="jobTitle" onchange="submitForm()">
-                                        <option selected> Please select job </option>
-                                        <option th:each="job : ${uniqueJob}" th:text="${job}">
-                                        </option>
+                                    <div class="form-group">
 
-                                    </select>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="exampleSelectLocation"> Location Type: </label>
+
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleSelectLocation" name="location" th:field="*{location}" >
+                                                        <option value="" disabled selected> Please select -----------------------   </option>
+                                                        <option value="On-site">On-site</option>
+                                                        <option value="Hybrid">Hybrid</option>
+                                                        <option value="Remote">Remote</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label for="exampleSelectEmp"> Employment Type: </label>
+
+
+                                                <div class="col-sm-9">
+                                                    <select class="form-control" id="exampleSelectEmp" name="empType" th:field="*{empType}">
+                                                        <option value="" disabled selected> Please select -----------------------</option>
+                                                        <option value="Full-Time">Full-Time</option>
+                                                        <option value="Part-Time">Part-Time</option>
+                                                        <option value="Freelance">Freelance</option>
+                                                        <option value="Internship">Internship</option>
+                                                        <option value="Apprenticeship">Apprenticeship</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleTextarea2">Job Description</label>
+                                        <textarea class="form-control" name="jobDescription" id="exampleTextarea2" rows="1" th:field="*{jobDescription}"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleTextarea3">Qualification</label>
+                                        <textarea class="form-control" name="qualification" id="exampleTextarea3" rows="4" th:field="*{qualification}"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleTextarea4">Required Skills</label>
+                                        <textarea class="form-control" name="skills" id="exampleTextarea4" rows="2" th:field="*{skills}"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="salary">Expected Salary (per month)</label>
+                                        <input type="text" class="form-control" name="salary" id="salary" th:field="*{salary}">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1"> Key Responsibilties</label>
+                                        <textarea class="form-control" name="responsibilities" id="exampleTextarea1" rows="4"  th:field="*{responsibilities}"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="deadline">Add deadline</label>
+                                        <input type="date" class="form-control" name="deadline" id="deadline" placeholder="yyyy-mm-dd" th:field="*{deadline}">
+
+                                    </div>
+
+
+
+                                    <button type="submit" class="btn jobsubmit-btn btn-primary me-2">Edit job </button>
                                 </form>
 
-<!--                                <a class="job-btn" th:href="@{/getApplicants}" th:each="job : ${uniqueJob}">-->
-<!--                                    <span th:text="${job}"></span>-->
-<!--                                </a>-->
-
-
-
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th> Name </th>
-                                            <th> Email </th>
-                                            <th> Contact </th>
-                                            <th> CV </th>
-                                            <!-- <th> View Profile </th> -->
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr th:each="applicant : ${applicants}">
-                                            <td>
-                                                <img  th:src="@{'/uploadImg/' + ${applicant.userDocs.profileName}}" class="me-2" alt="image">
-                                                <span th:text="${applicant.userDocs.personalDetails.name}"></span>
-                                            </td>
-                                            <td th:text="${applicant.userDocs.personalDetails.email}"></td>
-
-                                            <td th:text="${applicant.userDocs.personalDetails.phoneNo}"></td>
-
-                                            <td>
-                                                <a th:href="@{'/uploadImg/' + ${applicant.userDocs.cvName}}" target="_blank">View CV</a>
-
-                                            </td>
-                                            <td>
-                                                <a th:href="@{${applicant.applicantId} + '/applicantProfile/' + ${applicant.userDocs.personalDetails.userId}}">View Profile</a>
-                                            </td>
-                                        </tr>
-
-
-                                        </tbody>
-                                    </table>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -244,6 +303,7 @@
 
 
             </div>
+
             <!-- content-wrapper ends -->
             <!-- partial:partials/_footer.html -->
             <footer class="footer">
@@ -257,12 +317,9 @@
     </div>
     <!-- page-body-wrapper ends -->
 </div>
-<script>
-    function submitForm() {
-        document.getElementById("jobForm").submit();
-    }
-</script>
 <!-- container-scroller -->
+<!-- plugins:js -->
+
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>
 <!-- endinject -->

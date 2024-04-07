@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Getter
+@Transactional
 @Setter
 public class JobDetails {
     @Id
@@ -39,8 +41,6 @@ public class JobDetails {
     private String responsibilities;
     private LocalDate deadline;
 
-//    private String daysRemaining;
-
     private String jobStatus;
 
     @ManyToOne
@@ -51,14 +51,11 @@ public class JobDetails {
     @JoinColumn(name="docId")
     private CompanyDocs companyDocs;
 
-    @OneToMany(mappedBy = "jobDetails", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jobDetails", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Applicant> applicantList = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "jobDetails", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "jobDetails", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
     private List<userDocs>  userDocs;
-
-
-
 
     public JobDetails(){
 

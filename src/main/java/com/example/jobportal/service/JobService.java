@@ -1,12 +1,15 @@
 package com.example.jobportal.service;
 
 import com.example.jobportal.model.Applicant;
+import com.example.jobportal.model.Company;
 import com.example.jobportal.model.JobDetails;
+import com.example.jobportal.model.userDocs;
 import com.example.jobportal.repository.ApplicantRepository;
 import com.example.jobportal.repository.JobDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -21,6 +24,11 @@ public class JobService {
 
     @Autowired
     ApplicantRepository appRepo;
+
+    @Autowired
+    public JobService(JobDetailsRepository jobRepository) {
+        this.jobRepository = jobRepository;
+    }
 
     public List<JobDetails> searchJobs(String query) {
         // Implement your search logic here, such as searching by job title
@@ -60,4 +68,9 @@ public class JobService {
         return daysRemainingMap;
     }
 
+
+    @Transactional
+    public void deleteJob(int jobId) {
+         jobRepository.deleteById(jobId);
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.jobportal.repository;
 
 import com.example.jobportal.model.Company;
+import com.example.jobportal.model.CompanyDocs;
 import com.example.jobportal.model.JobDetails;
 import com.example.jobportal.model.userDocs;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,7 +19,7 @@ public interface JobDetailsRepository extends JpaRepository<JobDetails, Integer>
 
     List<JobDetails> findAllByCompany(Company company);
 
-    JobDetails findByCompany(Company company);
+    JobDetails findAllByCompanyAndAndCompanyDocs(Company company, CompanyDocs companyDocs);
     JobDetails findByJobIdAndCompany(int jobId, Company company);
 
     JobDetails findByUserDocs(userDocs userDocs);

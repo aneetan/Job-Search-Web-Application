@@ -16,7 +16,6 @@ public class Applicant {
     @JoinColumn(name="userDocId")
     private userDocs userDocs;
 
-
     @ManyToOne
     @JoinColumn(name = "jobId")
     private JobDetails jobDetails;

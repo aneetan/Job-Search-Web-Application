@@ -5,15 +5,24 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> Declined Companies</title>
+    <title>Purple Admin</title>
     <base href="http://localhost:8080/">
-
     <!-- plugins:css -->
     <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
     <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
 
     <!-- Layout styles -->
     <link rel="stylesheet" th:href="@{css/superAdmin.css}">
+
+    <!-- jQuery CDN -->
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+
+    <!-- Bootstrap CSS CDN -->
+<!--    <link th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css}" rel="stylesheet">-->
+
+    <!-- Bootstrap JS CDN (optional, only if you need Bootstrap JavaScript functionality) -->
+    <script th:src="@{https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js}"></script>
+
     <!-- End layout styles -->
     <!--  <link rel="shortcut icon" th:href="assets/images/favicon.ico" />-->
 </head>
@@ -67,12 +76,12 @@
                 <span class="mdi mdi-menu"></span>
             </button>
             <div class="search-field d-none d-md-block">
-                <form class="d-flex align-items-center h-100" action="#">
+                <form id="searchForm" class="d-flex align-items-center h-100" th:action="@{/searchCompany}" method="get">
                     <div class="input-group">
                         <div class="input-group-prepend bg-transparent">
                             <i class="input-group-text border-0 mdi mdi-magnify"></i>
                         </div>
-                        <input type="text" class="form-control bg-transparent border-0" placeholder="Search projects">
+                        <input type="text" id="searchInput" name="query" class="form-control bg-transparent border-0" placeholder="Search user ">
                     </div>
                 </form>
             </div>
@@ -116,13 +125,14 @@
                         <i class="mdi mdi-contacts menu-icon"></i>
                     </a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link" th:href="@{/userList}">
                         <span class="menu-title">User List</span>
                         <i class="mdi mdi-format-list-bulleted menu-icon"></i>
                     </a>
                 </li>
-                <li class="nav-item active">
+
+                <li class="nav-item">
                     <a class="nav-link" th:href="@{/declinedCompany}">
                         <span class="menu-title">Declined companies</span>
                         <i class="mdi mdi-table-large menu-icon"></i>
@@ -141,60 +151,84 @@
                 <span class="page-title-icon text-white me-2">
             <i class="mdi mdi-contacts menu-icon"></i>
 
-                </span> Declined Companies
+                </span> User List
                     </h3>
 
                 </div>
+
+                <p  th:text="${noCompanies}" style="color: #9C9FA6;"></p>
 
 
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Companies List</h4>
+                                <h4 class="card-title">User List</h4>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                         <tr>
-                                            <th> Company Name </th>
+                                            <th> Name </th>
+                                            <th> Email </th>
                                             <th> Address </th>
                                             <th> Contact </th>
-                                            <th> URL </th>
-                                            <th> Industry </th>
-                                            <th> Employee No. </th>
-                                            <th> Verfication Doc </th>
-                                            <th> Status </th>
+                                            <th> JobTitle </th>
+                                            <th> CV </th>
+
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="entity: ${dataList}">
+                                        <tr th:each="entity, iterStat: ${dataList.content}">
+
+                                                <td>
+                                                    <!-- Your table cell content here -->
+                                                    <img th:src="@{'/uploadImg/' + ${entity.profileName}}" class="me-2" alt="image">
+                                                    <span th:text="${entity.personalDetails.name}"> Name </span>
+                                                </td>
+                                                <td th:text="${entity.personalDetails.email}"></td>
+                                                <td th:text="${entity.personalDetails.address}"></td>
+                                                <td th:text="${entity.personalDetails.phoneNo}"></td>
+                                                <td th:text="${entity.additionalDetails.jobTitle}"></td>
                                             <td>
-                                                <img th:src="@{'uploadImg/' + ${entity.logoName}}" class="me-2" alt="image">
-                                                <span th:text="${entity.company.companyName}"> Name </span>
-                                            </td>
-                                            <td th:text="${entity.companyDetails.companyAddress}"></td>
-                                            <td th:text="${entity.companyDetails.companyContact}"></td>
-                                            <td>
-                                                <a th:text="${entity.companyDetails.companyUrl}" th:href="${entity.companyDetails.companyUrl}" target="_blank"> </a>
-                                            </td>
-                                            <td th:text="${entity.companyDetails.industry}"></td>
-                                            <td th:text="${entity.companyDetails.employeeNo}"></td>
-                                            <td>
-                                                <a th:href="@{'uploadImg/' + ${entity.verifiedDocName}}" target="_blank">View Document</a>
+                                                <a target="_blank" th:href="@{'uploadImg/' + ${entity.cvName}}"> View CV</a>
                                             </td>
 
-                                            <td>
-                                                <span> Declined </span>
-                                            </td>
-
-                                            <td>
-                                                <a  class="approve-btn badge badge-gradient-success" th:href="@{'/approve/' + ${entity.company.companyId}}"> Approve </a>
-                                            </td>
                                         </tr>
 
                                         </tbody>
                                     </table>
+                                    <!-- Pagination controls -->
+                                    <div class="pagination">
+                                        <!-- Previous Page Button -->
+                                        <a class="page-link" th:href="@{'/userList?offset=' + ${dataList.number - 1} + '&pageSize=' + ${dataList.size}}"
+                                           th:if="${dataList.hasPrevious()}">Previous</a>
+
+                                        <!-- Page Numbers -->
+                                        <span th:each="i : ${#numbers.sequence(0, dataList.totalPages - 1)}">
+                                        <a class="page-link"  th:href="@{'/userList?offset=' + ${i} + '&pageSize=' + ${dataList.size}}" th:text="${i + 1}"></a>
+                                        </span>
+
+                                        <!-- Next Page Button -->
+                                        <a class="page-link" th:href="@{'/userList?offset=' + ${dataList.number + 1} + '&pageSize=' + ${dataList.size}}"
+                                           th:if="${dataList.hasNext()}">Next</a>
                                 </div>
+
+<!--                                &lt;!&ndash; Pagination &ndash;&gt;-->
+<!--                                <div class="col-md-12">-->
+<!--                                    <ul class="pagination">-->
+<!--                                        <li class="page-item">-->
+<!--                                            <a class="page-link" href="#" >Previous</a>-->
+<!--                                        </li>-->
+<!--                                        <li class="page-item">-->
+<!--                                            <a class="page-link" href="#"></a>-->
+<!--                                        </li>-->
+<!--                                        <li class="page-item">-->
+<!--                                            <a class="page-link" href="#">Next</a>-->
+<!--                                        </li>-->
+<!--                                    </ul>-->
+<!--                                </div>-->
+
+
                             </div>
                         </div>
                     </div>
@@ -214,6 +248,22 @@
     </div>
     <!-- page-body-wrapper ends -->
 </div>
+
+
+<!--<script th:inline="javascript">-->
+<!--    /* <![CDATA[ */-->
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        var searchInput = document.getElementById('searchInput');-->
+
+<!--        searchInput.addEventListener('input', function() {-->
+<!--            var query = searchInput.value.trim();-->
+<!--            var url = /*[[@{/searchCompany}]]*/ + '?query=' + encodeURIComponent(query);-->
+<!--            window.location.href = url;-->
+<!--        });-->
+<!--    });-->
+<!--    /* ]]> */-->
+<!--</script>-->
+
 <!-- container-scroller -->
 <!-- plugins:js -->
 <script th:src="@{vendors/js/vendor.bundle.base.js}"></script>

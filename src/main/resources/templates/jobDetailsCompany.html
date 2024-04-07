@@ -262,7 +262,7 @@
                         </li>
 
                         <li class="buttons">
-                          <a href="">
+                          <a th:href="@{'/editJob/' + ${job.jobId}}">
                             <button type="button" class="job-btn" > Edit </button>
                           </a>
 
@@ -338,7 +338,7 @@
                                   <a href="">
                                     <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                   </a>
-                                  <a th:href="'/delete/' + ${job.jobId}">
+                                  <a th:href="@{'/deleteJobDetails/' + ${job.jobId}}">
                                     <button style="float: right" type="button" class="btn btn-primary btn-modal" > Yes, Delete </button>
                                   </a>
 

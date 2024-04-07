@@ -9,6 +9,8 @@ import com.example.jobportal.service.MailService;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -1299,4 +1301,127 @@ public class JobController {
         return "index.html";
     }
 
+    @GetMapping("/editJob/{jobId}")
+    public String editJob(HttpSession session, Model model, @PathVariable int jobId){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        JobDetails jobDetails = jdRepo.findAllByJobId(jobId);
+        model.addAttribute("job", jobDetails);
+        return "editJobDetails.html";
+    }
+
+    @PostMapping("/editJobDetails")
+    public String editJobDetails(HttpSession session, Model model, @ModelAttribute("job") JobDetails job){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        JobDetails details = jdRepo.findAllByJobId(job.getJobId());
+        model.addAttribute("data", docs);
+
+        job.setJobStatus(details.getJobStatus());
+        job.setCompany(company);
+        job.setCompanyDocs(docs);
+        jdRepo.save(job);
+
+        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        model.addAttribute("jobDetails", jobDetails);
+
+        return "viewJobsCompany.html";
+    }
+
+    @GetMapping("/companyChangePw")
+    public String companyChangePw(HttpSession session, Model model){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+        return "companyChangePw.html";
+    }
+
+    @PostMapping("/verifyPwCompany")
+    private String verifyPwCompany(HttpSession session, Model model, @ModelAttribute Company c){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (encoder.matches(c.getCompanyPassword(), company.getCompanyPassword())){
+            model.addAttribute("data", docs);
+            return "changePwCompany.html";
+
+        } else {
+            model.addAttribute("data", docs);
+            model.addAttribute("error", "Invalid Password");
+            return "companyChangePw.html";
+        }
+    }
+
+    @PostMapping("/submitPwCompany")
+    private String changePwCompany(HttpSession session, Model model, @ModelAttribute Company c){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+
+        model.addAttribute("data", docs);
+
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashPw = encoder.encode(c.getCompanyPassword());
+
+        company.setCompanyPassword(hashPw);
+        cRepo.save(company);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants with status "pending" for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+
+            // Add applicants to the list of selected applicants
+            selectedApplicants.addAll(applicantsForJob);
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("applicants", selectedApplicants);
+        model.addAttribute("jobTitle", "All jobs");
+
+        model.addAttribute("success", "Password changed successfully");
+        return "companyLanding.html";
+    }
+
+    @GetMapping("/userList")
+    public String seeUserList(@RequestParam(defaultValue = "0") int offset,
+                              @RequestParam(defaultValue = "5") int pageSize, Model model){
+
+        Page<userDocs> userPagination = fileService.findUserWithPagination(offset, pageSize);
+        model.addAttribute("dataList", userPagination);
+        return "userTable.html";
+    }
+
+    @GetMapping("/deleteJobDetails/{jobId}")
+    public String deleteJob(HttpSession session,Model model, @PathVariable int jobId){
+
+        Company company = (Company) session.getAttribute("activeCompany");
+        jdRepo.deleteById(jobId);
+        if (!(jdRepo.existsById(jobId))){
+            model.addAttribute("error", "Job deleted");
+        }
+
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
+        model.addAttribute("data", docs);
+
+        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        model.addAttribute("jobDetails", jobDetails);
+
+        return "viewJobsCompany.html";
+
+    }
 }
