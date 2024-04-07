@@ -8,12 +8,12 @@ import java.util.Set;
 
 @Entity
 @Data
+@Transactional
 public class CompanyDocs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int docId;
     private String logoName;
-
     @OneToOne
     @JoinColumn(name = "companyId", referencedColumnName = "companyId")
     private  Company company;

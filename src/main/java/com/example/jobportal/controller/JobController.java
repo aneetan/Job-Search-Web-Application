@@ -59,7 +59,7 @@ public class JobController {
         if (company != null && encoder.matches(c.getCompanyPassword(), company.getCompanyPassword())){
             session.setAttribute("activeCompany", company);
             session.setAttribute("activeDetails", companyDetails);
-//            session.setMaxInactiveInterval(30);
+            session.setMaxInactiveInterval(86400);
             model.addAttribute("data", docs);
 
             // Retrieve job details for the company
@@ -70,12 +70,15 @@ public class JobController {
 
             // Iterate through each job posted by the company
             for (JobDetails job : jobDetailsList) {
-                // Retrieve applicants with status "pending" for the current job
-                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+                if (job.getJobStatus().equals("Active") || job.getJobStatus().equals("Inactive") ) {
+                    // Retrieve applicants with status "pending" for the current job
+                    List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Pending");
 
-                // Add applicants to the list of selected applicants
-                selectedApplicants.addAll(applicantsForJob);
+                    // Add applicants to the list of selected applicants
+                    selectedApplicants.addAll(applicantsForJob);
+                }
             }
+
 
             List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
 
@@ -424,11 +427,13 @@ public class JobController {
 
         // Iterate through each job posted by the company
         for (JobDetails job : jobDetailsList) {
-            // Retrieve applicants with status "pending" for the current job
-            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+            if (job.getJobStatus().equals("Active") || job.getJobStatus().equals("Inactive") ) {
+                // Retrieve applicants with status "pending" for the current job
+                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Pending");
 
-            // Add applicants to the list of selected applicants
-            selectedApplicants.addAll(applicantsForJob);
+                // Add applicants to the list of selected applicants
+                selectedApplicants.addAll(applicantsForJob);
+            }
         }
 
         List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
@@ -481,9 +486,11 @@ public class JobController {
         jdRepo.save(details);
 
         Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
 
         List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
         model.addAttribute("jobDetails", jobDetails);
+        model.addAttribute("data", docs);
 
         return "viewJobsCompany.html";
     }
@@ -492,7 +499,6 @@ public class JobController {
     public String addJobs(HttpSession session, Model model) {
         Company activeCompany = (Company) session.getAttribute("activeCompany");
         CompanyDocs docs = docsRepo.findAllByCompany(activeCompany);
-        System.out.println(docs);
 
         if (activeCompany == null) {
             model.addAttribute("login", "Please login first");
@@ -518,15 +524,13 @@ public class JobController {
                           HttpSession session,@ModelAttribute("data") CompanyDocs docs, @ModelAttribute("details") CompanyDetails companyDetails, Model model){
 
         Company activeCompany = (Company) session.getAttribute("activeCompany");
-        System.out.println(company);
-        System.out.println(docs);
-        System.out.println(companyDetails);
+        CompanyDocs d = docsRepo.getCompanyDocsByCompany(company);
 
-//        if(activeCompany == null) {
-//            model.addAttribute("login", "Please login first");
-//
-//            return "adminLogin.html";
-//        }
+        if(activeCompany == null) {
+            model.addAttribute("login", "Please login first");
+            return "adminLogin.html";
+        }
+
         if(activeCompany.getStatus().equals("Pending")){
             model.addAttribute("error", "Your company request is under approval! Please wait for confirmation mail to add job details.");
 
@@ -555,6 +559,10 @@ public class JobController {
             model.addAttribute("days", daysRemaining);
             model.addAttribute("success", "Your job has been posted");
         }
+        model.addAttribute("Company", activeCompany);
+        model.addAttribute("data", d);
+        model.addAttribute("details", d.getCompanyDetails());
+
         return "addJobsCompany.html";
     }
 
@@ -781,7 +789,7 @@ public class JobController {
     @GetMapping("/getApplicants")
     public String getApplicantsForJob(@RequestParam("jobTitle") String jobTitle, Model model, HttpSession session) {
         // Retrieve applicants for the selected job title
-        List<Applicant> applicants = jobService.getApplicantsByJobTitle(jobTitle);
+        List<Applicant> applicants = appRepo.findByJobDetails_TitleAndStatus(jobTitle, "Pending");
 
         // Pass the list of applicants to the view
         model.addAttribute("applicants", applicants);
@@ -913,11 +921,13 @@ public class JobController {
 
         // Iterate through each job posted by the company
         for (JobDetails job : jobDetailsList) {
-            // Retrieve applicants for the current job
-            List<Applicant> applicantsForJob = appRepo.findByJobDetails(job);
+            if (job.getJobStatus().equals("Active") || job.getJobStatus().equals("Inactive") ) {
+                // Retrieve applicants with status "pending" for the current job
+                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Pending");
 
-            // Add applicants to the list of selected applicants
-            selectedApplicants.addAll(applicantsForJob);
+                // Add applicants to the list of selected applicants
+                selectedApplicants.addAll(applicantsForJob);
+            }
         }
 
         List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
@@ -958,11 +968,13 @@ public class JobController {
 
         // Iterate through each job posted by the company
         for (JobDetails job : jobDetailsList) {
-            // Retrieve applicants with status "pending" for the current job
-            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+            if (job.getJobStatus().equals("Active") || job.getJobStatus().equals("Inactive") ) {
+                // Retrieve applicants with status "pending" for the current job
+                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Pending");
 
-            // Add applicants to the list of selected applicants
-            selectedApplicants.addAll(applicantsForJob);
+                // Add applicants to the list of selected applicants
+                selectedApplicants.addAll(applicantsForJob);
+            }
         }
 
         List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
@@ -1379,11 +1391,13 @@ public class JobController {
 
         // Iterate through each job posted by the company
         for (JobDetails job : jobDetailsList) {
-            // Retrieve applicants with status "pending" for the current job
-            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "pending");
+            if (job.getJobStatus().equals("Active") || job.getJobStatus().equals("Inactive") ) {
+                // Retrieve applicants with status "pending" for the current job
+                List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Pending");
 
-            // Add applicants to the list of selected applicants
-            selectedApplicants.addAll(applicantsForJob);
+                // Add applicants to the list of selected applicants
+                selectedApplicants.addAll(applicantsForJob);
+            }
         }
 
         List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
@@ -1437,22 +1451,58 @@ public class JobController {
         model.addAttribute("dataList", userPagination);
         return "userTable.html";
     }
-    @GetMapping("/deleteJobDetails/{jobId}")
-    public String deleteJob(HttpSession session,Model model, @PathVariable int jobId){
 
+    @GetMapping("/searchJobCompany")
+    public String searchJobCompany(@RequestParam("query") String query, Model model, HttpSession session){
         Company company = (Company) session.getAttribute("activeCompany");
-        jdRepo.deleteById(jobId);
-        if (!(jdRepo.existsById(jobId))){
-            model.addAttribute("error", "Job deleted");
-        }
-
+        session.setAttribute("activeCompany", company);
         CompanyDocs docs = docsRepo.getCompanyDocsByCompany(company);
         model.addAttribute("data", docs);
 
-        List<JobDetails> jobDetails = jdRepo.findAllByCompany(company);
+        List<JobDetails> jobDetails = jdRepo.findByTitleContainingIgnoreCaseOrJobStatus(query,query);
         model.addAttribute("jobDetails", jobDetails);
-
         return "viewJobsCompany.html";
+    }
 
+    @GetMapping("/searchApplicantCompany")
+    public String searchApplicantCompany(@RequestParam("query") String query, Model model, HttpSession session){
+        Company company = (Company) session.getAttribute("activeCompany");
+        CompanyDocs docs = docsRepo.findAllByCompany(company);
+        model.addAttribute("data", docs);
+
+        // Retrieve job details for the company
+        List<JobDetails> jobDetailsList = jdRepo.findAllByCompany(company);
+
+        // Create a map to hold job details and associated applicants
+        List<Applicant> selectedApplicants = new ArrayList<>();
+
+        // Iterate through each job posted by the company
+        for (JobDetails job : jobDetailsList) {
+            // Retrieve applicants for the current job
+            List<Applicant> applicantsForJob = appRepo.findByJobDetailsAndStatus(job, "Approved");
+
+            // Filter approved applicants by name
+            for (Applicant applicant : applicantsForJob) {
+                if (applicant.getUserDocs().getPersonalDetails().getName().equalsIgnoreCase(query)) {
+                    selectedApplicants.add(applicant);
+                }
+            }
+        }
+
+        if (selectedApplicants.isEmpty()){
+            model.addAttribute("noApplicant", "No approved Applicants!!");
+        } else {
+            model.addAttribute("applicants", selectedApplicants);
+
+        }
+
+        List<String> uniqueJob = jdRepo.findDistinctTitlesByCompanyAndActiveOrInactiveStatus(company);
+
+        // Add unique job locations to the model
+        model.addAttribute("uniqueJob", uniqueJob);
+        model.addAttribute("jobTitle", "All jobs");
+
+        // Return the view name
+        return "approvedApplicants.html";
     }
 }

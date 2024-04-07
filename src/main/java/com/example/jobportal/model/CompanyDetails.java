@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Data
+@Transactional
 public class CompanyDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +21,6 @@ public class CompanyDetails {
     @OneToOne
     @JoinColumn(name = "companyId", referencedColumnName = "companyId")
     private Company company;
-
-
 
     public CompanyDetails(){
 

@@ -26,6 +26,8 @@ public interface JobDetailsRepository extends JpaRepository<JobDetails, Integer>
 
     List<JobDetails> findByCompanyAndJobStatus(Company company, String jobStatus);
 
+    List<JobDetails> findByTitleContainingIgnoreCaseOrJobStatus(String title, String jobStatus);
+
     List<JobDetails> findByTitleContainingIgnoreCase(String query);
 
     JobDetails findByJobId(int jobId);
