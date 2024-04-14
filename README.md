@@ -3,7 +3,7 @@
 
 ## Description
 
-This is a comprehensive web-based platform developed using HTML, CSS, JavaScript, AJAX, and Spring Boot with Java  to facilitate seamless interactions between job seekers and companies. It implements SMTP for email transfer and incorporates various technologies such as Thymeleaf, Jackson Databind, ORM, and more.
+This is a comprehensive web-based platform developed using HTML, CSS, JavaScript and Spring Boot with Java  to facilitate seamless interactions between job seekers and companies. It implements SMTP for email transfer and incorporates various technologies such as Thymeleaf, Jackson Databind, ORM, and more.
 
 ## Features
 
