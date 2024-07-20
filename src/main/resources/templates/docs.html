@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css}" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+  <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+
+  <link rel="stylesheet" th:href="@{css/registration.css}" />
+
+  <script type="text/javascript" th:src="@{js/form.js}">  </script>
+
+</head>
+<style>
+  .profile {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: #ccc;
+    background-size: cover;
+    background-position: center;
+    margin-left: 30px;
+  }
+</style>
+<body>
+
+<section class="container">
+  <div class="formbold-steps">
+    <ul>
+      <li class="formbold-step-menu1  ">
+        <span>1</span>
+        <p> Personal Details </p>
+      </li>
+      <li class="formbold-step-menu2 ">
+        <span>2</span>
+        <p>Additional Details </p>
+      </li>
+      <li class="formbold-step-menu3 active">
+        <span>3</span>
+        <p> Documents (if any) </p>
+      </li>
+
+    </ul>
+  </div>
+
+  <form action="/userRegister" method="post" class="form" enctype="multipart/form-data">
+
+    <input type="hidden" name="userId" th:value="${pDetails.userId}">
+    <input type="hidden" name="name" th:value="${pDetails.name}">
+    <input type="hidden" name="password" th:value="${pDetails.password}">
+    <input type="hidden" name="phoneNo" th:value="${pDetails.phoneNo}">
+    <input type="hidden" name="address" th:value="${pDetails.address}">
+    <input type="hidden" name="email" th:value="${pDetails.email}">
+
+    <input type="hidden" name="addId" th:value="${add.addId}">
+    <input type="hidden" name="bio" th:value="${add.bio}">
+    <input type="hidden" name="jobTitle" th:value="${add.jobTitle}">
+
+
+    <div class="input-box">
+      <label>Add CV (.pdf/.docx/.doc)*</label>
+      <input type="file" name="cv" id="file" accept=".pdf,.doc,.docx" required>
+    </div>
+
+    <div class="input-box">
+      <label> Add Profile </label> <br>
+      <img class="profile" id="profile" src="img/profile.jpg" alt="png">
+      <input type="file" id="imgUpload" name="profile" accept="image/*" ><br>
+    </div>
+
+<!--    <div class="input-box">-->
+<!--      <a href="" class="links" data-bs-toggle="modal" data-bs-target="#certificationModal"> Add Certifications (if any)-->
+<!--        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" fill="currentColor" class="addIcon bi bi-plus" viewBox="0 0 16 16">-->
+<!--          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>-->
+<!--        </svg>-->
+<!--      </a>-->
+<!--    </div>-->
+
+    <p class="terms"> By submitting this form, you agree to our <a href=""> Terms and Conditions.</a></p>
+    <div class="add-btn">
+<!--      <a class="back-btn" href="additional.html"> Back </a>-->
+      <input class="next-btn" type="submit" value="Submit">
+    </div>
+
+  </form>
+
+
+<!--  <div class="modal fade" id="certificationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog modal-dialog-centered">-->
+<!--      <div class="modal-content pop">-->
+<!--        <div class="edu-header">-->
+<!--          <button type="button" class="btn-close exit" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--          <p class="head-text"> Add Education </p>-->
+
+<!--        </div>-->
+
+<!--        <div class=" modalContainer">-->
+
+<!--          <form action=""  method="post" class="form" id="certificateForm">-->
+
+
+<!--            <input type="hidden" id="userId" name="userId" th:value="${pDetails.userId}">-->
+<!--            <input type="hidden" id="pName" name="name" th:value="${pDetails.name}">-->
+<!--            <input type="hidden" id="password" name="password" th:value="${pDetails.password}">-->
+<!--            <input type="hidden" id="phoneNo" name="phoneNo" th:value="${pDetails.phoneNo}">-->
+<!--            <input type="hidden" id="address" name="address" th:value="${pDetails.address}">-->
+<!--            <input type="hidden" id="email" name="email" th:value="${pDetails.email}">-->
+
+
+
+<!--            <div class="column">-->
+<!--              <div class="input-box">-->
+<!--                <label>Title</label>-->
+<!--                <input type="text" name="cerTitle" id="cerTitle" placeholder="Eg: Frontend Development" required />-->
+<!--              </div>-->
+
+<!--            </div>-->
+
+
+
+<!--            <div class="column">-->
+<!--              <div class="input-box">-->
+<!--                <label>Add certification</label>-->
+<!--                <input type="file" name="cerFile" id="certification" accept=".pdf,.doc,.docx" required>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--            <input class="proceed-btn" type="submit" value="Proceed">-->
+
+<!--          </form>-->
+<!--        </div>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+  </div>
+</section>
+
+<script>
+  var profile = document.getElementById("profile");
+  var inputFile = document.getElementById("imgUpload");
+
+  inputFile.onchange = function(){
+    profile.src = URL.createObjectURL(inputFile.files[0]);
+  }
+</script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js}" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js}" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js}" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+
+</body>
+</html>

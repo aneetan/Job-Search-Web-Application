@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>View Jobs- Company</title>
+  <base href="http://localhost:8080/">
+  <!-- plugins:css -->
+  <link rel="stylesheet" th:href="@{vendors/mdi/css/materialdesignicons.min.css}">
+  <link rel="stylesheet" th:href="@{vendors/css/vendor.bundle.base.css}">
+
+  <link rel='stylesheet' th:href='@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css}'>
+
+  <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+
+  <script th:src='@{https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js}'></script>
+  <!-- endinject -->
+
+  <!-- Layout styles -->
+  <link rel="stylesheet" th:href="@{css/superAdmin.css}">
+  <link rel="stylesheet" th:href="@{css/cards.css}">
+  <link rel="stylesheet" th:href="@{css/jobdetail.css}">
+
+  <!-- End layout styles -->
+</head>
+
+<style>
+  .navbar .navbar-brand-wrapper .navbar-brand img{
+    height: 70px;
+    width: 180px;
+  }
+
+  .navbar .navbar-brand-wrapper .navbar-brand.brand-logo-mini img{
+    width: 60px;
+    height: 60px;
+  }
+
+  .page-title .page-title-icon{
+    background: #148FA8 !important;
+  }
+
+
+  .sidebar .nav .nav-item.active > .nav-link .menu-title,
+  .sidebar .nav .nav-item.active > .nav-link i{
+    color: #148FA8;
+  }
+
+  .navbar-dropdown a:hover{
+    color: #148FA8 !important;
+  }
+
+  .job-btn{
+    font-size: 12px;
+    text-decoration: none;
+    background: #148fa8;
+    color: #aba7a7;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 12px;
+  }
+
+  .navbar .navbar-menu-wrapper .navbar-nav .nav-item.dropdown .dropdown-menu.navbar-dropdown a{
+    margin-right: 100px !important;
+    font-size: 14px !important;
+  }
+
+  .close a{
+    width: 100%;
+  }
+
+  .close a i{
+    font-size: 24px;
+    color: #148fa8;
+    float: right;
+  }
+
+  .inner-text{
+    color: #343A40 !important;
+  }
+
+  li a{
+    text-decoration: none;
+    color: #fafafa;
+  }
+
+  .job-btn,
+  .job-delete{
+    font-size: 12px;
+    text-decoration: none;
+    background: #148fa8;
+    color: #fafafa !important;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 12px;
+    transition: transform .2s ease-out;
+  }
+
+  .job-btn:hover,
+  .job-delete:hover{
+    transform: scale(1.02);
+
+  }
+
+  .job-delete{
+    color: #148fa8 !important;
+    background: #fafafa;
+    border: 1px solid #148fa8;
+  }
+  .buttons{
+    width: 130% !important;
+  }
+
+  .content-wrapper{
+    padding: 1.5rem 1.5rem !important;
+  }
+
+  .modal-footer{
+    display: -webkit-box !important;
+  }
+
+  .btn-modal{
+    background: #148fa8 !important;
+  }
+
+</style>
+<body>
+<div class="container-scroller">
+
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo" href=""><img src="img/jobsearchlogo.png" alt="logo" /></a>
+      <a class="navbar-brand brand-logo-mini" href=""><img src="img/logo.png" alt="logo" /></a>
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-stretch">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+        <span class="mdi mdi-menu"></span>
+      </button>
+      <div class="search-field d-none d-md-block">
+        <form class="d-flex align-items-center h-100" action="#">
+          <div class="input-group">
+            <div class="input-group-prepend bg-transparent">
+              <i class="input-group-text border-0 mdi mdi-magnify"></i>
+            </div>
+            <input type="text" class="form-control bg-transparent border-0" placeholder="Search jobs ">
+          </div>
+        </form>
+      </div>
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item nav-profile dropdown">
+          <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="nav-profile-img">
+              <img th:src="@{'uploadImg/' + ${data.logoName}}" alt="image">
+              <span class="availability-status online"></span>
+            </div>
+            <div class="nav-profile-text">
+              <p class="mb-1 text-black" th:text="${data.company.companyName}"></p>
+            </div>
+          </a>
+          <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" th:href="@{/seeCompanyProfile}">
+              <i class="mdi mdi-cached me-2 text-success"></i> See profile </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="">
+              <i class="mdi mdi-logout me-2 text-primary"></i> Change Password </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" th:href="@{/logoutCompany}">
+              <i class="mdi mdi-logout me-2 text-primary"></i> Logout </a>
+          </div>
+        </li>
+
+
+
+
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <span class="mdi mdi-menu"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/companyLanding}">
+            <span class="menu-title"> Applicants</span>
+            <i class="mdi mdi-contacts menu-icon"></i>
+          </a>
+        </li>
+
+
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/viewJob}">
+            <span class="menu-title"> View active jobs</span>
+            <i class="mdi mdi-briefcase menu-icon"></i>
+
+
+          </a>
+        </li>
+
+
+        <li class="nav-item ">
+          <a class="nav-link" th:href="@{/addJobs}">
+            <span class="menu-title"> Add jobs</span>
+            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/approvedApplicants}">
+            <span class="menu-title"> Approved applicants</span>
+            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+
+        <div class="content-wrapper close">
+          <a class="close-btn" href="">
+            <i class="mdi mdi-close"></i>
+          </a>
+          <div class="row">
+            <div class="col-lg-12 mb-4 mb-sm-5">
+              <div class="card card-style1 border-0">
+                <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                  <div class="row align-items-center">
+                    <img class="img-logo" th:src="@{'uploadImg/' + ${job.companyDocs.logoName}}" alt="...">
+
+                    <div class="col-lg-6">
+                      <ul class="list-unstyled mb">
+                        <li class="mb-2 mb-xl-3 display-24"><span class="display-24  me-2 font-weight-600"> Job Title: </span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.title}"></span>
+                        </li>
+                        <li class="mb-2 mb-xl-3 display-28"><span class="display-24  me-2 font-weight-600">Company:</span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.company.companyName}"></span>
+                           </li>
+                        <li class="mb-2 mb-xl-3 display-28"><span class="display-24  me-2 font-weight-600">Salary:</span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.salary}"></span>
+                        </li>
+                        <li class="mb-2 mb-xl-3 display-28"><span class="display-24  me-2 font-weight-600">Type:</span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.location} + ' | ' + ${job.empType}"></span>
+
+                        </li>
+                        <li class="mb-2 mb-xl-3 display-28"><span class="display-24  me-2 font-weight-600">Deadline:</span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.deadline}"></span>
+                        </li>
+
+                        <li class="mb-2 mb-xl-3 display-28"><span class="display-24  me-2 font-weight-600">Job Status:</span>
+                          <span class="inner-text" style="font-size: 14px; color: #0a0a0a;" th:text="${job.jobStatus}"></span>
+                        </li>
+
+                        <li class="buttons">
+                          <a th:href="@{'/editJob/' + ${job.jobId}}">
+                            <button type="button" class="job-btn" > Edit </button>
+                          </a>
+
+                            <button type="button" class="job-btn" data-bs-toggle="modal" data-bs-target="#closeModal" > Close job </button>
+
+                          <!-- Modal -->
+                          <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel2">Confirm</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure to close the job?
+                                  <p style="color: #aba7a7; font-size: 14px;"> You will no longer recieve applicant!</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="">
+                                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  </a>
+                                  <a th:href="@{'/close/' + ${job.jobId}}">
+                                    <button style="float: right" type="button" class="btn btn-primary btn-modal" > Yes, Close </button>
+                                  </a>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                            <button type="button" class="job-btn" data-bs-toggle="modal" data-bs-target="#dismissModal" > Dismiss </button>
+
+                          <!-- Modal -->
+                          <div class="modal fade" id="dismissModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel1">Confirm</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure to dismiss the job?
+                                  <p style="color: #aba7a7; font-size: 14px;"> This will change the status to dismiss!</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="">
+                                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  </a>
+                                  <a th:href="@{'/dismiss/' + ${job.jobId}}">
+                                    <button style="float: right" type="button" class="btn btn-primary btn-modal" > Yes, Dissmiss </button>
+                                  </a>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+<!--                          <a href="">-->
+                            <button type="button" class="job-delete" data-bs-toggle="modal" data-bs-target="#exampleModal"> Delete </button>
+<!--                          </a>-->
+                          <!-- Modal -->
+                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  Are you sure to delete the job?
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="">
+                                    <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  </a>
+                                  <a th:href="@{'/deleteJobDetails/' + ${job.jobId}}">
+                                    <button style="float: right" type="button" class="btn btn-primary btn-modal" > Yes, Delete </button>
+                                  </a>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </li>
+
+                      </ul>
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 mb-4">
+              <div>
+                <span class="section-title mb-3 text-head mb-sm-4"> Description</span>
+                <p th:text="${job.jobDescription}"> </p>
+              </div>
+            </div>
+
+            <div class="col-lg-12 mb-4">
+              <div>
+                <span class="section-title mb-3 text-head mb-sm-4"> Skills Required</span>
+                <p th:text="${job.skills}"> </p>
+              </div>
+            </div>
+
+            <div class="col-lg-12 mb-4">
+              <div>
+                <span class="section-title mb-3 text-head mb-sm-4"> Qualification</span>
+                <p th:text="${job.qualification}"> </p>
+              </div>
+            </div>
+
+            <div class="col-lg-12 mb-4">
+              <div>
+                <span class="section-title mb-3 text-head mb-sm-4"> Responsibilities</span>
+                <p th:text="${job.responsibilities}"> </p>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </div>
+      <!-- content-wrapper ends -->
+      <!-- partial:partials/_footer.html -->
+      <footer class="footer">
+        <div class="container-fluid d-flex justify-content-between">
+          <span class="text-muted d-block text-center text-sm-start d-sm-inline-block">JobSearch - Company Panel</span>
+        </div>
+      </footer>
+      <!-- partial -->
+    </div>
+    <!-- main-panel ends -->
+  </div>
+  </div>
+  <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script th:src="@{vendors/js/vendor.bundle.base.js}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script th:src="@{vendors/chart.js/Chart.min.js}"></script>
+<script th:src="@{js/jquery.cookie.js}" type="text/javascript"></script>
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script th:src="@{js/off-canvas.js}"></script>
+<script th:src="@{js/hoverable-collapse.js}"></script>
+<script th:src="@{js/misc.js}"></script>
+<!-- endinject -->
+<!-- Custom js for this page -->
+<script th:src="@{js/dashboard.js}"></script>
+<!-- End custom js for this page -->
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title> Forgot pw form </title>
+  <link rel="stylesheet" th:href="@{css/login.css}">
+  <!-- Fontawesome CDN Link -->
+  <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    .input-box{
+      position: relative;
+    }
+    .error{
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      margin-top: 20px !important;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="cover">
+    <div class="front">
+      <img src="img/applyjob.jpg" alt="">
+      <div class="text">
+        <span class="text-1">Reset your password,<br>unlock endless possibilities</span>
+        <span class="text-2">Let's get you connected again</span>
+
+      </div>
+    </div>
+    <div class="back">
+      <!--<img class="backImg" src="images/backImg.jpg" alt="">-->
+      <div class="text">
+        <span class="text-1">Complete miles of journey <br> with one step</span>
+        <span class="text-2">Let's get started</span>
+      </div>
+    </div>
+  </div>
+  <div class="forms">
+    <div class="form-content">
+      <div class="login-form">
+        <div style="color: #148FA8;" class="title"> Forgot Password?</div>
+        <div style="color: #757575;" class="text sign-up-text">  Please enter the code sent to anita@gmail.com </div>
+
+        <form method="post" action="/verifyOtp">
+          <div class="input-boxes">
+            <div class="input-box">
+              <i class="fas fa-key"></i>
+              <input type="text" placeholder="Enter the code" name="code">
+              <div class="error" th:text="${error}">  </div>
+            </div>
+
+            <div class="button input-box">
+              <input type="submit" value="Verify">
+            </div>
+          </div>
+        </form>
+        <div class="text sign-up-text"> Didn't get a code? <a th:href="@{/resendOTP}"> Resend </a></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>

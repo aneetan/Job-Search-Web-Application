@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Registration Form in HTML CSS</title>
+  <!---Custom CSS File--->
+  <link rel="stylesheet" th:href="@{css/registration.css}" />
+</head>
+<body>
+
+<section class="container">
+  <div class="formbold-steps">
+    <ul>
+      <li class="formbold-step-menu1 active ">
+        <span>1</span>
+        <p> Personal Details </p>
+      </li>
+      <li class="formbold-step-menu2 ">
+        <span>2</span>
+        <p>Additional Details </p>
+      </li>
+      <li class="formbold-step-menu3">
+        <span>3</span>
+        <p> Documents (if any) </p>
+      </li>
+
+    </ul>
+  </div>
+
+  <p class="login"> Already have account? <a href="/userLogin"> Login</a></p>
+  <div class="error">
+
+    <p th:text="${error}" style="color:red;"> </p>
+  </div>
+
+  <form action="/goToAdditional" class="form" method="post" id="form">
+
+    <div class="column">
+      <div class="input-box">
+        <label>Full Name</label>
+        <input type="text" name="name" id="name" placeholder="Enter full name" />
+        <div class="error"></div>
+
+      </div>
+
+      <div class="input-box">
+        <label>Email</label>
+        <input type="email" name="email" id="email" placeholder="example@gmail.com"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+    <div class="column">
+      <div class="input-box">
+        <label>Password</label>
+        <input type="password" name="password" id="password" placeholder="Enter password" />
+        <div class="error"></div>
+
+      </div>
+
+      <div class="input-box">
+        <label>Confirm Password</label>
+        <input type="password" name="confirmPw" id="confirmPw" placeholder="Re-enter your password"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+    <div class="column">
+      <div class="input-box">
+        <label>Address</label>
+        <input type="text" name="address" id="address" placeholder="E.g. Kathmandu, Nepal" />
+        <div class="error"></div>
+
+      </div>
+
+      <div class="input-box">
+        <label>Phone Number</label>
+        <input type="text" name="phoneNo" id="number" placeholder="9812345678"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+
+    <div class="add-btn">
+      <input class="next-btn" type="submit" value="Next">
+
+    </div>
+
+  </form>
+</section>
+
+<script  th:src="@{js/register.js}"></script>
+</body>
+</html>

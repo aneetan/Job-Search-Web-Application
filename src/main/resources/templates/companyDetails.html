@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!---Custom CSS File--->
+  <link rel="stylesheet" th:href="@{css/registration.css}" />
+</head>
+<body>
+
+<section class="container">
+  <div class="formbold-steps">
+    <ul>
+      <li class="formbold-step-menu1 ">
+        <span>1</span>
+        <p> Account Details </p>
+      </li>
+      <li class="formbold-step-menu2 active ">
+        <span>2</span>
+        <p>Company Details </p>
+      </li>
+      <li class="formbold-step-menu3">
+        <span>3</span>
+        <p> Verification docs </p>
+      </li>
+
+    </ul>
+  </div>
+
+  <form action="/companyDetails" method="post" id="adminForm" class="form" >
+
+    <input type="hidden" name="companyId" th:value="${Company.companyId}">
+    <input type="hidden" name="companyName" th:value="${Company.companyName}">
+    <input type="hidden" name="companyEmail" th:value="${Company.companyEmail}">
+    <input type="hidden" name="companyPassword" th:value="${Company.companyPassword}">
+
+    <div class="column">
+      <div class="input-box">
+        <label>Address</label>
+        <input type="text" name="companyAddress" id="companyAddress" placeholder="Eg: Kathmandu, Nepal" />
+        <div class="error"></div>
+      </div>
+
+      <div class="input-box">
+        <label>Industry</label>
+        <input type="text" name="industry" id="companyIndustry" placeholder="Eg: Construction"  />
+        <div class="error"></div>
+
+      </div>
+    </div>
+    <div class="column">
+      <div class="input-box">
+        <label>Employee No.(approx)</label>
+        <input type="text" name="employeeNo" id="employee" placeholder="eg: 60" />
+        <div class="error"></div>
+
+      </div>
+
+      <div class="input-box">
+        <label>Contact</label>
+        <input type="text" name="companyContact" id="contact" placeholder="Eg: 123-4567" />
+        <div class="error"></div>
+
+      </div>
+
+    </div>
+    <div class="input-box">
+      <label>Official website</label>
+      <input type="text" name="companyUrl" id="companyWebsite" placeholder="Eg: www.microsoft.com"  />
+      <div class="error"></div>
+
+    </div>
+
+
+    <div class="add-btn">
+      <a class="back-btn" href="adminRegister.html"> Back </a>
+      <input class="next-btn" type="submit" value="Next">
+    </div>
+
+
+  </form>
+</section>
+
+<script>
+  const form = document.getElementById("adminForm");
+  const address = document.getElementById("companyAddress");
+  const phoneNo = document.getElementById("contact");
+  const industry = document.getElementById("companyIndustry");
+  const empNo = document.getElementById('employee');
+  const url = document.getElementById("companyWebsite");
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+
+    if (validateInputs()) {
+      this.submit();
+    }
+  });
+
+
+  // Error Message
+  const setError = (element, message) => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = message;
+    inputControl.classList.add('error');
+    inputControl.classList.remove('success');
+  }
+
+
+  //success message
+  const setSuccess = element => {
+    const inputControl = element.parentElement;
+    const errorDisplay = inputControl.querySelector('.error');
+
+    errorDisplay.innerText = '';
+    inputControl.classList.add('success');
+    inputControl.classList.remove('error');
+  }
+
+
+  //check for phone number
+  function isValidPhoneNumber(phoneNumber) {
+    // Regular expression to match 10 digits
+    var regex = /^\d{10}$/;
+
+    // Test the phone num against the regex
+    return regex.test(phoneNumber);
+  }
+
+  function isValidUrl(url) {
+    var urlRegex = /^(?:https?:\/\/)?(?:www\.)?[\w\.-]+\.\w{2,}(?:\/[\w\.-]*)*\/?$/;
+    return urlRegex.test(url);
+  }
+
+  const validateInputs = () => {
+
+    const addressValue = address.value;
+    const phoneValue = phoneNo.value.trim();
+    const industryValue = industry.value;
+    const urlValue = url.value.trim();
+    const employeeValue = empNo.value;
+
+    let isValid = true;
+
+    //check phone validation
+    if(phoneValue === '') {
+      setError(phoneNo, 'Phone is required');
+      isValid=false;
+    } else if(!isValidPhoneNumber(phoneValue)) {
+      setError(phoneNo, 'Phone number must contain 10 digits');
+      isValid=false;
+    } else {
+      setSuccess(phoneNo);
+    }
+
+    //check for address validation
+    if (addressValue === '') {
+      setError(address, 'Address is required');
+      isValid=false;
+    } else {
+      setSuccess(address);
+    }
+
+    //check for industry validation
+    if (industryValue === '') {
+      setError(industry, 'Industry is required');
+      isValid=false;
+    } else {
+      setSuccess(industry);
+    }
+
+
+    //check for url validation
+    if(urlValue === '') {
+      setError(url, 'url is required');
+      isValid=false;
+    } else if(!isValidUrl(urlValue)) {
+      setError(url, 'Insert valid url');
+      isValid=false;
+    } else {
+      setSuccess(url);
+    }
+
+    //check for employee validation
+    if (employeeValue === '') {
+      setError(empNo, 'Enter approx employee number');
+      isValid=false;
+    } else {
+      setSuccess(empNo);
+    }
+
+    return isValid;
+  }
+
+</script>
+</body>
+</html>
